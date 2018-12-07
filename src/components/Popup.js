@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import Button from './Button';
 
 class Popup extends Component {
   constructor(props) {
@@ -20,19 +21,15 @@ class Popup extends Component {
         <div style={{width: width || 350}}>
           <div>
             <div>{title || '提示'}</div>
-            <div onClick={() => dispatch('close')}>
-              <Icon type={'circle-cross'}/>
-            </div>
+            <div onClick={() => dispatch('close')}>✕</div>
           </div>
           <div>{content}</div>
           <div>
             {
               footer || (
                 <Fragment>
-                  <Button onClick={() => dispatch('cancel')}>取消</Button>
-                  <Button
-                    style={{marginLeft: 10}}
-                    styleType={'primary'}
+                  <Button onClick={() => dispatch('cancel')}>取消</>
+                  <Button style={{marginLeft: 10}}
                     onClick={() => dispatch('confirm')}
                   >确认</Button>
                 </Fragment>
