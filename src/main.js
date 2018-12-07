@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Popup from './components/Popup';
 
-class ClassConfirm {
+class AlertConfirm {
   constructor({title, content, footer, width, closeBefore}) {
     const container = document.createElement('div');
+    container.className = 'alert-confirm-container';
     document.body.appendChild(container);
     ReactDOM.render(
       <Popup
@@ -27,15 +28,17 @@ class ClassConfirm {
    * close => 关闭按钮
    */
   dispatch(action) {
-    this.closeBefore(action, () => {
-      this.closeConfirm()
-    });
+    if (this.closeBefore) {
+      this.closeBefore(action, this.closeConfirm);
+      return;
+    }
+    this.closeConfirm()
   }
 
-  // close Confirm popup
+  // close popup
   closeConfirm() {
     document.body.removeChild(this.container);
   }
 }
 
-export default options => new ClassConfirm(options);
+export default options => new AlertConfirm(options);

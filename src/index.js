@@ -1,5 +1,6 @@
+import './index.css';
 import createPopup from './main';
-import Button from './components/Button';
+import _Button from './components/Button';
 
 export default createPopup;
-export const Button = Button;
+export const Button = _Button;

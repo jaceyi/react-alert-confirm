@@ -2,10 +2,6 @@ import React, {Component, Fragment} from 'react';
 import Button from './Button';
 
 class Popup extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       title,
@@ -16,20 +12,22 @@ class Popup extends Component {
     } = this.props;
 
     return (
-      <div>
-        <div/>
-        <div style={{width: width || 350}}>
-          <div>
-            <div>{title || '提示'}</div>
-            <div onClick={() => dispatch('close')}>✕</div>
+      <Fragment>
+        <div className={'alert-confirm-shadow'}/>
+        <div className={'alert-confirm-main'} style={{width: width || 360}}>
+          <div className={'alert-confirm-header'}>
+            <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
+            <div className={'alert-confirm-header-close'} onClick={() => dispatch('close')}>✕</div>
           </div>
-          <div>{content}</div>
-          <div>
+          <div className={'alert-confirm-body'}>{content}</div>
+          <div className={'alert-confirm-footer'}>
             {
               footer || (
                 <Fragment>
-                  <Button onClick={() => dispatch('cancel')}>取消</>
-                  <Button style={{marginLeft: 10}}
+                  <Button onClick={() => dispatch('cancel')}>取消</Button>
+                  <Button
+                    type={'primary'}
+                    style={{marginLeft: 10}}
                     onClick={() => dispatch('confirm')}
                   >确认</Button>
                 </Fragment>
@@ -37,7 +35,7 @@ class Popup extends Component {
             }
           </div>
         </div>
-      </div>
+      </Fragment>
     )
   }
 }

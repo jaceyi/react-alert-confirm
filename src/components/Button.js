@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 
 class Button extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
+    const {
+      type,
+      children
+    } = this.props;
+
     return (
-      <button {...this.props}>
-        {this.props.children}
+      <button
+        className={`alert-confirm-button ${type || ''}`}
+        {...this.props}>
+        {children}
       </button>
     )
   }
