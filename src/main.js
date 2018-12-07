@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import Popup from './components/Popup';
 
 class AlertConfirm {
-  constructor({title, content, footer, width, closeBefore}) {
+  constructor({title, content, footer, width, closeBefore, zIndex, type}) {
     const container = document.createElement('div');
     container.className = 'alert-confirm-container';
+    container.style.zIndex = zIndex || 99999;
     document.body.appendChild(container);
     ReactDOM.render(
       <Popup
+        type={type}
         title={title}
         content={content}
         footer={footer}

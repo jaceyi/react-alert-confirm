@@ -8,8 +8,10 @@ class Popup extends Component {
       content,
       footer,
       width,
-      dispatch
+      dispatch,
+      type
     } = this.props;
+    const isAlert = type !== 'alert';
 
     return (
       <Fragment>
@@ -17,14 +19,18 @@ class Popup extends Component {
         <div className={'alert-confirm-main'} style={{width: width || 360}}>
           <div className={'alert-confirm-header'}>
             <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
-            <div className={'alert-confirm-header-close'} onClick={() => dispatch('close')}>✕</div>
+            {
+              isAlert && <div className={'alert-confirm-header-close'} onClick={() => dispatch('close')}>✕</div>
+            }
           </div>
           <div className={'alert-confirm-body'}>{content}</div>
           <div className={'alert-confirm-footer'}>
             {
               footer || (
                 <Fragment>
-                  <Button onClick={() => dispatch('cancel')}>取消</Button>
+                  {
+                    isAlert && <Button onClick={() => dispatch('cancel')}>取消</Button>
+                  }
                   <Button
                     type={'primary'}
                     style={{marginLeft: 10}}
