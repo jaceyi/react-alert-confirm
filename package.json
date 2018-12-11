@@ -1,11 +1,21 @@
 {
   "name": "react-alert-confirm",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A react popup component",
   "main": "src/index.js",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",
   "author": "Jace Yi <yijinchun@outlook.com>",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "dialog",
+    "confirm",
+    "react alert",
+    "react dialog",
+    "react confirm",
+    "react-alert-confirm",
+    "alert confirm dialog react"
+  ],
   "files": [
     "README.md",
     "dist"
