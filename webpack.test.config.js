@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -17,15 +16,6 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      },
-      {
-        test: /\.(scss)$/,
-        exclude: /node_modules/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
       }
     ]
   },
@@ -33,14 +23,12 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve('', 'test/index.html')
-    }),
-    new FriendlyErrorsPlugin()
+    })
   ],
 
   devServer: {
     inline: true,
     historyApiFallback: true,
-    contentBase: '../test',
     progress: true,
     overlay: {
       warnings: true,

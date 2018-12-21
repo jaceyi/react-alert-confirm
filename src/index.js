@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 import alertConfirm from './main';
 import _Button from './components/Button';
 
