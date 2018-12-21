@@ -2,7 +2,7 @@
   "name": "react-alert-confirm",
   "version": "1.0.4",
   "description": "A react popup component",
-  "main": "src/index.js",
+  "main": "dist",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",
   "author": "Jace Yi <yijinchun@outlook.com>",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "webpack --mode=production --progress"
+    "test": "webpack-dev-server --config webpack.test.config.js",
+    "build": "webpack --config webpack.build.config.js"
   },
   "dependencies": {
     "react": "^16.6.3",
@@ -34,8 +35,11 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "css-loader": "^1.0.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }

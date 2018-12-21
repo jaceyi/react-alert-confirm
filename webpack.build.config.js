@@ -1,11 +1,13 @@
 const path = require('path');
 
 module.exports = {
-  entry: ['./src'],
+  mode: 'production',
+
+  entry: './src',
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: 'index.js',
     library: 'alert-confirm',
     libraryTarget: 'umd'
   },
