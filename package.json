@@ -22,6 +22,7 @@
   ],
   "scripts": {
     "test": "webpack-dev-server --config webpack.test.config.js",
+    "watch": "webpack --watch --config webpack.build.config.js",
     "build": "webpack --config webpack.build.config.js"
   },
   "dependencies": {

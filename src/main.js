@@ -31,14 +31,14 @@ class AlertConfirm {
    */
   dispatch(action) {
     if (this.closeBefore) {
-      this.closeBefore(action, this.closeConfirm);
+      this.closeBefore(action, () => this.closePopup());
       return;
     }
-    this.closeConfirm()
+    this.closePopup()
   }
 
   // close popup
-  closeConfirm() {
+  closePopup() {
     document.body.removeChild(this.container);
   }
 }

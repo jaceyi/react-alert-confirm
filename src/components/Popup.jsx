@@ -20,7 +20,11 @@ class Popup extends Component {
           <div className={'alert-confirm-header'}>
             <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
             {
-              isAlert && <div className={'alert-confirm-header-close'} onClick={() => dispatch('close')}>✕</div>
+              isAlert && (
+                <div className={'alert-confirm-header-close'}>
+                  <span className={'icon'} onClick={() => dispatch('close')}>✕</span>
+                </div>
+              )
             }
           </div>
           <div className={'alert-confirm-body'}>{content}</div>
@@ -29,13 +33,13 @@ class Popup extends Component {
               footer || (
                 <Fragment>
                   {
-                    isAlert && <Button onClick={() => dispatch('cancel')}>取消</Button>
+                    isAlert && <Button onClick={() => dispatch('cancel')}>取 消</Button>
                   }
                   <Button
                     type={'primary'}
                     style={{marginLeft: 10}}
                     onClick={() => dispatch('confirm')}
-                  >确认</Button>
+                  >确 认</Button>
                 </Fragment>
               )
             }
