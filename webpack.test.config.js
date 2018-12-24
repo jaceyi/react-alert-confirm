@@ -34,6 +34,6 @@ module.exports = {
       warnings: true,
       errors: true
     },
-    port: 8000
+    port: 8080
   }
 };

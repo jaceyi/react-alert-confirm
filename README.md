@@ -7,7 +7,7 @@
 ```$xslt
 yarn add react-alert-confirm
 // or
-npm install react-alert-confirm --save-dev
+npm install react-alert-confirm --save
 ```
 
 ## Example
