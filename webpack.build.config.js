@@ -8,20 +8,19 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
-    library: 'alert-confirm',
+    library: 'react-alert-confirm',
     libraryTarget: 'umd'
   },
 
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.ts', '.tsx']
   },
 
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
       },
       {
         test: /\.(scss)$/,

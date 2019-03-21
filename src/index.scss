@@ -19,6 +19,7 @@
 }
 
 .alert-confirm-main {
+  width: 340px;
   position: absolute;
   left: 50%;
   top: 30%;
@@ -46,11 +47,10 @@
 
   .icon {
     display: block;
-    transition: color, transform 0.3s;
+    transition: color 0.3s;
 
     &:hover {
-      color: #bbb;
-      transform: scale(0.9);
+      color: #CCC;
     }
   }
 }

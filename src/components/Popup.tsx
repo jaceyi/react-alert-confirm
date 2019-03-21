@@ -1,22 +1,33 @@
-import React, {Component, Fragment} from 'react';
+import * as React from 'react';
 import Button from './Button';
 
-class Popup extends Component {
+export namespace Popup {
+  export interface Props {
+    title?: React.ReactNode;
+    content?: React.ReactNode;
+    footer?: React.ReactNode;
+    dispatch: {
+      (action: string): void
+    };
+    type?: 'alert' | 'confirm'
+  }
+}
+
+class Popup extends React.Component<Popup.Props> {
   render() {
     const {
       title,
       content,
       footer,
-      width,
       dispatch,
       type
     } = this.props;
     const isAlert = type !== 'alert';
 
-    return (
-      <Fragment>
+    return(
+      <React.Fragment>
         <div className={'alert-confirm-shadow'}/>
-        <div className={'alert-confirm-main'} style={{width: width || 360}}>
+        <div className={'alert-confirm-main'}>
           <div className={'alert-confirm-header'}>
             <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
             {
@@ -31,21 +42,21 @@ class Popup extends Component {
           <div className={'alert-confirm-footer'}>
             {
               footer || (
-                <Fragment>
+                <React.Fragment>
                   {
-                    isAlert && <Button onClick={() => dispatch('cancel')}>取 消</Button>
+                    isAlert && <Button onClick={() => dispatch('cancel')}><span>取 消</span></Button>
                   }
                   <Button
-                    type={'primary'}
+                    type="primary"
                     style={{marginLeft: 10}}
                     onClick={() => dispatch('confirm')}
                   >确 认</Button>
-                </Fragment>
+                </React.Fragment>
               )
             }
           </div>
         </div>
-      </Fragment>
+      </React.Fragment>
     )
   }
 }
