@@ -22,10 +22,10 @@ interface AlertConfirmInterface {
 class AlertConfirm implements AlertConfirmInterface {
   container = null;
 
-  constructor({title, content, footer, closeBefore, zIndex, type}) {
+  constructor({title, content, footer, closeBefore, zIndex, type}: optionsInterface) {
     const container = document.createElement('div');
     container.className = 'alert-confirm-container';
-    container.style.zIndex = zIndex || 99999;
+    zIndex && (container.style.zIndex = String(zIndex));
     document.body.appendChild(container);
     ReactDOM.render(
       <Popup
@@ -36,8 +36,9 @@ class AlertConfirm implements AlertConfirmInterface {
         dispatch={action => this.dispatch(action)}
       />,
       container);
-    this.closeBefore = closeBefore;
     this.container = container;
+
+    closeBefore && (this.closeBefore = closeBefore);
   }
 
   closeBefore(action, closePopup) {
@@ -60,4 +61,16 @@ class AlertConfirm implements AlertConfirmInterface {
   }
 }
 
-export default options => new AlertConfirm(options);
+interface optionsInterface {
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
+  closeBefore?: closePopupInterface;
+  zIndex?: number;
+  type?: 'alert' | 'confirm'
+}
+
+export default (options: optionsInterface) => {
+  const instance: AlertConfirmInterface = new AlertConfirm(options);
+  return instance;
+};

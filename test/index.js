@@ -1,12 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import alertConfirm, { Button } from '../dist';
 
 class App extends React.Component {
   render() {
     return (
       <div>
-        <Button onClick={this.handleClickBtn}>点 击</Button>
+        <Button
+          type={'primary'}
+          onClick={this.handleClickBtn}
+        >点 击</Button>
       </div>
     )
   }
@@ -14,7 +17,7 @@ class App extends React.Component {
   handleClickBtn = () => {
     alertConfirm({
       title: '提示',
-      content: '此操作会让你少活1s，请确认！',
+      content: '这是提示语，支持ReactNode',
       closeBefore(action, close) {
         console.log(action);
         close();
