@@ -4,115 +4,127 @@
 
 ### Installing
 
-```$xslt
+```
 yarn add react-alert-confirm
 // or
 npm install react-alert-confirm --save
 ```
 
 ## Example
+```
+import alertConfirm, { alert } from 'react-alert-confirm';
 
-```$xslt
-import alertConfirm, {Button} from 'react-alert-confirm';
-
+// Confirm
 alertConfirm({
   title: 'Title',
   content: 'Content',
-  closeBefore(action, close) {
-    switch (action) {
-      case 'confirm':
-        // some event
-        break;
-      case 'cancel':
-        // some event
-        break;
-      case 'close':
-        // some event
-        close() // 关闭弹窗
-        break;
-      default:
-        close() // close popup
-    }
+  onOk: () => {
+    console.log('ok')
+  },
+  onCancel: () => {
+    console.log('cancel')
   }
 })
 
-// alert
+// Alert
 alertConfirm({
   type: 'alert',
-  //...
+  ...
 })
-
-// button 提供统一风格的Button
-const instance = alertConfirm({
-  title: 'title',
-  content: 'content',
-  footer: (
-    <div>
-      <Button onClick={() => instance.dispatch('hello')}>
-        Hello
-      </Button>
-    </div>
-  ),
-  closeBefore(action, close) {
-    switch (action) {
-      case 'hello':
-        // some event
-        break;
-      case 'close':
-        // some event
-        close();
-      default:
-        close();
-    }
-  }
+// or
+alert({
+  ...
 })
 ```
 
 ## Options
-
-```$xslt
+```
 {
-  title: <div>title</div>,
-  content: <div>demo</div>,
-  footer: null,
+  // 弹窗的类型
+  type?: 'alert' | 'confirm';
   
-  // [string] 弹窗类型 default is confirm type
-  type: 'alert',
+  // 弹窗标题
+  title?: React.ReactNode;
   
-  // [number] 弹窗宽度
-  width: 360,
+  // 弹窗内容
+  content?: React.ReactNode;
   
-  // [number]
-  zIndex: 99999,
+  // 弹窗底部 用于自定义底部按钮
+  footer?: React.ReactNode;
   
-  /**
-   * @param action
-   * default:
-   * confirm => 确认按钮
-   * cancel => 取消按钮
-   * close => 关闭按钮
-   *
-   * @param close
-   * Close the popup callback function
-   */
-  closeBefore(action, close) {
-    // some event
-    close()
-  }
+  // 点击确认的回调
+  onOk: { (): void };
+  
+  // 点击取消或者关闭弹窗的回调
+  onCancel: { (): void };
+  
+  // 关闭弹窗之前的回调（此方法会导致 onOk 和 onCancel 失效）
+  closeBefore?: {
+    /**
+     * @params action 触发关闭的来源，默认（ok: 确认按钮 | cancel: 取消按钮 | close: 关闭按钮）
+     * @params closePopup 关闭弹窗的方法
+     */
+    (action: string | number, closePopup: { (): void }): void
+  };
 }
 ```
 
 ## Instance
 
-```$xslt
-const instance = alertConfirm([options: object]): object
+```
+import alertConfirm, { alert } from 'react-alert-confirm';
 
-// popup最外层container元素
-instance.container
+const instance = alertConfirm({ ... }):
 
-// 触发 closeBefore 事件
-instance.dispatch([action: string]): void
+{
+  container: Element;
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
+  type: 'confirm' | 'alert';
+  status: 'mount' | 'unmount';
+  onOk: { (): void };
+  onCancel: { (): void };
+  closeBefore: {
+    (action: string | number, closePopup: { (): void }): void
+  };
+  
+  // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
+  dispatch: {
+    (action: string | number): void;
+  };
+  
+  // 关闭当前实例弹窗
+  closePopup: { (): void };
+  
+  // 重新渲染当前实例
+  render: { (): void };
+}
+```
 
-// 关闭当前弹窗
-instance.closeConfirm(): void
+## Advanced
+```
+import alertConfirm, { Button } from 'react-alert-confirm';
+
+// 提供按钮组件方便样式统一
+const instance = alertConfirm({
+  title: 'title',
+  content: 'content',
+  footer: (
+    <Button onClick={() => instance.dispatch('hello')}>
+      Hello
+    </Button>
+  ),
+  closeBefore(action, close) {
+    switch (action) {
+      case 'close':
+        // ...
+        break;
+      case 'hello':
+        // ...
+        break;
+    }
+    close() // close popup
+  }
+})
 ```

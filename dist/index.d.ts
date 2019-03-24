@@ -6,7 +6,6 @@ interface closeBeforeInterface {
 
 interface AlertConfirmInterface {
   container: Element;
-  closeBefore: closeBeforeInterface;
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
@@ -14,22 +13,22 @@ interface AlertConfirmInterface {
   status: 'mount' | 'unmount';
   onOk: { (): void };
   onCancel: { (): void };
+  closeBefore: closeBeforeInterface;
   dispatch: {
     (action: string | number): void;
   };
   closePopup: { (): void };
-  render: {
-    (callBack: { (): void }): void
-  }
+  render: { (): void };
 }
 
 interface optionsInterface {
+  type?: 'alert' | 'confirm';
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
-  closeBefore?: closeBeforeInterface;
   onOk: { (): void };
   onCancel: { (): void };
+  closeBefore?: closeBeforeInterface;
 }
 
 export default function (options: optionsInterface): AlertConfirmInterface;

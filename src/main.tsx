@@ -11,7 +11,6 @@ interface optionsInterface {
   content?: React.ReactNode;
   footer?: React.ReactNode;
   type: 'confirm' | 'alert';
-  status: 'mount' | 'unmount';
   closeBefore: closeBeforeInterface;
   onOk: { (): void }
   onCancel: { (): void }
@@ -58,13 +57,10 @@ class AlertConfirm {
 
   closePopup(): void {
     this.status = 'unmount';
-    this.render(() => {
-      ReactDOM.unmountComponentAtNode(this.container);
-      document.body.removeChild(this.container);
-    });
+    this.render();
   }
 
-  render(callBack: { (): void } = null) {
+  render() {
     const {
       container,
       title,
@@ -83,7 +79,10 @@ class AlertConfirm {
         footer={footer}
         dispatch={action => this.dispatch(action)}
         status={status}
-        onClosePopup={callBack}
+        onClosePopup={() => {
+          ReactDOM.unmountComponentAtNode(this.container);
+          document.body.removeChild(this.container);
+        }}
       />,
       container);
   }
