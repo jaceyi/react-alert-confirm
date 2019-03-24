@@ -1,8 +1,6 @@
-# react-alert-confirm
-
 > A react popup component. （一个react的弹窗组件，支持 alert、confirm）
 
-### Installing
+## Installing
 
 ```
 yarn add react-alert-confirm
