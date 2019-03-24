@@ -3,30 +3,70 @@ import * as ReactDOM from 'react-dom';
 import Popup from './components/Popup';
 
 interface closePopupInterface {
-  (): void
+  (action: string, closePopup: closePopupInterface): void;
 }
 
 interface AlertConfirmInterface {
-  container: Element
-  closeBefore: {
-    (action: string, closePopup: closePopupInterface): void;
-  };
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
+  type?: 'alert' | 'confirm'
+  container: Element;
+  animateTimer: number;
+  closeBefore: closePopupInterface;
   dispatch: {
     (action): void;
   }
   closePopup: {
     (): void
   }
+  render: {
+    (): void
+  }
 }
 
 class AlertConfirm implements AlertConfirmInterface {
   container = null;
+  closeBefore = null;
+  animateTimer = null;
+  title = null;
+  content = null;
+  footer = null;
+  type = null;
 
-  constructor({title, content, footer, closeBefore, zIndex, type}: optionsInterface) {
+  constructor({title, content, footer, closeBefore, type}: optionsInterface) {
+    this.title = title;
+    this.content = content;
+    this.footer = footer;
+    this.type = type;
     const container = document.createElement('div');
     container.className = 'alert-confirm-container';
-    zIndex && (container.style.zIndex = String(zIndex));
     document.body.appendChild(container);
+    this.container = container;
+    closeBefore && (this.closeBefore = closeBefore);
+    this.render();
+  }
+
+  dispatch(action) {
+    if (this.closeBefore) {
+      this.closeBefore(action, this.closePopup.bind(this));
+    } else {
+      this.closePopup();
+    }
+  }
+
+  closePopup() {
+    this.render();
+    // document.body.removeChild(this.container);
+  }
+
+  render() {
+    const { container, type, title, content, footer } = this;
+
+    if (ReactDOM.unmountComponentAtNode(container)) {
+      return
+    }
+
     ReactDOM.render(
       <Popup
         type={type}
@@ -36,28 +76,6 @@ class AlertConfirm implements AlertConfirmInterface {
         dispatch={action => this.dispatch(action)}
       />,
       container);
-    this.container = container;
-
-    closeBefore && (this.closeBefore = closeBefore);
-  }
-
-  closeBefore(action, closePopup) {
-    closePopup();
-  }
-
-  /**
-   * @param action
-   * confirm => 确认按钮
-   * cancel => 取消按钮
-   * close => 关闭按钮
-   */
-  dispatch(action) {
-    this.closeBefore(action, () => this.closePopup());
-  }
-
-  // close popup
-  closePopup() {
-    document.body.removeChild(this.container);
   }
 }
 
@@ -66,11 +84,7 @@ interface optionsInterface {
   content?: React.ReactNode;
   footer?: React.ReactNode;
   closeBefore?: closePopupInterface;
-  zIndex?: number;
   type?: 'alert' | 'confirm'
 }
 
-export default (options: optionsInterface) => {
-  const instance: AlertConfirmInterface = new AlertConfirm(options);
-  return instance;
-};
+export default (options: optionsInterface) => new AlertConfirm(options);
