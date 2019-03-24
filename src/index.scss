@@ -19,7 +19,7 @@
 }
 
 .alert-confirm-main {
-  width: 360px;
+  width: 380px;
   position: absolute;
   left: 0;
   right: 0;
@@ -57,7 +57,7 @@
 }
 
 .alert-confirm-body {
-  padding: 8px 10px;
+  padding: 10px;
   color: #666;
   font-size: 14px;
 }
@@ -81,6 +81,7 @@
   color: #5c5c5c;
   border-radius: 3px;
   outline: none;
+  background-color: #fff;
   transition: box-shadow .3s cubic-bezier(.4,0,.2,1), color 0.3s;
   box-shadow: 0 -2px 5px 0 rgba(223,200,241,.3), 0 1px 0 0 rgba(223,224,241,.3), 0 1px 1px 0 rgba(162,166,191,.5), 0 2px 4px 0 rgba(228,229,242,.6);
 
@@ -100,19 +101,19 @@
 }
 
 .fadeIn {
-  animation: fadeIn 200ms;
+  animation: fadeIn 150ms;
 }
 
 .fadeOut {
-  animation: fadeOut 200ms;
+  animation: fadeOut 150ms;
 }
 
 .zoomIn {
-  animation: zoomIn 200ms;
+  animation: zoomIn 150ms;
 }
 
 .zoomOut {
-  animation: zoomOut 200ms;
+  animation: zoomOut 150ms;
 }
 
 @keyframes fadeIn {
@@ -135,18 +136,18 @@
 
 @keyframes zoomIn {
   0% {
-    transform: scale(0.6);
+    transform: scale(0.6) translateY(-50px);
   }
   100% {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 
 @keyframes zoomOut {
   0% {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
   100% {
-    transform: scale(0.6);
+    transform: scale(0.6) translateY(-50px);
   }
 }

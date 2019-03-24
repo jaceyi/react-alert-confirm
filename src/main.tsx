@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Popup from './components/Popup';
+import { addClassName, removeClassName } from './utils';
 
 interface closePopupInterface {
   (action: string, closePopup: closePopupInterface): void;
@@ -12,27 +13,27 @@ interface AlertConfirmInterface {
   footer?: React.ReactNode;
   type?: 'alert' | 'confirm'
   container: Element;
-  animateTimer: number;
   closeBefore: closePopupInterface;
   dispatch: {
-    (action): void;
+    (action: string | number): void;
   }
   closePopup: {
     (): void
   }
-  render: {
-    (): void
+  animate: {
+    (animation: 'show' | 'hide', callBack): void
   }
+  mainRef: HTMLElement
 }
 
 class AlertConfirm implements AlertConfirmInterface {
   container = null;
   closeBefore = null;
-  animateTimer = null;
   title = null;
   content = null;
   footer = null;
   type = null;
+  mainRef = null;
 
   constructor({title, content, footer, closeBefore, type}: optionsInterface) {
     this.title = title;
@@ -44,7 +45,17 @@ class AlertConfirm implements AlertConfirmInterface {
     document.body.appendChild(container);
     this.container = container;
     closeBefore && (this.closeBefore = closeBefore);
-    this.render();
+    ReactDOM.render(
+      <Popup
+        mainRef={node => this.mainRef = node}
+        type={type}
+        title={title}
+        content={content}
+        footer={footer}
+        dispatch={action => this.dispatch(action)}
+      />,
+      container);
+    this.animate('show', null);
   }
 
   dispatch(action) {
@@ -56,26 +67,31 @@ class AlertConfirm implements AlertConfirmInterface {
   }
 
   closePopup() {
-    this.render();
-    // document.body.removeChild(this.container);
+    this.animate('hide', () => {
+      ReactDOM.unmountComponentAtNode(this.container);
+      document.body.removeChild(this.container);
+    });
   }
 
-  render() {
-    const { container, type, title, content, footer } = this;
-
-    if (ReactDOM.unmountComponentAtNode(container)) {
-      return
+  animate(animation, callBack) {
+    if (animation === 'show') {
+      addClassName(this.mainRef, 'zoomIn');
+      addClassName(this.container, 'fadeIn');
+    } else {
+      addClassName(this.mainRef, 'zoomOut');
+      addClassName(this.container, 'fadeOut');
     }
 
-    ReactDOM.render(
-      <Popup
-        type={type}
-        title={title}
-        content={content}
-        footer={footer}
-        dispatch={action => this.dispatch(action)}
-      />,
-      container);
+    this.mainRef.addEventListener('animationend', () => {
+      if (animation === 'show') {
+        removeClassName(this.mainRef, 'zoomIn');
+        removeClassName(this.container, 'fadeIn');
+      } else {
+        removeClassName(this.mainRef, 'zoomOut');
+        removeClassName(this.container, 'fadeOut');
+      }
+      callBack && callBack();
+    });
   }
 }
 

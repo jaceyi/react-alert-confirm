@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from './Button';
-import { addClassName } from '../utils';
 
 export namespace Popup {
   export interface Props {
@@ -10,22 +9,18 @@ export namespace Popup {
     dispatch: {
       (action: string): void
     };
-    type?: 'alert' | 'confirm'
+    type?: 'alert' | 'confirm',
+    mainRef: {
+      (mainNode: HTMLElement): void
+    }
   }
 }
 
 class Popup extends React.Component<Popup.Props> {
-  shadowNode: HTMLElement = null;
   mainNode: HTMLElement = null;
 
   componentDidMount(): void {
-    addClassName(this.shadowNode, 'fadeIn');
-    addClassName(this.mainNode, 'zoomIn');
-  }
-
-  componentWillUnmount(): void {
-    addClassName(this.shadowNode, 'fadeOut');
-    addClassName(this.mainNode, 'zoomOut');
+    this.props.mainRef(this.mainNode);
   }
 
   render() {
@@ -40,7 +35,7 @@ class Popup extends React.Component<Popup.Props> {
 
     return(
       <React.Fragment>
-        <div className={'alert-confirm-shadow'} ref={node => node && (this.shadowNode = node)}/>
+        <div className={'alert-confirm-shadow'}/>
         <div className={'alert-confirm-main'} ref={node => node && (this.mainNode = node)}>
           <div className={'alert-confirm-header'}>
             <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
