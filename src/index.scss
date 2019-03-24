@@ -24,7 +24,7 @@
   left: 0;
   right: 0;
   margin: 0 auto;
-  top: 30vh;
+  top: 26vh;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -56,7 +56,7 @@
   }
 }
 
-.alert-confirm-body {
+.alert-confirm-content {
   padding: 10px;
   color: #666;
   font-size: 14px;
@@ -136,7 +136,7 @@
 
 @keyframes zoomIn {
   0% {
-    transform: scale(0.6) translateY(-50px);
+    transform: scale(0.6) translateY(-100px);
   }
   100% {
     transform: scale(1) translateY(0);
@@ -148,6 +148,6 @@
     transform: scale(1) translateY(0);
   }
   100% {
-    transform: scale(0.6) translateY(-50px);
+    transform: scale(0.6) translateY(-100px);
   }
 }

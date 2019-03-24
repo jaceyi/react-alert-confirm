@@ -8,10 +8,6 @@ interface closePopupInterface {
 }
 
 interface AlertConfirmInterface {
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  footer?: React.ReactNode;
-  type?: 'alert' | 'confirm'
   container: Element;
   closeBefore: closePopupInterface;
   dispatch: {
@@ -29,22 +25,15 @@ interface AlertConfirmInterface {
 class AlertConfirm implements AlertConfirmInterface {
   container = null;
   closeBefore = null;
-  title = null;
-  content = null;
-  footer = null;
-  type = null;
   mainRef = null;
 
-  constructor({title, content, footer, closeBefore, type}: optionsInterface) {
-    this.title = title;
-    this.content = content;
-    this.footer = footer;
-    this.type = type;
+  constructor({title, content, footer, closeBefore, type = 'confirm'}: optionsInterface) {
     const container = document.createElement('div');
     container.className = 'alert-confirm-container';
     document.body.appendChild(container);
     this.container = container;
     closeBefore && (this.closeBefore = closeBefore);
+
     ReactDOM.render(
       <Popup
         mainRef={node => this.mainRef = node}

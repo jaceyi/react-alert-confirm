@@ -31,7 +31,7 @@ class Popup extends React.Component<Popup.Props> {
       dispatch,
       type
     } = this.props;
-    const isAlert = type !== 'alert';
+    const isConfirm = type === 'confirm';
 
     return(
       <React.Fragment>
@@ -40,20 +40,20 @@ class Popup extends React.Component<Popup.Props> {
           <div className={'alert-confirm-header'}>
             <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
             {
-              isAlert && (
+              isConfirm && (
                 <div className={'alert-confirm-header-close'}>
                   <span className={'icon'} onClick={() => dispatch('close')}>✕</span>
                 </div>
               )
             }
           </div>
-          <div className={'alert-confirm-body'}>{content}</div>
+          <div className={'alert-confirm-content'}>{content}</div>
           <div className={'alert-confirm-footer'}>
             {
               footer || (
                 <React.Fragment>
                   {
-                    isAlert && <Button onClick={() => dispatch('cancel')}><span>取 消</span></Button>
+                    isConfirm && <Button onClick={() => dispatch('cancel')}><span>取 消</span></Button>
                   }
                   <Button
                     type="primary"

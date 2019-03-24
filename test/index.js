@@ -15,7 +15,7 @@ class App extends React.Component {
   }
 
   handleClickBtn = () => {
-    alertConfirm({
+    const instance = alertConfirm({
       title: '提示',
       content: '这是提示语，支持ReactNode',
       closeBefore(action, close) {
@@ -23,6 +23,7 @@ class App extends React.Component {
         close();
       }
     });
+    console.log(instance);
   };
 }
 
