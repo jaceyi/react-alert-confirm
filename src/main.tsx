@@ -1,95 +1,92 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Popup from './components/Popup';
-import { addClassName, removeClassName } from './utils';
 
-interface closePopupInterface {
-  (action: string, closePopup: closePopupInterface): void;
-}
-
-interface AlertConfirmInterface {
-  container: Element;
-  closeBefore: closePopupInterface;
-  dispatch: {
-    (action: string | number): void;
-  }
-  closePopup: {
-    (): void
-  }
-  animate: {
-    (animation: 'show' | 'hide', callBack): void
-  }
-  mainRef: HTMLElement
-}
-
-class AlertConfirm implements AlertConfirmInterface {
-  container = null;
-  closeBefore = null;
-  mainRef = null;
-
-  constructor({title, content, footer, closeBefore, type = 'confirm'}: optionsInterface) {
-    const container = document.createElement('div');
-    container.className = 'alert-confirm-container';
-    document.body.appendChild(container);
-    this.container = container;
-    closeBefore && (this.closeBefore = closeBefore);
-
-    ReactDOM.render(
-      <Popup
-        mainRef={node => this.mainRef = node}
-        type={type}
-        title={title}
-        content={content}
-        footer={footer}
-        dispatch={action => this.dispatch(action)}
-      />,
-      container);
-    this.animate('show', null);
-  }
-
-  dispatch(action) {
-    if (this.closeBefore) {
-      this.closeBefore(action, this.closePopup.bind(this));
-    } else {
-      this.closePopup();
-    }
-  }
-
-  closePopup() {
-    this.animate('hide', () => {
-      ReactDOM.unmountComponentAtNode(this.container);
-      document.body.removeChild(this.container);
-    });
-  }
-
-  animate(animation, callBack) {
-    if (animation === 'show') {
-      addClassName(this.mainRef, 'zoomIn');
-      addClassName(this.container, 'fadeIn');
-    } else {
-      addClassName(this.mainRef, 'zoomOut');
-      addClassName(this.container, 'fadeOut');
-    }
-
-    this.mainRef.addEventListener('animationend', () => {
-      if (animation === 'show') {
-        removeClassName(this.mainRef, 'zoomIn');
-        removeClassName(this.container, 'fadeIn');
-      } else {
-        removeClassName(this.mainRef, 'zoomOut');
-        removeClassName(this.container, 'fadeOut');
-      }
-      callBack && callBack();
-    });
-  }
+interface closeBeforeInterface {
+  (action: string | number, closePopup: { (): void }): void
 }
 
 interface optionsInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
-  closeBefore?: closePopupInterface;
-  type?: 'alert' | 'confirm'
+  type: 'confirm' | 'alert';
+  status: 'mount' | 'unmount';
+  closeBefore: closeBeforeInterface;
+  onOk: { (): void }
+  onCancel: { (): void }
+}
+
+class AlertConfirm {
+  title?: React.ReactNode = null;
+  content?: React.ReactNode = null;
+  footer?: React.ReactNode = null;
+  type: 'confirm' | 'alert' = 'confirm';
+  status: 'mount' | 'unmount' = 'mount';
+  container: Element = null;
+  closeBefore: closeBeforeInterface = null;
+  onOk: { (): void } = null;
+  onCancel: { (): void } = null;
+
+  constructor({ title, content, footer, closeBefore, type = 'confirm', onOk, onCancel }: optionsInterface) {
+    const container = document.createElement('div');
+    container.className = 'alert-confirm-container';
+    document.body.appendChild(container);
+    this.container = container;
+    this.type = type;
+    this.title = title;
+    this.content = content;
+    this.footer = footer;
+    this.onOk = onOk;
+    this.onCancel = onCancel;
+    closeBefore && (this.closeBefore = closeBefore);
+    this.render();
+  }
+
+  dispatch(action: string | number): void {
+    const { closeBefore, onOk, onCancel } = this;
+
+    /*优先选择 closeBefore */
+    if (closeBefore) {
+      closeBefore(action, this.closePopup.bind(this));
+      return
+    }
+    if (action === 'ok') onOk && onOk();
+    if (action === 'cancel' || action === 'close') onCancel && onCancel();
+    this.closePopup();
+  }
+
+  closePopup(): void {
+    this.status = 'unmount';
+    this.render(() => {
+      ReactDOM.unmountComponentAtNode(this.container);
+      document.body.removeChild(this.container);
+    });
+  }
+
+  render(callBack: { (): void } = null) {
+    const {
+      container,
+      title,
+      content,
+      footer,
+      type,
+      status
+    } = this;
+
+    ReactDOM.unmountComponentAtNode(container);
+    ReactDOM.render(
+      <Popup
+        type={type}
+        title={title}
+        content={content}
+        footer={footer}
+        dispatch={action => this.dispatch(action)}
+        status={status}
+        onClosePopup={callBack}
+      />,
+      container);
+  }
 }
 
 export default (options: optionsInterface) => new AlertConfirm(options);

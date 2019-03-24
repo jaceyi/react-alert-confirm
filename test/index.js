@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import alertConfirm, { Button } from '../dist';
+import confirm, { Button, alert } from '../dist';
 
 class App extends React.Component {
   render() {
@@ -8,20 +8,33 @@ class App extends React.Component {
       <div>
         <Button
           type={'primary'}
-          onClick={this.handleClickBtn}
-        >点 击</Button>
+          onClick={this.handleClickConfirm}
+        >Confirm</Button>
+        <Button
+          style={{marginLeft: 10}}
+          onClick={this.handleClickAlert}
+        >Alert</Button>
       </div>
     )
   }
 
-  handleClickBtn = () => {
-    const instance = alertConfirm({
+  handleClickConfirm = () => {
+    const instance = confirm({
       title: '提示',
-      content: '这是提示语，支持ReactNode',
-      closeBefore(action, close) {
-        console.log(action);
-        close();
+      content: '这是 Confirm，支持ReactNode',
+      onOk: () => {
+        console.log('ok');
+      },
+      onCancel: () => {
+        console.log('cancel')
       }
+    });
+    console.log(instance);
+  };
+
+  handleClickAlert = () => {
+    const instance = alert({
+      content: '这是 Alert ，支持ReactNode'
     });
     console.log(instance);
   };

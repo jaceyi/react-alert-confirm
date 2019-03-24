@@ -14,11 +14,13 @@ export default class Button extends React.Component<Button.Props> {
     const {
       type,
       children,
-      onClick
+      onClick,
+      style
     } = this.props;
 
     return (
-      <button 
+      <button
+        style={style}
         onClick={onClick}
         className={`alert-confirm-button ${type || 'default'}`}
       >

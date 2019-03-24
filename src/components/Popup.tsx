@@ -7,23 +7,55 @@ export namespace Popup {
     content?: React.ReactNode;
     footer?: React.ReactNode;
     dispatch: {
-      (action: string): void
+      (action: string | number): void
     };
-    type?: 'alert' | 'confirm',
-    mainRef: {
-      (mainNode: HTMLElement): void
-    }
+    type?: 'alert' | 'confirm';
+    status: 'mount' | 'unmount';
+    onClosePopup: { (): void }
+  }
+
+  export interface State {
+    shadowClassName: string;
+    mainClassName: string
   }
 }
 
-class Popup extends React.Component<Popup.Props> {
-  mainNode: HTMLElement = null;
+class Popup extends React.Component<Popup.Props, Popup.State> {
+  state = {
+    shadowClassName: '',
+    mainClassName: '',
+  };
 
   componentDidMount(): void {
-    this.props.mainRef(this.mainNode);
+    if (this.props.status === 'mount') {
+      this.setState({
+        shadowClassName: 'fadeIn',
+        mainClassName: 'zoomIn'
+      })
+    } else {
+      this.setState({
+        shadowClassName: 'fadeOut',
+        mainClassName: 'zoomOut'
+      })
+    }
   }
 
+  animationEnd = () => {
+    this.setState({
+      shadowClassName: '',
+      mainClassName: ''
+    });
+    const { status, onClosePopup } = this.props;
+    if (status === 'unmount') {
+      onClosePopup && onClosePopup();
+    }
+  };
+
   render() {
+    const {
+      shadowClassName,
+      mainClassName
+    } = this.state;
     const {
       title,
       content,
@@ -31,16 +63,14 @@ class Popup extends React.Component<Popup.Props> {
       dispatch,
       type
     } = this.props;
-    const isConfirm = type === 'confirm';
 
     return(
-      <React.Fragment>
-        <div className={'alert-confirm-shadow'}/>
-        <div className={'alert-confirm-main'} ref={node => node && (this.mainNode = node)}>
+      <div className={`alert-confirm-shadow ${shadowClassName}`}>
+        <div className={`alert-confirm-main ${mainClassName}`} onAnimationEnd={this.animationEnd}>
           <div className={'alert-confirm-header'}>
-            <div className={'alert-confirm-header-title'}>{title || '提示'}</div>
+            <div className={'alert-confirm-header-title'}>{title}</div>
             {
-              isConfirm && (
+              type !== 'alert' && (
                 <div className={'alert-confirm-header-close'}>
                   <span className={'icon'} onClick={() => dispatch('close')}>✕</span>
                 </div>
@@ -53,19 +83,19 @@ class Popup extends React.Component<Popup.Props> {
               footer || (
                 <React.Fragment>
                   {
-                    isConfirm && <Button onClick={() => dispatch('cancel')}><span>取 消</span></Button>
+                    type !== 'alert' && <Button onClick={() => dispatch('cancel')}><span>取 消</span></Button>
                   }
                   <Button
                     type="primary"
                     style={{marginLeft: 10}}
-                    onClick={() => dispatch('confirm')}
+                    onClick={() => dispatch('ok')}
                   >确 认</Button>
                 </React.Fragment>
               )
             }
           </div>
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 }
