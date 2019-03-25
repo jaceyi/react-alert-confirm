@@ -1,6 +1,6 @@
-> A react popup component. （一个react的弹窗组件，支持 alert、confirm）
+> A react component confirm dialog. （一个react的弹窗组件，支持 alert、confirm）
 
-## Installing
+### Installing（安装）
 
 ```
 yarn add react-alert-confirm
@@ -8,7 +8,7 @@ yarn add react-alert-confirm
 npm install react-alert-confirm --save
 ```
 
-## Example
+### Example（例子）
 ```
 import alertConfirm, { alert } from 'react-alert-confirm';
 
@@ -35,7 +35,7 @@ alert({
 })
 ```
 
-## Options
+### Options（选项）
 ```
 {
   // 弹窗的类型
@@ -67,7 +67,7 @@ alert({
 }
 ```
 
-## Instance
+### Instance（实例）
 
 ```
 import alertConfirm, { alert } from 'react-alert-confirm';
@@ -100,7 +100,7 @@ const instance = alertConfirm({ ... }):
 }
 ```
 
-## Advanced
+### Advanced（高级用法）
 ```
 import alertConfirm, { Button } from 'react-alert-confirm';
 
