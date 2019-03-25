@@ -106,8 +106,8 @@ import alertConfirm, { Button } from 'react-alert-confirm';
 
 // 提供按钮组件方便样式统一
 const instance = alertConfirm({
-  title: 'title',
-  content: 'content',
+  title: 'Title',
+  content: 'Content',
   footer: (
     <Button onClick={() => instance.dispatch('hello')}>
       Hello
