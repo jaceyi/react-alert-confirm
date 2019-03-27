@@ -11,6 +11,7 @@ npm install react-alert-confirm --save
 ### Example（例子）
 ```
 import alertConfirm, { alert } from 'react-alert-confirm';
+import 'react-alert-confirm/dist/index.css';
 
 // Confirm
 alertConfirm({
@@ -49,6 +50,9 @@ alert({
   
   // 弹窗底部 用于自定义底部按钮
   footer?: React.ReactNode;
+
+  // 弹层的 z-index 默认为1000
+  zIndex?: number = 1000;
   
   // 点击确认的回调
   onOk: { (): void };
@@ -71,6 +75,7 @@ alert({
 
 ```
 import alertConfirm, { alert } from 'react-alert-confirm';
+import 'react-alert-confirm/dist/index.css';
 
 const instance = alertConfirm({ ... }):
 
@@ -103,6 +108,7 @@ const instance = alertConfirm({ ... }):
 ### Advanced（高级用法）
 ```
 import alertConfirm, { Button } from 'react-alert-confirm';
+import 'react-alert-confirm/dist/index.css';
 
 // 提供按钮组件方便样式统一
 const instance = alertConfirm({

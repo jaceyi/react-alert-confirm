@@ -9,6 +9,7 @@ interface AlertConfirmInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
+  zIndex: number;
   type: 'confirm' | 'alert';
   status: 'mount' | 'unmount';
   onOk: { (): void };
@@ -26,6 +27,7 @@ interface optionsInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
+  zIndex?: number;
   onOk: { (): void };
   onCancel: { (): void };
   closeBefore?: closeBeforeInterface;

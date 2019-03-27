@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import confirm, { Button, alert } from '../dist';
+import '../dist/index.css';
 
 class App extends React.Component {
   render() {
@@ -20,6 +21,7 @@ class App extends React.Component {
 
   handleClickConfirm = () => {
     const instance = confirm({
+      zIndex: 999,
       title: '提示',
       content: '这是 Confirm，支持ReactNode',
       onOk: () => {

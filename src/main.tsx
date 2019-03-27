@@ -10,6 +10,7 @@ interface optionsInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
+  zIndex?: number;
   type: 'confirm' | 'alert';
   closeBefore: closeBeforeInterface;
   onOk: { (): void }
@@ -20,6 +21,7 @@ class AlertConfirm {
   title?: React.ReactNode = null;
   content?: React.ReactNode = null;
   footer?: React.ReactNode = null;
+  zIndex?: number;
   type: 'confirm' | 'alert' = 'confirm';
   status: 'mount' | 'unmount' = 'mount';
   container: Element = null;
@@ -27,15 +29,21 @@ class AlertConfirm {
   onOk: { (): void } = null;
   onCancel: { (): void } = null;
 
-  constructor({ title, content, footer, closeBefore, type = 'confirm', onOk, onCancel }: optionsInterface) {
-    const container = document.createElement('div');
+  constructor({ title, content, footer, zIndex, closeBefore, type = 'confirm', onOk, onCancel }: optionsInterface) {
+    const container: HTMLDivElement = document.createElement('div');
     container.className = 'alert-confirm-container';
+    if (zIndex !== undefined) {
+      container.style.zIndex = String(zIndex);
+      this.zIndex = zIndex;
+    } else {
+      this.zIndex = 999;
+    }
     document.body.appendChild(container);
     this.container = container;
-    this.type = type;
     this.title = title;
     this.content = content;
     this.footer = footer;
+    this.type = type;
     this.onOk = onOk;
     this.onCancel = onCancel;
     closeBefore && (this.closeBefore = closeBefore);
@@ -45,7 +53,7 @@ class AlertConfirm {
   dispatch(action: string | number): void {
     const { closeBefore, onOk, onCancel } = this;
 
-    /*优先选择 closeBefore */
+    // 优先选择 closeBefore
     if (closeBefore) {
       closeBefore(action, this.closePopup.bind(this));
       return

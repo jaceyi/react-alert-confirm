@@ -15,26 +15,26 @@ export namespace Popup {
   }
 
   export interface State {
-    shadowClassName: string;
+    maskClassName: string;
     mainClassName: string
   }
 }
 
 class Popup extends React.Component<Popup.Props, Popup.State> {
   state = {
-    shadowClassName: '',
+    maskClassName: '',
     mainClassName: '',
   };
 
   componentDidMount(): void {
     if (this.props.status === 'mount') {
       this.setState({
-        shadowClassName: 'fadeIn',
+        maskClassName: 'fadeIn',
         mainClassName: 'zoomIn'
       })
     } else {
       this.setState({
-        shadowClassName: 'fadeOut',
+        maskClassName: 'fadeOut',
         mainClassName: 'zoomOut'
       })
     }
@@ -42,7 +42,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
 
   animationEnd = () => {
     this.setState({
-      shadowClassName: '',
+      maskClassName: '',
       mainClassName: ''
     });
     const { status, onClosePopup } = this.props;
@@ -53,7 +53,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
 
   render() {
     const {
-      shadowClassName,
+      maskClassName,
       mainClassName
     } = this.state;
     const {
@@ -65,7 +65,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
     } = this.props;
 
     return(
-      <div className={`alert-confirm-shadow ${shadowClassName}`}>
+      <div className={`alert-confirm-mask ${maskClassName}`}>
         <div className={`alert-confirm-main ${mainClassName}`} onAnimationEnd={this.animationEnd}>
           <div className={'alert-confirm-header'}>
             <div className={'alert-confirm-header-title'}>{title}</div>
