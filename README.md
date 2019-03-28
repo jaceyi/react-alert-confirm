@@ -85,6 +85,7 @@ const instance = alertConfirm({ ... }):
   content?: React.ReactNode;
   footer?: React.ReactNode;
   type: 'confirm' | 'alert';
+  zIndex: number;
   status: 'mount' | 'unmount';
   onOk: { (): void };
   onCancel: { (): void };
