@@ -52,7 +52,7 @@ alert({
   footer?: React.ReactNode;
 
   // 弹层的 z-index 默认为1000
-  zIndex?: number = 1000;
+  zIndex?: number;
   
   // 点击确认的回调
   onOk: { (): void };

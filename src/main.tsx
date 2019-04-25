@@ -21,7 +21,7 @@ class AlertConfirm {
   title?: React.ReactNode = null;
   content?: React.ReactNode = null;
   footer?: React.ReactNode = null;
-  zIndex?: number;
+  zIndex?: number = 1000;
   type: 'confirm' | 'alert' = 'confirm';
   status: 'mount' | 'unmount' = 'mount';
   container: Element = null;
@@ -32,13 +32,12 @@ class AlertConfirm {
   constructor({ title, content, footer, zIndex, closeBefore, type = 'confirm', onOk, onCancel }: optionsInterface) {
     const container: HTMLDivElement = document.createElement('div');
     container.className = 'alert-confirm-container';
-    if (zIndex !== undefined) {
+    document.body.appendChild(container);
+
+    if (typeof zIndex === 'number') {
       container.style.zIndex = String(zIndex);
       this.zIndex = zIndex;
-    } else {
-      this.zIndex = 999;
     }
-    document.body.appendChild(container);
     this.container = container;
     this.title = title;
     this.content = content;
@@ -50,10 +49,9 @@ class AlertConfirm {
     this.render();
   }
 
-  dispatch(action: string | number): void {
+  dispatch = (action: string | number): void => {
     const { closeBefore, onOk, onCancel } = this;
 
-    // 优先选择 closeBefore
     if (closeBefore) {
       closeBefore(action, this.closePopup.bind(this));
       return
@@ -63,7 +61,7 @@ class AlertConfirm {
     this.closePopup();
   }
 
-  closePopup(): void {
+  closePopup = (): void => {
     this.status = 'unmount';
     this.render();
   }
@@ -75,7 +73,8 @@ class AlertConfirm {
       content,
       footer,
       type,
-      status
+      status,
+      dispatch
     } = this;
 
     ReactDOM.unmountComponentAtNode(container);
@@ -85,11 +84,11 @@ class AlertConfirm {
         title={title}
         content={content}
         footer={footer}
-        dispatch={action => this.dispatch(action)}
+        dispatch={action => dispatch(action)}
         status={status}
         onClosePopup={() => {
-          ReactDOM.unmountComponentAtNode(this.container);
-          document.body.removeChild(this.container);
+          ReactDOM.unmountComponentAtNode(container);
+          document.body.removeChild(container);
         }}
       />,
       container);

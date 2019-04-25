@@ -25,13 +25,12 @@ class App extends React.Component {
       title: '提示',
       content: '这是 Confirm，支持ReactNode',
       onOk: () => {
-        console.log('ok');
+        console.log('ok', instance);
       },
       onCancel: () => {
-        console.log('cancel')
+        console.log('cancel', instance)
       }
     });
-    console.log(instance);
   };
 
   handleClickAlert = () => {
