@@ -1,6 +1,7 @@
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -42,7 +43,19 @@ module.exports = {
     new ExtractTextPlugin('index.css'),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    new OptimizeCssAssetsPlugin ({
+      assetNameRegExp: /\.(sa|sc|c)ss$/g,
+      cssProcessor: require('cssnano'),
+
+      cssProcessorPluginOptions: {
+        preset: ['default', {
+          discardComments: { removeAll: true},
+          normalizeUnicode: false
+        }]
+      },
+      canPrint: false
+    }),
   ],
 
   externals: {

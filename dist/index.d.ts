@@ -39,7 +39,7 @@ export function alert (options: optionsInterface): AlertConfirmInterface;
 
 export namespace Button {
   export interface Props {
-    type?: 'primary' | 'default' | 'danger';
+    type?: 'default' | 'primary' | 'danger';
     children?: React.ReactNode;
     style?: React.CSSProperties;
     onClick?: React.MouseEventHandler;

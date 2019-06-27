@@ -10,8 +10,8 @@ npm install react-alert-confirm --save
 
 ### Example（例子）
 ```
-import alertConfirm, { alert } from 'react-alert-confirm';
 import 'react-alert-confirm/dist/index.css';
+import alertConfirm, { alert } from 'react-alert-confirm';
 
 // Confirm
 alertConfirm({
@@ -41,25 +41,25 @@ alert({
 {
   // 弹窗的类型
   type?: 'alert' | 'confirm';
-  
+
   // 弹窗标题
   title?: React.ReactNode;
-  
+
   // 弹窗内容
   content?: React.ReactNode;
-  
+
   // 弹窗底部 用于自定义底部按钮
   footer?: React.ReactNode;
 
   // 弹层的 z-index 默认为1000
   zIndex?: number;
-  
+
   // 点击确认的回调
   onOk: { (): void };
-  
+
   // 点击取消或者关闭弹窗的回调
   onCancel: { (): void };
-  
+
   // 关闭弹窗之前的回调（此方法会导致 onOk 和 onCancel 失效）
   closeBefore?: {
     /**
@@ -74,8 +74,8 @@ alert({
 ### Instance（实例）
 
 ```
-import alertConfirm, { alert } from 'react-alert-confirm';
 import 'react-alert-confirm/dist/index.css';
+import alertConfirm, { alert } from 'react-alert-confirm';
 
 const instance = alertConfirm({ ... }):
 
@@ -92,15 +92,15 @@ const instance = alertConfirm({ ... }):
   closeBefore: {
     (action: string | number, closePopup: { (): void }): void
   };
-  
+
   // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
   dispatch: {
     (action: string | number): void;
   };
-  
+
   // 关闭当前实例弹窗
   closePopup: { (): void };
-  
+
   // 重新渲染当前实例
   render: { (): void };
 }
@@ -108,8 +108,8 @@ const instance = alertConfirm({ ... }):
 
 ### Advanced（高级用法）
 ```
-import alertConfirm, { Button } from 'react-alert-confirm';
 import 'react-alert-confirm/dist/index.css';
+import alertConfirm, { Button } from 'react-alert-confirm';
 
 // 提供按钮组件方便样式统一
 const instance = alertConfirm({
@@ -132,4 +132,12 @@ const instance = alertConfirm({
     close() // close popup
   }
 })
+```
+
+### Button Props
+```
+{
+  type?: 'default' | 'primary' | 'danger' = 'default';
+  // ...ReactNode Props
+}
 ```

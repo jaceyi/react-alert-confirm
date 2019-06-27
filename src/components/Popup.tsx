@@ -66,7 +66,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
 
     return(
       <div className={`alert-confirm-mask ${maskClassName}`}>
-        <div className={`alert-confirm-main ${mainClassName}`} onAnimationEnd={this.animationEnd}>
+        <div className={`alert-confirm-main ${mainClassName} ${type}`} onAnimationEnd={this.animationEnd}>
           <div className="alert-confirm-header">
             <div className="alert-confirm-header-title">{title}</div>
             {
@@ -83,7 +83,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
               footer || (
                 <React.Fragment>
                   {
-                    type !== 'alert' && <Button onClick={() => dispatch('cancel')}><span>取 消</span></Button>
+                    type !== 'alert' && <Button onClick={() => dispatch('cancel')}>取 消</Button>
                   }
                   <Button
                     type="primary"

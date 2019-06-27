@@ -30,6 +30,10 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
+.alert {
+  width: 360px;
+}
+
 .alert-confirm-header {
   padding: 12px 12px 0;
   display: flex;
@@ -113,19 +117,19 @@
 }
 
 .fadeIn {
-  animation: fadeIn 150ms;
+  animation: fadeIn 200ms;
 }
 
 .fadeOut {
-  animation: fadeOut 150ms;
+  animation: fadeOut 200ms;
 }
 
 .zoomIn {
-  animation: zoomIn 150ms;
+  animation: zoomIn 200ms;
 }
 
 .zoomOut {
-  animation: zoomOut 150ms;
+  animation: zoomOut 200ms;
 }
 
 @keyframes fadeIn {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import confirm, { Button, alert } from '../dist';
+import { Fragment } from 'react';
 import '../dist/index.css';
 
 class App extends React.Component {
@@ -50,7 +51,13 @@ class App extends React.Component {
       title: '警告',
       content: '此操作将删除该任务，请确认！',
       footer: (
-        <Button onClick={() => instance.dispatch('ok')} type="danger">确认</Button>
+        <Fragment>
+          <Button>取 消</Button>
+          <Button
+            onClick={() => instance.dispatch('ok')}
+            type="danger"
+          >确 认</Button>
+        </Fragment>
       ),
       onOk: () => {
         console.log('ok', instance);
