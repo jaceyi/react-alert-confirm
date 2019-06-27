@@ -1,6 +1,6 @@
 > A react component confirm dialog. （一个react的弹窗组件，支持 alert、confirm）
 
-### Installing（安装）
+### Installing
 
 ```
 yarn add react-alert-confirm
@@ -8,7 +8,7 @@ yarn add react-alert-confirm
 npm install react-alert-confirm --save
 ```
 
-### Example（例子）
+### Example
 ```
 import 'react-alert-confirm/dist/index.css';
 import alertConfirm, { alert } from 'react-alert-confirm';
@@ -36,7 +36,7 @@ alert({
 })
 ```
 
-### Options（选项）
+### Options
 ```
 {
   // 弹窗的类型
@@ -71,7 +71,7 @@ alert({
 }
 ```
 
-### Instance（实例）
+### Instance
 
 ```
 import 'react-alert-confirm/dist/index.css';
@@ -106,7 +106,7 @@ const instance = alertConfirm({ ... }):
 }
 ```
 
-### Advanced（高级用法）
+### Advanced
 ```
 import 'react-alert-confirm/dist/index.css';
 import alertConfirm, { Button } from 'react-alert-confirm';

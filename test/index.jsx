@@ -52,7 +52,7 @@ class App extends React.Component {
       content: '此操作将删除该任务，请确认！',
       footer: (
         <Fragment>
-          <Button>取 消</Button>
+          <Button onClick={() => instance.dispatch('cancel')}>取 消</Button>
           <Button
             onClick={() => instance.dispatch('ok')}
             type="danger"

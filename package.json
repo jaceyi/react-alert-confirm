@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "1.2.7",
+  "version": "1.2.9",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "main": "dist",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",
@@ -21,7 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "webpack-dev-server --config webpack.test.config.js",
+    "test": "webpack-dev-server --open --config webpack.test.config.js",
     "watch": "webpack --watch --config webpack.build.config.js",
     "build": "webpack --config webpack.build.config.js"
   },

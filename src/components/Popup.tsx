@@ -87,7 +87,6 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
                   }
                   <Button
                     type="primary"
-                    style={{marginLeft: 10}}
                     onClick={() => dispatch('ok')}
                   >确 认</Button>
                 </React.Fragment>
