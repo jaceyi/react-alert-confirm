@@ -67,18 +67,18 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
     return(
       <div className={`alert-confirm-mask ${maskClassName}`}>
         <div className={`alert-confirm-main ${mainClassName}`} onAnimationEnd={this.animationEnd}>
-          <div className={'alert-confirm-header'}>
-            <div className={'alert-confirm-header-title'}>{title}</div>
+          <div className="alert-confirm-header">
+            <div className="alert-confirm-header-title">{title}</div>
             {
               type !== 'alert' && (
-                <div className={'alert-confirm-header-close'}>
-                  <span className={'icon'} onClick={() => dispatch('close')}>✕</span>
+                <div className="alert-confirm-header-close">
+                  <span className="icon" onClick={() => dispatch('close')}>✕</span>
                 </div>
               )
             }
           </div>
-          <div className={'alert-confirm-content'}>{content}</div>
-          <div className={'alert-confirm-footer'}>
+          <div className="alert-confirm-content">{content}</div>
+          <div className="alert-confirm-footer">
             {
               footer || (
                 <React.Fragment>

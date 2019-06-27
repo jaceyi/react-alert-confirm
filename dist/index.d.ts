@@ -10,7 +10,7 @@ interface AlertConfirmInterface {
   content?: React.ReactNode;
   footer?: React.ReactNode;
   zIndex: number;
-  type: 'confirm' | 'alert';
+  type: 'confirm' | 'alert' | 'danger';
   status: 'mount' | 'unmount';
   onOk: { (): void };
   onCancel: { (): void };

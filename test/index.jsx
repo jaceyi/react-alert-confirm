@@ -8,13 +8,18 @@ class App extends React.Component {
     return (
       <div>
         <Button
-          type={'primary'}
+          type="primary"
           onClick={this.handleClickConfirm}
         >Confirm</Button>
         <Button
           style={{marginLeft: 10}}
           onClick={this.handleClickAlert}
         >Alert</Button>
+        <Button
+          type="danger"
+          style={{marginLeft: 10}}
+          onClick={this.handleClickDanger}
+        >Danger</Button>
       </div>
     )
   }
@@ -39,6 +44,19 @@ class App extends React.Component {
     });
     console.log(instance);
   };
+
+  handleClickDanger = () => {
+    const instance = confirm({
+      title: '警告',
+      content: '此操作将删除该任务，请确认！',
+      footer: (
+        <Button onClick={() => instance.dispatch('ok')} type="danger">确认</Button>
+      ),
+      onOk: () => {
+        console.log('ok', instance);
+      }
+    });
+  }
 }
 
 ReactDOM.render(

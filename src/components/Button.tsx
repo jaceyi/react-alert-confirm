@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export namespace Button {
   export interface Props {
-    type?: 'primary' | 'default';
+    type?: 'primary' | 'default' | 'danger';
     children?: React.ReactNode;
     style?: React.CSSProperties;
     onClick?: React.MouseEventHandler;
