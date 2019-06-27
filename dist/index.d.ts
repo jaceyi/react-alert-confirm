@@ -10,7 +10,7 @@ interface AlertConfirmInterface {
   content?: React.ReactNode;
   footer?: React.ReactNode;
   zIndex: number;
-  type: 'confirm' | 'alert' | 'danger';
+  type: 'confirm' | 'alert';
   status: 'mount' | 'unmount';
   onOk: { (): void };
   onCancel: { (): void };
@@ -39,7 +39,7 @@ export function alert (options: optionsInterface): AlertConfirmInterface;
 
 export namespace Button {
   export interface Props {
-    type?: 'primary' | 'default';
+    type?: 'primary' | 'default' | 'danger';
     children?: React.ReactNode;
     style?: React.CSSProperties;
     onClick?: React.MouseEventHandler;
