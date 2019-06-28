@@ -1,5 +1,7 @@
 > A react component confirm dialog. （一个react的弹窗组件，支持 alert、confirm）
 
+![GIF](https://yijic.com/static/images/avatar.jpg)
+
 ### Installing
 
 ```
