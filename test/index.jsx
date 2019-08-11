@@ -27,9 +27,10 @@ class App extends React.Component {
 
   handleClickConfirm = () => {
     const instance = confirm({
-      zIndex: 999,
       title: '提示',
       content: '这是 Confirm，支持ReactNode',
+      okText: 'OK',
+      cancelText: 'Cancel',
       onOk: () => {
         console.log('ok', instance);
       },

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from './Button';
 
 export namespace Popup {
   export interface Props {
@@ -16,17 +15,17 @@ export namespace Popup {
 
   export interface State {
     maskClassName: string;
-    mainClassName: string
+    mainClassName: string;
   }
 }
 
 class Popup extends React.Component<Popup.Props, Popup.State> {
   state = {
     maskClassName: '',
-    mainClassName: '',
+    mainClassName: ''
   };
 
-  componentDidMount(): void {
+  componentDidMount() {
     if (this.props.status === 'mount') {
       this.setState({
         maskClassName: 'fadeIn',
@@ -64,7 +63,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
       type
     } = this.props;
 
-    return(
+    return (
       <div className={`alert-confirm-mask ${maskClassName}`}>
         <div className={`alert-confirm-main ${mainClassName} ${type}`} onAnimationEnd={this.animationEnd}>
           <div className="alert-confirm-header">
@@ -79,19 +78,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
           </div>
           <div className="alert-confirm-content">{content}</div>
           <div className="alert-confirm-footer">
-            {
-              footer || (
-                <React.Fragment>
-                  {
-                    type !== 'alert' && <Button onClick={() => dispatch('cancel')}>取 消</Button>
-                  }
-                  <Button
-                    type="primary"
-                    onClick={() => dispatch('ok')}
-                  >确 认</Button>
-                </React.Fragment>
-              )
-            }
+            {footer}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Popup from './components/Popup';
+import Button from './components/Button';
 
 interface closeBeforeInterface {
   (action: string | number, closePopup: { (): void }): void
@@ -10,6 +11,8 @@ interface optionsInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
+  okText?: string;
+  cancelText?: string;
   zIndex?: number;
   type: 'confirm' | 'alert';
   closeBefore: closeBeforeInterface;
@@ -29,7 +32,18 @@ class AlertConfirm {
   onOk: { (): void } = null;
   onCancel: { (): void } = null;
 
-  constructor({ title, content, footer, zIndex, closeBefore, type = 'confirm', onOk, onCancel }: optionsInterface) {
+  constructor({
+    title,
+    content,
+    footer,
+    zIndex,
+    closeBefore,
+    type = 'confirm',
+    onOk,
+    onCancel,
+    okText,
+    cancelText
+  }: optionsInterface) {
     const container: HTMLDivElement = document.createElement('div');
     container.className = 'alert-confirm-container';
     document.body.appendChild(container);
@@ -41,7 +55,18 @@ class AlertConfirm {
     this.container = container;
     this.title = title;
     this.content = content;
-    this.footer = footer;
+    const _footer = (
+      <React.Fragment>
+        {
+          type !== 'alert' && <Button onClick={() => this.dispatch('cancel')}>{ cancelText || '取 消' }</Button>
+        }
+        <Button
+          type="primary"
+          onClick={() => this.dispatch('ok')}
+        >{ okText || '确 认' }</Button>
+      </React.Fragment>
+    )
+    this.footer = footer || _footer;
     this.type = type;
     this.onOk = onOk;
     this.onCancel = onCancel;

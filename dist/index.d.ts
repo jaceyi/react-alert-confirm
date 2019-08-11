@@ -14,6 +14,8 @@ interface AlertConfirmInterface {
   status: 'mount' | 'unmount';
   onOk: { (): void };
   onCancel: { (): void };
+  okText?: string;
+  cancelText?: string;
   closeBefore: closeBeforeInterface;
   dispatch: {
     (action: string | number): void;

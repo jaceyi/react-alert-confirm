@@ -62,6 +62,12 @@ alert({
   // 点击取消或者关闭弹窗的回调
   onCancel: { (): void };
 
+  // 确认按钮的文字
+  okText?: string;
+
+  // 取消按钮的文字
+  cancelText?: string;
+
   // 关闭弹窗之前的回调（此方法会导致 onOk 和 onCancel 失效）
   closeBefore?: {
     /**
@@ -77,7 +83,7 @@ alert({
 
 ```
 import 'react-alert-confirm/dist/index.css';
-import alertConfirm, { alert } from 'react-alert-confirm';
+import alertConfirm from 'react-alert-confirm';
 
 const instance = alertConfirm({ ... }):
 
