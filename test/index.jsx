@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import confirm, { Button, alert } from '../dist';
 import { Fragment } from 'react';
 import '../dist/index.css';
+import 'regenerator-runtime/runtime';
 
 class App extends React.Component {
   render() {
@@ -21,6 +22,11 @@ class App extends React.Component {
           style={{marginLeft: 10}}
           onClick={this.handleClickDanger}
         >Danger</Button>
+        <Button
+          style={{marginLeft: 10}}
+          type="primary"
+          onClick={this.handleClickAsync}
+        >Async Confirm</Button>
       </div>
     )
   }
@@ -64,6 +70,14 @@ class App extends React.Component {
         console.log('ok', instance);
       }
     });
+  };
+
+  handleClickAsync = async () => {
+    const instance = await confirm({
+      title: '提示',
+      content: '这是一个异步弹窗！'
+    }).async();
+    console.log(instance);
   }
 }
 

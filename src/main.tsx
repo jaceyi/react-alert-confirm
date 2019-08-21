@@ -20,17 +20,39 @@ interface optionsInterface {
   onCancel: { (): void }
 }
 
+interface AlertConfirmInterface {
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
+  zIndex: number;
+  type: 'confirm' | 'alert';
+  status: 'mount' | 'unmount';
+  container: Element;
+  onOk?: { (): void };
+  onCancel?: { (): void };
+  closeBefore: closeBeforeInterface;
+  resolve?: { (instance: AlertConfirmInterface): void };
+  reject?: { (instance: AlertConfirmInterface): void };
+  dispatch: {
+    (action: string | number): void;
+  };
+  closePopup: { (): void };
+  async: { (): Promise<AlertConfirmInterface>};
+}
+
 class AlertConfirm {
-  title?: React.ReactNode = null;
-  content?: React.ReactNode = null;
-  footer?: React.ReactNode = null;
-  zIndex?: number = 1000;
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
+  zIndex: number = 1000;
   type: 'confirm' | 'alert' = 'confirm';
   status: 'mount' | 'unmount' = 'mount';
   container: Element = null;
+  onOk?: { (): void };
+  onCancel?: { (): void };
   closeBefore: closeBeforeInterface = null;
-  onOk: { (): void } = null;
-  onCancel: { (): void } = null;
+  resolve?: { (instance?: AlertConfirmInterface): void };
+  reject?: { (instance?: AlertConfirmInterface): void };
 
   constructor({
     title,
@@ -48,7 +70,7 @@ class AlertConfirm {
     container.className = 'alert-confirm-container';
     document.body.appendChild(container);
 
-    if (typeof zIndex === 'number') {
+    if (!Number.isNaN(zIndex) && typeof zIndex === 'number') {
       container.style.zIndex = String(zIndex);
       this.zIndex = zIndex;
     }
@@ -58,14 +80,18 @@ class AlertConfirm {
     const _footer = (
       <React.Fragment>
         {
-          type !== 'alert' && <Button onClick={() => this.dispatch('cancel')}>{ cancelText || '取 消' }</Button>
+          type !== 'alert' && (
+            <Button onClick={
+              () => this.dispatch('cancel')
+            }>{ cancelText || '取 消' }</Button>
+          )
         }
         <Button
           type="primary"
           onClick={() => this.dispatch('ok')}
         >{ okText || '确 认' }</Button>
       </React.Fragment>
-    )
+    );
     this.footer = footer || _footer;
     this.type = type;
     this.onOk = onOk;
@@ -75,20 +101,33 @@ class AlertConfirm {
   }
 
   dispatch = (action: string | number): void => {
-    const { closeBefore, onOk, onCancel } = this;
+    const { closeBefore, onOk, onCancel, resolve, reject } = this;
 
     if (closeBefore) {
       closeBefore(action, this.closePopup.bind(this));
       return
     }
-    if (action === 'ok') onOk && onOk();
-    if (action === 'cancel' || action === 'close') onCancel && onCancel();
+    if (action === 'ok') {
+      onOk && onOk();
+      resolve && resolve(this);
+    }
+    if (action === 'cancel' || action === 'close'){
+      onCancel && onCancel();
+      reject && reject(this);
+    }
     this.closePopup();
-  }
+  };
 
   closePopup = (): void => {
     this.status = 'unmount';
     this.render();
+  };
+
+  async(): Promise<AlertConfirmInterface> {
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    })
   }
 
   render() {

@@ -21,7 +21,6 @@ interface AlertConfirmInterface {
     (action: string | number): void;
   };
   closePopup: { (): void };
-  render: { (): void };
 }
 
 interface optionsInterface {
