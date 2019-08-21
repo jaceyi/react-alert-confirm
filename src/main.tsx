@@ -31,8 +31,8 @@ interface AlertConfirmInterface {
   onOk?: { (): void };
   onCancel?: { (): void };
   closeBefore: closeBeforeInterface;
-  resolve?: { (instance: AlertConfirmInterface): void };
-  reject?: { (instance: AlertConfirmInterface): void };
+  resolve?: { (action: string): void };
+  reject?: { (action: string): void };
   dispatch: {
     (action: string | number): void;
   };
@@ -51,8 +51,8 @@ class AlertConfirm {
   onOk?: { (): void };
   onCancel?: { (): void };
   closeBefore: closeBeforeInterface = null;
-  resolve?: { (instance?: AlertConfirmInterface): void };
-  reject?: { (instance?: AlertConfirmInterface): void };
+  resolve?: { (action: string): void };
+  reject?: { (action: string): void };
 
   constructor({
     title,
@@ -109,11 +109,11 @@ class AlertConfirm {
     }
     if (action === 'ok') {
       onOk && onOk();
-      resolve && resolve(this);
+      resolve && resolve(action);
     }
     if (action === 'cancel' || action === 'close'){
       onCancel && onCancel();
-      reject && reject(this);
+      reject && reject(action);
     }
     this.closePopup();
   };
@@ -123,7 +123,7 @@ class AlertConfirm {
     this.render();
   };
 
-  async(): Promise<AlertConfirmInterface> {
+  async(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;

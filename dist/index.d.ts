@@ -5,22 +5,23 @@ interface closeBeforeInterface {
 }
 
 interface AlertConfirmInterface {
-  container: Element;
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
   zIndex: number;
   type: 'confirm' | 'alert';
   status: 'mount' | 'unmount';
-  onOk: { (): void };
-  onCancel: { (): void };
-  okText?: string;
-  cancelText?: string;
+  container: Element;
+  onOk?: { (): void };
+  onCancel?: { (): void };
   closeBefore: closeBeforeInterface;
+  resolve?: { (instance: AlertConfirmInterface): void };
+  reject?: { (instance: AlertConfirmInterface): void };
   dispatch: {
     (action: string | number): void;
   };
   closePopup: { (): void };
+  async: { (): Promise<AlertConfirmInterface>};
 }
 
 interface optionsInterface {
