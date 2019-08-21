@@ -11,12 +11,13 @@ interface AlertConfirmInterface {
   zIndex: number;
   type: 'confirm' | 'alert';
   status: 'mount' | 'unmount';
+  action: string | number;
   container: Element;
   onOk?: { (): void };
   onCancel?: { (): void };
   closeBefore: closeBeforeInterface;
-  resolve?: { (instance: AlertConfirmInterface): void };
-  reject?: { (instance: AlertConfirmInterface): void };
+  resolve?: { (instance?: AlertConfirmInterface): void };
+  reject?: { (instance?: AlertConfirmInterface): void };
   dispatch: {
     (action: string | number): void;
   };
@@ -35,9 +36,9 @@ interface optionsInterface {
   closeBefore?: closeBeforeInterface;
 }
 
-export default function (options: optionsInterface): AlertConfirmInterface;
+export default function (options: optionsInterface | string): AlertConfirmInterface;
 
-export function alert (options: optionsInterface): AlertConfirmInterface;
+export function alert (options: optionsInterface | string): AlertConfirmInterface;
 
 export namespace Button {
   export interface Props {

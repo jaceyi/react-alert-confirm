@@ -47,9 +47,7 @@ class App extends React.Component {
   };
 
   handleClickAlert = () => {
-    const instance = alert({
-      content: '这是 Alert ，支持ReactNode'
-    });
+    const instance = alert('这是 Alert ，支持ReactNode');
     console.log(instance);
   };
 

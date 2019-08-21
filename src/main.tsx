@@ -7,17 +7,17 @@ interface closeBeforeInterface {
   (action: string | number, closePopup: { (): void }): void
 }
 
-interface optionsInterface {
+export interface optionsInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
   okText?: string;
   cancelText?: string;
   zIndex?: number;
-  type: 'confirm' | 'alert';
-  closeBefore: closeBeforeInterface;
-  onOk: { (): void }
-  onCancel: { (): void }
+  type?: 'confirm' | 'alert';
+  closeBefore?: closeBeforeInterface;
+  onOk?: { (): void }
+  onCancel?: { (): void }
 }
 
 interface AlertConfirmInterface {
@@ -27,12 +27,13 @@ interface AlertConfirmInterface {
   zIndex: number;
   type: 'confirm' | 'alert';
   status: 'mount' | 'unmount';
+  action: string | number;
   container: Element;
   onOk?: { (): void };
   onCancel?: { (): void };
   closeBefore: closeBeforeInterface;
-  resolve?: { (action: string): void };
-  reject?: { (action: string): void };
+  resolve?: { (instance?: AlertConfirmInterface): void };
+  reject?: { (instance?: AlertConfirmInterface): void };
   dispatch: {
     (action: string | number): void;
   };
@@ -47,12 +48,13 @@ class AlertConfirm {
   zIndex: number = 1000;
   type: 'confirm' | 'alert' = 'confirm';
   status: 'mount' | 'unmount' = 'mount';
+  action: string | number = null;
   container: Element = null;
   onOk?: { (): void };
   onCancel?: { (): void };
   closeBefore: closeBeforeInterface = null;
-  resolve?: { (action: string): void };
-  reject?: { (action: string): void };
+  resolve?: { (instance?: AlertConfirmInterface): void };
+  reject?: { (instance?: AlertConfirmInterface): void };
 
   constructor({
     title,
@@ -101,6 +103,7 @@ class AlertConfirm {
   }
 
   dispatch = (action: string | number): void => {
+    this.action = action;
     const { closeBefore, onOk, onCancel, resolve, reject } = this;
 
     if (closeBefore) {
@@ -109,11 +112,11 @@ class AlertConfirm {
     }
     if (action === 'ok') {
       onOk && onOk();
-      resolve && resolve(action);
+      resolve && resolve(this);
     }
     if (action === 'cancel' || action === 'close'){
       onCancel && onCancel();
-      reject && reject(action);
+      reject && reject(this);
     }
     this.closePopup();
   };
@@ -123,7 +126,7 @@ class AlertConfirm {
     this.render();
   };
 
-  async(): Promise<string> {
+  async(): Promise<AlertConfirmInterface> {
     return new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;
@@ -159,4 +162,15 @@ class AlertConfirm {
   }
 }
 
-export default (options: optionsInterface) => new AlertConfirm(options);
+export default (options: optionsInterface | string) => {
+  const _options: optionsInterface = {};
+  if (typeof options === 'string') {
+    _options.content = options
+  } else if (typeof options === 'object') {
+    Object.assign(_options, options);
+  } else {
+    throw new Error('options required type is object or and string!')
+  }
+
+  return new AlertConfirm(_options);
+};
