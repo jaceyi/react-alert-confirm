@@ -1,10 +1,21 @@
 import './index.scss';
+import * as React from 'react';
 import alertConfirm from './main';
-import { optionsInterface } from './main';
-import _Button from './components/Button';
+import { optionsInterface, AlertConfirmInterface } from './main';
+import ConfirmButton from './components/Button';
+import { Button as ButtonTypes } from './components/Button';
 
-export const Button = _Button;
-export const alert = options => {
+interface alertInterface {
+  (options: optionsInterface | string): AlertConfirmInterface;
+}
+
+interface asyncConfirmInterface {
+  (options: optionsInterface | string): Promise<AlertConfirmInterface>
+}
+
+export const Button: React.ComponentClass<ButtonTypes.Props> = ConfirmButton;
+
+export const alert: alertInterface = options => {
   const _options: optionsInterface = { type: 'alert' };
   if (typeof options === 'string') {
     _options.content = options;
@@ -13,4 +24,9 @@ export const alert = options => {
   }
   return alertConfirm(_options)
 };
+
+export const asyncConfirm: asyncConfirmInterface = options => {
+  return alertConfirm(options).async()
+};
+
 export default alertConfirm;

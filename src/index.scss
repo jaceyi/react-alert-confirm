@@ -33,11 +33,6 @@
 
 .alert-confirm-header {
   padding: 12px 12px 0;
-  display: flex;
-  justify-content: space-between;
-}
-
-.alert-confirm-header-title {
   font-size: 18px;
   color: #000;
 }
@@ -46,6 +41,9 @@
   color: #aaa;
   cursor: pointer;
   line-height: 1;
+  position: absolute;
+  right: 10px;
+  top: 10px;
 
   .icon {
     display: block;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-export namespace Popup {
-  export interface Props {
+declare namespace Popup {
+  interface Props {
     title?: React.ReactNode;
     content?: React.ReactNode;
     footer?: React.ReactNode;
@@ -13,7 +13,7 @@ export namespace Popup {
     onClosePopup: { (): void }
   }
 
-  export interface State {
+  interface State {
     maskClassName: string;
     mainClassName: string;
   }
@@ -66,16 +66,14 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
     return (
       <div className={`alert-confirm-mask ${maskClassName}`}>
         <div className={`alert-confirm-main ${mainClassName} ${type}`} onAnimationEnd={this.animationEnd}>
-          <div className="alert-confirm-header">
-            <div className="alert-confirm-header-title">{title}</div>
-            {
-              type !== 'alert' && (
-                <div className="alert-confirm-header-close">
-                  <span className="icon" onClick={() => dispatch('close')}>✕</span>
-                </div>
-              )
-            }
-          </div>
+          <div className="alert-confirm-header">{title}</div>
+          {
+            type !== 'alert' && (
+              <div className="alert-confirm-header-close">
+                <span className="icon" onClick={() => dispatch('close')}>✕</span>
+              </div>
+            )
+          }
           <div className="alert-confirm-content">{content}</div>
           <div className="alert-confirm-footer">
             {footer}

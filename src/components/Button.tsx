@@ -9,7 +9,7 @@ export namespace Button {
   }
 }
 
-export default class Button extends React.Component<Button.Props> {
+class Button extends React.Component<Button.Props> {
   render() {
     const {
       type,
@@ -29,3 +29,5 @@ export default class Button extends React.Component<Button.Props> {
     )
   }
 }
+
+export default Button;

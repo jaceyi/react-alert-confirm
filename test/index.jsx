@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import confirm, { Button, alert } from '../dist';
+import confirm, { Button, alert, asyncConfirm } from '../dist';
 import { Fragment } from 'react';
 import '../dist/index.css';
 import 'regenerator-runtime/runtime';
@@ -14,16 +14,16 @@ class App extends React.Component {
           onClick={this.handleClickConfirm}
         >Confirm</Button>
         <Button
-          style={{marginLeft: 10}}
+          style={{ marginLeft: 10 }}
           onClick={this.handleClickAlert}
         >Alert</Button>
         <Button
           type="danger"
-          style={{marginLeft: 10}}
+          style={{ marginLeft: 10 }}
           onClick={this.handleClickDanger}
         >Danger</Button>
         <Button
-          style={{marginLeft: 10}}
+          style={{ marginLeft: 10 }}
           type="primary"
           onClick={this.handleClickAsync}
         >Async Confirm</Button>
@@ -71,10 +71,7 @@ class App extends React.Component {
   };
 
   handleClickAsync = async () => {
-    const instance = await confirm({
-      title: '提示',
-      content: '这是一个异步弹窗！'
-    }).async();
+    const instance = await asyncConfirm('这是一个异步弹窗！');
     console.log(instance);
   }
 }

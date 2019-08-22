@@ -20,7 +20,7 @@ export interface optionsInterface {
   onCancel?: { (): void }
 }
 
-interface AlertConfirmInterface {
+export interface AlertConfirmInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
@@ -79,8 +79,8 @@ class AlertConfirm {
     this.container = container;
     this.title = title;
     this.content = content;
-    const _footer = (
-      <React.Fragment>
+    this.footer = footer || (
+      <>
         {
           type !== 'alert' && (
             <Button onClick={
@@ -92,9 +92,8 @@ class AlertConfirm {
           type="primary"
           onClick={() => this.dispatch('ok')}
         >{ okText || '确 认' }</Button>
-      </React.Fragment>
+      </>
     );
-    this.footer = footer || _footer;
     this.type = type;
     this.onOk = onOk;
     this.onCancel = onCancel;

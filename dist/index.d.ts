@@ -1,50 +1,15 @@
+import './index.scss';
 import * as React from 'react';
-
-interface closeBeforeInterface {
-  (action: string | number, closePopup: { (): void }): void
+import alertConfirm from './main';
+import { optionsInterface, AlertConfirmInterface } from './main';
+import { Button as ButtonTypes } from './components/Button';
+interface alertInterface {
+    (options: optionsInterface | string): AlertConfirmInterface;
 }
-
-interface AlertConfirmInterface {
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  footer?: React.ReactNode;
-  zIndex: number;
-  type: 'confirm' | 'alert';
-  status: 'mount' | 'unmount';
-  action: string | number;
-  container: Element;
-  onOk?: { (): void };
-  onCancel?: { (): void };
-  closeBefore: closeBeforeInterface;
-  resolve?: { (instance?: AlertConfirmInterface): void };
-  reject?: { (instance?: AlertConfirmInterface): void };
-  dispatch: {
-    (action: string | number): void;
-  };
-  closePopup: { (): void };
-  async: { (): Promise<AlertConfirmInterface>};
+interface asyncConfirmInterface {
+    (options: optionsInterface | string): Promise<AlertConfirmInterface>;
 }
-
-interface optionsInterface {
-  type?: 'alert' | 'confirm';
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  footer?: React.ReactNode;
-  zIndex?: number;
-  onOk: { (): void };
-  onCancel: { (): void };
-  closeBefore?: closeBeforeInterface;
-}
-
-export default function (options: optionsInterface | string): AlertConfirmInterface;
-
-export function alert (options: optionsInterface | string): AlertConfirmInterface;
-
-export namespace Button {
-  export interface Props {
-    type?: 'default' | 'primary' | 'danger';
-    children?: React.ReactNode;
-    style?: React.CSSProperties;
-    onClick?: React.MouseEventHandler;
-  }
-}
+export declare const Button: React.ComponentClass<ButtonTypes.Props>;
+export declare const alert: alertInterface;
+export declare const asyncConfirm: asyncConfirmInterface;
+export default alertConfirm;
