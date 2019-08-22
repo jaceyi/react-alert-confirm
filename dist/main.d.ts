@@ -5,20 +5,20 @@ interface closeBeforeInterface {
     }): void;
 }
 export interface optionsInterface {
+    type?: 'confirm' | 'alert';
     title?: React.ReactNode;
     content?: React.ReactNode;
     footer?: React.ReactNode;
+    zIndex?: number;
     okText?: string;
     cancelText?: string;
-    zIndex?: number;
-    type?: 'confirm' | 'alert';
-    closeBefore?: closeBeforeInterface;
     onOk?: {
         (): void;
     };
     onCancel?: {
         (): void;
     };
+    closeBefore?: closeBeforeInterface;
 }
 export interface AlertConfirmInterface {
     title?: React.ReactNode;
@@ -52,7 +52,7 @@ export interface AlertConfirmInterface {
         (): Promise<AlertConfirmInterface>;
     };
 }
-declare class AlertConfirm {
+declare class AlertConfirm implements AlertConfirmInterface {
     title?: React.ReactNode;
     content?: React.ReactNode;
     footer?: React.ReactNode;
@@ -75,7 +75,7 @@ declare class AlertConfirm {
         (instance?: AlertConfirmInterface): void;
     };
     constructor({ title, content, footer, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: optionsInterface);
-    dispatch: (action: React.ReactText) => void;
+    dispatch: (action: string | number) => void;
     closePopup: () => void;
     async(): Promise<AlertConfirmInterface>;
     render(): void;

@@ -2,7 +2,7 @@
 
 ![GIF](https://raw.githubusercontent.com/jaceyi/react-alert-confirm/master/images/illustrate.gif)
 
-### Installing
+## Installing
 
 ```
 yarn add react-alert-confirm
@@ -10,12 +10,18 @@ yarn add react-alert-confirm
 npm install react-alert-confirm --save
 ```
 
-### Example
-```
+## Import
+> 提供按钮组件便于样式统一
+```$xslt
 import 'react-alert-confirm/dist/index.css';
-import alertConfirm, { alert } from 'react-alert-confirm';
+import alertConfirm, { alert, asyncConfirm, Button } from 'react-alert-confirm';
+```
 
-// Confirm
+## Example
+### Confirm
+```$xslt
+alertConfirm('This is Content!');
+// or
 alertConfirm({
   title: 'Title',
   content: 'Content',
@@ -26,49 +32,60 @@ alertConfirm({
     console.log('cancel')
   }
 })
-
+```
+### Alert
+```
 // Alert
 alertConfirm({
   type: 'alert',
-  ...
+  content: 'This is Content!'
 })
 // or
-alert({
-  ...
-})
+alert('This is Content!')
 ```
-
-### Options
+### Async
+```$xslt
+async function handleClick() {
+  await asyncConfirm('This is async dialog!');
+  // ... ok events
+}
+// or
+async function handleClick() {
+  await alertConfirm('This is async dialog!').async();
+  // ... ok events
+}
+```
+## Options
 ```
 {
   // 弹窗的类型
-  type?: 'alert' | 'confirm';
-
+  type?: 'confirm' | 'alert' = 'confirm';
+  
   // 弹窗标题
   title?: React.ReactNode;
-
+  
   // 弹窗内容
   content?: React.ReactNode;
-
+  
   // 弹窗底部 用于自定义底部按钮
   footer?: React.ReactNode;
-
+  
   // 弹层的 z-index 默认为1000
-  zIndex?: number;
-
-  // 点击确认的回调
-  onOk: { (): void };
-
-  // 点击取消或者关闭弹窗的回调
-  onCancel: { (): void };
-
+  zIndex?: number = 1000;
+  
   // 确认按钮的文字
-  okText?: string;
-
+  okText?: string = '确认';
+  
   // 取消按钮的文字
-  cancelText?: string;
+  cancelText?: string = '取消';
+  
+  // 点击确认的回调
+  onOk?: { (): void }
+  
+  // 点击取消或者关闭弹窗的回调
+  onCancel?: { (): void }
 
-  // 关闭弹窗之前的回调（此方法会导致 onOk 和 onCancel 失效）
+  // 关闭弹窗之前的回调 [tip:此方法会导致 onOk 和 onCancel 失效，且异步方法 (resolve, reject) 会被此方法拦截]
   closeBefore?: {
     /**
      * @params action 触发关闭的来源，默认（ok: 确认按钮 | cancel: 取消按钮 | close: 关闭按钮）
@@ -79,47 +96,61 @@ alert({
 }
 ```
 
-### Instance
-
+## Instance
 ```
-import 'react-alert-confirm/dist/index.css';
-import alertConfirm from 'react-alert-confirm';
+const instance: AlertConfirmInterface = alertConfirm({ ... }):
 
-const instance = alertConfirm({ ... }):
+interface AlertConfirmInterface {
 
-{
-  container: Element;
   title?: React.ReactNode;
+  
   content?: React.ReactNode;
+  
   footer?: React.ReactNode;
-  type: 'confirm' | 'alert';
-  zIndex: number;
-  status: 'mount' | 'unmount';
-  onOk: { (): void };
-  onCancel: { (): void };
-  closeBefore: {
-    (action: string | number, closePopup: { (): void }): void
-  };
-
-  // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
+  
+  zIndex: number = 1000;
+  
+  type: 'confirm' | 'alert' = 'confirm';
+  
+  // 实例状态
+  status: 'mount' | 'unmount' = 'mount';
+  
+  // 实例被 dispatch 时候传入的 action
+  action: string | number;
+  
+  container: Element;
+  
+  onOk?: { (): void };
+  
+  onCancel?: { (): void };
+  
+  // 关闭实例弹窗的方法 可以手动调用此方法来关闭实例弹窗你并卸载
+  closeBefore: (action: string | number, closePopup: { (): void }): void;
+  
+  // 异步组件时才有 可以通过自定义 resolve 和 reject 来完成高阶用法
+  resolve?: { (instance?: AlertConfirmInterface): void };
+  
+  reject?: { (instance?: AlertConfirmInterface): void };
+  
+   // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
   dispatch: {
     (action: string | number): void;
   };
-
-  // 关闭当前实例弹窗
+  
+   // 关闭当前实例弹窗
   closePopup: { (): void };
-
-  // 重新渲染当前实例
-  render: { (): void };
+  
+  // 返回 Promise，只有点击 ok 才会 执行 resolve 返回实例内容
+  async: { (): Promise<AlertConfirmInterface>};
+  
 }
 ```
 
-### Advanced
+## Advanced
+### 自定义 Footer
 ```
-import 'react-alert-confirm/dist/index.css';
 import alertConfirm, { Button } from 'react-alert-confirm';
 
-// 提供按钮组件方便样式统一
 const instance = alertConfirm({
   title: 'Title',
   content: 'Content',
@@ -141,11 +172,28 @@ const instance = alertConfirm({
   }
 })
 ```
+### 异步弹窗
+```$xslt
+import alertConfirm from 'react-alert-confirm';
 
-### Button Props
+async function handleClickDelete() {
+  try {
+    await alertConfirm('确认删除？').async();
+    // ok events
+  } catch ({ action }) {
+    if (action === 'close') {
+      // close events
+    } else {
+      // cancel events
+    }
+  }
+}
+```
+## Button Props
 ```
 {
+  // 按钮样式
   type?: 'default' | 'primary' | 'danger' = 'default';
-  // ...ReactNode Props
+  ...ReactNode Props
 }
 ```
