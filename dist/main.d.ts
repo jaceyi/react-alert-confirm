@@ -4,11 +4,23 @@ interface closeBeforeInterface {
         (): void;
     }): void;
 }
+interface dispatchInterface {
+    (action: string | number): void;
+}
+interface resolveInterface {
+    (instance?: AlertConfirmInterface): void;
+}
+interface asyncInterface {
+    (): Promise<AlertConfirmInterface>;
+}
+interface getFooterInterface {
+    (): React.ReactNode;
+}
 export interface optionsInterface {
     type?: 'confirm' | 'alert';
     title?: React.ReactNode;
     content?: React.ReactNode;
-    footer?: React.ReactNode;
+    footer?: React.ReactNode | getFooterInterface;
     zIndex?: number;
     okText?: string;
     cancelText?: string;
@@ -36,21 +48,13 @@ export interface AlertConfirmInterface {
         (): void;
     };
     closeBefore: closeBeforeInterface;
-    resolve?: {
-        (instance?: AlertConfirmInterface): void;
-    };
-    reject?: {
-        (instance?: AlertConfirmInterface): void;
-    };
-    dispatch: {
-        (action: string | number): void;
-    };
+    resolve?: resolveInterface;
+    reject?: resolveInterface;
+    dispatch: dispatchInterface;
     closePopup: {
         (): void;
     };
-    async: {
-        (): Promise<AlertConfirmInterface>;
-    };
+    async: asyncInterface;
 }
 declare class AlertConfirm implements AlertConfirmInterface {
     title?: React.ReactNode;
@@ -75,9 +79,9 @@ declare class AlertConfirm implements AlertConfirmInterface {
         (instance?: AlertConfirmInterface): void;
     };
     constructor({ title, content, footer, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: optionsInterface);
-    dispatch: (action: string | number) => void;
+    dispatch: dispatchInterface;
     closePopup: () => void;
-    async(): Promise<AlertConfirmInterface>;
+    async: asyncInterface;
     render(): void;
 }
 declare const _default: (options: string | optionsInterface) => AlertConfirm;

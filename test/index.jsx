@@ -71,7 +71,22 @@ class App extends React.Component {
   };
 
   handleClickAsync = async () => {
-    const instance = await asyncConfirm('这是一个异步弹窗！');
+    const instance = await asyncConfirm({
+      content: '这是一个异步弹窗！',
+      footer() {
+        return (
+          <Button onClick={() => this.dispatch('hello')} type="primary">按 钮</Button>
+        )
+      },
+      closeBefore(action, close) {
+        if (action === 'hello') {
+          this.resolve(this);
+        } else {
+          this.reject(this);
+        }
+        close()
+      }
+    });
     console.log(instance);
   }
 }

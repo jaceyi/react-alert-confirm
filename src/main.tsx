@@ -7,11 +7,27 @@ interface closeBeforeInterface {
   (action: string | number, closePopup: { (): void }): void
 }
 
+interface dispatchInterface {
+  (action: string | number): void;
+}
+
+interface resolveInterface {
+  (instance?: AlertConfirmInterface): void;
+}
+
+interface asyncInterface {
+  (): Promise<AlertConfirmInterface>
+}
+
+interface getFooterInterface {
+  (): React.ReactNode;
+}
+
 export interface optionsInterface {
   type?: 'confirm' | 'alert';
   title?: React.ReactNode;
   content?: React.ReactNode;
-  footer?: React.ReactNode;
+  footer?: React.ReactNode | getFooterInterface;
   zIndex?: number;
   okText?: string;
   cancelText?: string;
@@ -32,13 +48,11 @@ export interface AlertConfirmInterface {
   onOk?: { (): void };
   onCancel?: { (): void };
   closeBefore: closeBeforeInterface;
-  resolve?: { (instance?: AlertConfirmInterface): void };
-  reject?: { (instance?: AlertConfirmInterface): void };
-  dispatch: {
-    (action: string | number): void;
-  };
+  resolve?: resolveInterface;
+  reject?: resolveInterface;
+  dispatch: dispatchInterface;
   closePopup: { (): void };
-  async: { (): Promise<AlertConfirmInterface>};
+  async: asyncInterface;
 }
 
 class AlertConfirm implements AlertConfirmInterface {
@@ -79,21 +93,26 @@ class AlertConfirm implements AlertConfirmInterface {
     this.container = container;
     this.title = title;
     this.content = content;
-    this.footer = footer || (
-      <>
-        {
-          type !== 'alert' && (
-            <Button onClick={
-              () => this.dispatch('cancel')
-            }>{ cancelText || '取 消' }</Button>
-          )
-        }
-        <Button
-          type="primary"
-          onClick={() => this.dispatch('ok')}
-        >{ okText || '确 认' }</Button>
-      </>
-    );
+    if (footer) {
+      const type = Object.prototype.toString.call(footer);
+      this.footer = type === '[object Function]' ? (footer as getFooterInterface).call(this) : footer;
+    } else {
+      this.footer = (
+        <>
+          {
+            type !== 'alert' && (
+              <Button onClick={
+                () => this.dispatch('cancel')
+              }>{ cancelText || '取 消' }</Button>
+            )
+          }
+          <Button
+            type="primary"
+            onClick={() => this.dispatch('ok')}
+          >{ okText || '确 认' }</Button>
+        </>
+      );
+    }
     this.type = type;
     this.onOk = onOk;
     this.onCancel = onCancel;
@@ -101,12 +120,12 @@ class AlertConfirm implements AlertConfirmInterface {
     this.render();
   }
 
-  dispatch = (action: string | number): void => {
+  dispatch: dispatchInterface = action => {
     this.action = action;
     const { closeBefore, onOk, onCancel, resolve, reject } = this;
 
     if (closeBefore) {
-      closeBefore(action, this.closePopup.bind(this));
+      closeBefore.call(this, action, this.closePopup.bind(this));
       return
     }
     if (action === 'ok') {
@@ -125,12 +144,12 @@ class AlertConfirm implements AlertConfirmInterface {
     this.render();
   };
 
-  async(): Promise<AlertConfirmInterface> {
+  async: asyncInterface = () => {
     return new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;
     })
-  }
+  };
 
   render() {
     const {

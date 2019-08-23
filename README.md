@@ -60,28 +60,28 @@ async function handleClick() {
 {
   // 弹窗的类型
   type?: 'confirm' | 'alert' = 'confirm';
-  
+
   // 弹窗标题
   title?: React.ReactNode;
-  
+
   // 弹窗内容
   content?: React.ReactNode;
-  
+
   // 弹窗底部 用于自定义底部按钮
-  footer?: React.ReactNode;
-  
+  footer?: React.ReactNode | { (): React.ReactNode };
+
   // 弹层的 z-index 默认为1000
   zIndex?: number = 1000;
-  
+
   // 确认按钮的文字
   okText?: string = '确认';
-  
+
   // 取消按钮的文字
   cancelText?: string = '取消';
-  
+
   // 点击确认的回调
   onOk?: { (): void }
-  
+
   // 点击取消或者关闭弹窗的回调
   onCancel?: { (): void }
 
@@ -103,46 +103,55 @@ const instance: AlertConfirmInterface = alertConfirm({ ... }):
 interface AlertConfirmInterface {
 
   title?: React.ReactNode;
-  
+
   content?: React.ReactNode;
-  
+
   footer?: React.ReactNode;
-  
+
   zIndex: number = 1000;
-  
+
   type: 'confirm' | 'alert' = 'confirm';
-  
+
   // 实例状态
   status: 'mount' | 'unmount' = 'mount';
-  
+
   // 实例被 dispatch 时候传入的 action
   action: string | number;
-  
+
   container: Element;
-  
+
   onOk?: { (): void };
-  
+
   onCancel?: { (): void };
-  
+
   // 关闭实例弹窗的方法 可以手动调用此方法来关闭实例弹窗你并卸载
   closeBefore: (action: string | number, closePopup: { (): void }): void;
-  
+
   // 异步组件时才有 可以通过自定义 resolve 和 reject 来完成高阶用法
   resolve?: { (instance?: AlertConfirmInterface): void };
-  
+
   reject?: { (instance?: AlertConfirmInterface): void };
-  
+
    // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
   dispatch: {
     (action: string | number): void;
   };
-  
+
    // 关闭当前实例弹窗
   closePopup: { (): void };
-  
+
   // 返回 Promise，只有点击 ok 才会 执行 resolve 返回实例内容
   async: { (): Promise<AlertConfirmInterface>};
-  
+
+}
+```
+
+## Button Props
+```
+{
+  // 按钮样式
+  type?: 'default' | 'primary' | 'danger' = 'default';
+  ...ReactNode Props
 }
 ```
 
@@ -189,11 +198,29 @@ async function handleClickDelete() {
   }
 }
 ```
-## Button Props
-```
-{
-  // 按钮样式
-  type?: 'default' | 'primary' | 'danger' = 'default';
-  ...ReactNode Props
+### 自定义 Footer & 异步弹窗
+```$xslt
+import { asyncConfirm, Button } from 'react-alert-confirm';
+
+async function handleClickDelte() {
+  await asyncConfirm({
+    content: '这是一个异步弹窗！',
+    footer() {
+      return (
+        <Button 
+          onClick={() => this.dispatch('hello')} 
+          type="primary">按 钮</Button>
+      )
+    },
+    closeBefore(action, close) {
+      if (action === 'hello') {
+        this.resolve(this);
+      } else {
+        this.reject(this);
+      }
+      close()
+    }
+  });
+  // ok events
 }
 ```
