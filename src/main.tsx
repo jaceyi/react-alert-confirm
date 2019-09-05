@@ -20,7 +20,7 @@ interface asyncInterface {
 }
 
 interface getFooterInterface {
-  (): React.ReactNode;
+  (dispatch: dispatchInterface): React.ReactNode;
 }
 
 export interface optionsInterface {
@@ -95,7 +95,7 @@ class AlertConfirm implements AlertConfirmInterface {
     this.content = content;
     if (footer) {
       const type = Object.prototype.toString.call(footer);
-      this.footer = type === '[object Function]' ? (footer as getFooterInterface).call(this) : footer;
+      this.footer = type === '[object Function]' ? (footer as getFooterInterface).call(this, this.dispatch) : footer;
     } else {
       this.footer = (
         <>

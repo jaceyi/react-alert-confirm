@@ -14,7 +14,7 @@ interface asyncInterface {
     (): Promise<AlertConfirmInterface>;
 }
 interface getFooterInterface {
-    (): React.ReactNode;
+    (dispatch: dispatchInterface): React.ReactNode;
 }
 export interface optionsInterface {
     type?: 'confirm' | 'alert';

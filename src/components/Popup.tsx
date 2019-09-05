@@ -46,7 +46,7 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
     });
     const { status, onClosePopup } = this.props;
     if (status === 'unmount') {
-      onClosePopup && onClosePopup();
+      onClosePopup();
     }
   };
 

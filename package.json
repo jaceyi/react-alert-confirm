@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "main": "dist",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",

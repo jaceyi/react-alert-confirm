@@ -68,7 +68,7 @@ async function handleClick() {
   content?: React.ReactNode;
 
   // 弹窗底部 用于自定义底部按钮
-  footer?: React.ReactNode | { (): React.ReactNode };
+  footer?: React.ReactNode | { (dispatch): React.ReactNode };
 
   // 弹层的 z-index 默认为1000
   zIndex?: number = 1000;
@@ -205,10 +205,10 @@ import { asyncConfirm, Button } from 'react-alert-confirm';
 async function handleClickDelte() {
   await asyncConfirm({
     content: '这是一个异步弹窗！',
-    footer() {
+    footer(dispatch) {
       return (
         <Button 
-          onClick={() => this.dispatch('hello')} 
+          onClick={() => dispatch('hello')} 
           type="primary">按 钮</Button>
       )
     },
