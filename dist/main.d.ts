@@ -84,5 +84,4 @@ declare class AlertConfirm implements AlertConfirmInterface {
     async: asyncInterface;
     render(): void;
 }
-declare const _default: (options: string | optionsInterface) => AlertConfirm;
-export default _default;
+export default AlertConfirm;

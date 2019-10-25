@@ -180,15 +180,4 @@ class AlertConfirm implements AlertConfirmInterface {
   }
 }
 
-export default (options: optionsInterface | string) => {
-  const _options: optionsInterface = {};
-  if (typeof options === 'string') {
-    _options.content = options
-  } else if (typeof options === 'object') {
-    Object.assign(_options, options);
-  } else {
-    throw new Error('options required type is object or and string!')
-  }
-
-  return new AlertConfirm(_options);
-};
+export default AlertConfirm;

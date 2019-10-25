@@ -41,31 +41,36 @@ class App extends React.Component {
         console.log('ok', instance);
       },
       onCancel: () => {
-        console.log('cancel', instance)
+        console.log('cancel', instance);
       }
     });
   };
 
-  handleClickAlert = () => {
-    const instance = alert('这是 Alert ，支持ReactNode');
+  handleClickAlert = async cb => {
+    const instance = await alert(<span>这是 Alert ，支持ReactNode</span>).async();
     console.log(instance);
+    if (cb instanceof Function) cb();
   };
 
   handleClickDanger = () => {
-    const instance = confirm({
+    confirm({
       title: '警告',
       content: '此操作将删除该任务，请确认！',
-      footer: (
+      footer: dispatch => (
         <Fragment>
-          <Button onClick={() => instance.dispatch('cancel')}>取 消</Button>
+          <Button onClick={() => dispatch('cancel')}>取 消</Button>
           <Button
-            onClick={() => instance.dispatch('ok')}
+            onClick={() => dispatch('ok')}
             type="danger"
           >确 认</Button>
         </Fragment>
       ),
-      onOk: () => {
-        console.log('ok', instance);
+      closeBefore: (action, close) => {
+        if (action === 'cancel') {
+          this.handleClickAlert(close);
+        } else {
+          close();
+        }
       }
     });
   };
@@ -73,11 +78,9 @@ class App extends React.Component {
   handleClickAsync = async () => {
     const instance = await asyncConfirm({
       content: '这是一个异步弹窗！',
-      footer(dispatch) {
-        return (
-          <Button onClick={() => dispatch('hello')} type="primary">按 钮</Button>
-        )
-      },
+      footer: dispatch => (
+        <Button onClick={() => dispatch('hello')} type="primary">按 钮</Button>
+      ),
       closeBefore(action, close) {
         if (action === 'hello') {
           this.resolve(this);

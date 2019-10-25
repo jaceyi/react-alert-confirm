@@ -11,7 +11,7 @@ npm install react-alert-confirm --save
 ```
 
 ## Import
-> 提供按钮组件便于样式统一
+提供按钮组件便于样式统一
 ```$xslt
 import 'react-alert-confirm/dist/index.css';
 import alertConfirm, { alert, asyncConfirm, Button } from 'react-alert-confirm';
@@ -207,8 +207,8 @@ async function handleClickDelte() {
     content: '这是一个异步弹窗！',
     footer(dispatch) {
       return (
-        <Button 
-          onClick={() => dispatch('hello')} 
+        <Button
+          onClick={() => dispatch('hello')}
           type="primary">按 钮</Button>
       )
     },
