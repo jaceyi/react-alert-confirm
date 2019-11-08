@@ -1,7 +1,7 @@
 const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'production',
@@ -26,36 +26,40 @@ module.exports = {
         loader: 'ts-loader'
       },
       {
-        test: /\.(scss)$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader',
-            'sass-loader'
-          ]
-        })
+        test: /\.scss$/,
+        include: /src/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
       }
     ]
   },
 
   plugins: [
-    new ExtractTextPlugin('index.css'),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
-    new OptimizeCssAssetsPlugin ({
-      assetNameRegExp: /\.(sa|sc|c)ss$/g,
+    new OptimizeCSSAssetsPlugin({
       cssProcessor: require('cssnano'),
-
       cssProcessorPluginOptions: {
-        preset: ['default', {
-          discardComments: { removeAll: true},
-          normalizeUnicode: false
-        }]
+        preset: [
+          'default',
+          {
+            discardComments: {
+              removeAll: true
+            }
+          }
+        ]
       },
-      canPrint: false
+      canPrint: true
     }),
+    new MiniCssExtractPlugin({
+      filename: 'index.css',
+      ignoreOrder: true
+    })
   ],
 
   externals: {
