@@ -19,7 +19,7 @@ import alertConfirm, { alert, asyncConfirm, Button } from 'react-alert-confirm';
 
 ## Example
 ### Confirm
-```$xslt
+```javascript
 alertConfirm('This is Content!');
 // or
 alertConfirm({
@@ -34,7 +34,7 @@ alertConfirm({
 })
 ```
 ### Alert
-```
+```javascript
 // Alert
 alertConfirm({
   type: 'alert',
@@ -44,7 +44,7 @@ alertConfirm({
 alert('This is Content!')
 ```
 ### Async
-```$xslt
+```javascript
 async function handleClick() {
   await asyncConfirm('This is async dialog!');
   // ... ok events
@@ -56,7 +56,7 @@ async function handleClick() {
 }
 ```
 ## Options
-```
+```javascript
 {
   // 弹窗的类型
   type?: 'confirm' | 'alert' = 'confirm';
@@ -97,7 +97,7 @@ async function handleClick() {
 ```
 
 ## Instance
-```
+```javascript
 const instance: AlertConfirmInterface = alertConfirm({ ... }):
 
 interface AlertConfirmInterface {
@@ -147,7 +147,7 @@ interface AlertConfirmInterface {
 ```
 
 ## Button Props
-```
+```javascript
 {
   // 按钮样式
   type?: 'default' | 'primary' | 'danger' = 'default';
@@ -157,7 +157,7 @@ interface AlertConfirmInterface {
 
 ## Advanced
 ### 自定义 Footer
-```
+```javascript
 import alertConfirm, { Button } from 'react-alert-confirm';
 
 const instance = alertConfirm({
@@ -182,7 +182,7 @@ const instance = alertConfirm({
 })
 ```
 ### 异步弹窗
-```$xslt
+```javascript
 import alertConfirm from 'react-alert-confirm';
 
 async function handleClickDelete() {
@@ -199,7 +199,7 @@ async function handleClickDelete() {
 }
 ```
 ### 自定义 Footer & 异步弹窗
-```$xslt
+```javascript
 import { asyncConfirm, Button } from 'react-alert-confirm';
 
 async function handleClickDelte() {
