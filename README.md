@@ -4,7 +4,7 @@
 
 ## Installing
 
-```
+```shell
 yarn add react-alert-confirm
 // or
 npm install react-alert-confirm --save
@@ -12,7 +12,7 @@ npm install react-alert-confirm --save
 
 ## Import
 提供按钮组件便于样式统一
-```$xslt
+```javascript
 import 'react-alert-confirm/dist/index.css';
 import alertConfirm, { alert, asyncConfirm, Button } from 'react-alert-confirm';
 ```
