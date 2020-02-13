@@ -6,11 +6,11 @@ declare namespace Popup {
     content?: React.ReactNode;
     footer?: React.ReactNode;
     dispatch: {
-      (action: string | number): void
+      (action: string | number): void;
     };
     type?: 'alert' | 'confirm';
     status: 'mount' | 'unmount';
-    onClosePopup: { (): void }
+    onClosePopup: { (): void };
   }
 
   interface State {
@@ -30,12 +30,12 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
       this.setState({
         maskClassName: 'fadeIn',
         mainClassName: 'zoomIn'
-      })
+      });
     } else {
       this.setState({
         maskClassName: 'fadeOut',
         mainClassName: 'zoomOut'
-      })
+      });
     }
   }
 
@@ -51,36 +51,25 @@ class Popup extends React.Component<Popup.Props, Popup.State> {
   };
 
   render() {
-    const {
-      maskClassName,
-      mainClassName
-    } = this.state;
-    const {
-      title,
-      content,
-      footer,
-      dispatch,
-      type
-    } = this.props;
+    const { maskClassName, mainClassName } = this.state;
+    const { title, content, footer, dispatch, type } = this.props;
 
     return (
       <div className={`alert-confirm-mask ${maskClassName}`}>
         <div className={`alert-confirm-main ${mainClassName} ${type}`} onAnimationEnd={this.animationEnd}>
           <div className="alert-confirm-header">{title}</div>
-          {
-            type !== 'alert' && (
-              <div className="alert-confirm-header-close">
-                <span className="icon" onClick={() => dispatch('close')}>✕</span>
-              </div>
-            )
-          }
+          {type !== 'alert' && (
+            <div className="alert-confirm-header-close">
+              <span className="icon" onClick={() => dispatch('close')}>
+                ✕
+              </span>
+            </div>
+          )}
           <div className="alert-confirm-content">{content}</div>
-          <div className="alert-confirm-footer">
-            {footer}
-          </div>
+          <div className="alert-confirm-footer">{footer}</div>
         </div>
       </div>
-    )
+    );
   }
 }
 

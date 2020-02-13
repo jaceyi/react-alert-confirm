@@ -2,9 +2,10 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Popup from './components/Popup';
 import Button from './components/Button';
+import languages from './languages';
 
 interface closeBeforeInterface {
-  (action: string | number, closePopup: { (): void }): void
+  (action: string | number, closePopup: { (): void }): void;
 }
 
 interface dispatchInterface {
@@ -16,7 +17,7 @@ interface resolveInterface {
 }
 
 interface asyncInterface {
-  (): Promise<AlertConfirmInterface>
+  (): Promise<AlertConfirmInterface>;
 }
 
 interface getFooterInterface {
@@ -28,11 +29,12 @@ export interface optionsInterface {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode | getFooterInterface;
+  language?: 'zh' | 'en';
   zIndex?: number;
   okText?: string;
   cancelText?: string;
-  onOk?: { (): void }
-  onCancel?: { (): void }
+  onOk?: { (): void };
+  onCancel?: { (): void };
   closeBefore?: closeBeforeInterface;
 }
 
@@ -74,6 +76,7 @@ class AlertConfirm implements AlertConfirmInterface {
     title,
     content,
     footer,
+    language = 'zh',
     zIndex,
     closeBefore,
     type = 'confirm',
@@ -93,23 +96,21 @@ class AlertConfirm implements AlertConfirmInterface {
     this.container = container;
     this.title = title;
     this.content = content;
+
     if (footer) {
       const type = Object.prototype.toString.call(footer);
       this.footer = type === '[object Function]' ? (footer as getFooterInterface).call(this, this.dispatch) : footer;
     } else {
+      const defaultLanguage = languages[language];
+
       this.footer = (
         <>
-          {
-            type !== 'alert' && (
-              <Button onClick={
-                () => this.dispatch('cancel')
-              }>{ cancelText || '取 消' }</Button>
-            )
-          }
-          <Button
-            type="primary"
-            onClick={() => this.dispatch('ok')}
-          >{ okText || '确 认' }</Button>
+          {type !== 'alert' && (
+            <Button onClick={() => this.dispatch('cancel')}>{cancelText || defaultLanguage?.cancel}</Button>
+          )}
+          <Button type="primary" onClick={() => this.dispatch('ok')}>
+            {okText || defaultLanguage?.ok}
+          </Button>
         </>
       );
     }
@@ -126,15 +127,15 @@ class AlertConfirm implements AlertConfirmInterface {
 
     if (closeBefore) {
       closeBefore.call(this, action, this.closePopup.bind(this));
-      return
+      return;
     }
     if (action === 'ok') {
-      onOk && onOk();
-      resolve && resolve(this);
+      onOk?.();
+      resolve?.(this);
     }
-    if (action === 'cancel' || action === 'close'){
-      onCancel && onCancel();
-      reject && reject(this);
+    if (action === 'cancel' || action === 'close') {
+      onCancel?.();
+      reject?.(this);
     }
     this.closePopup();
   };
@@ -148,19 +149,11 @@ class AlertConfirm implements AlertConfirmInterface {
     return new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;
-    })
+    });
   };
 
   render() {
-    const {
-      container,
-      title,
-      content,
-      footer,
-      type,
-      status,
-      dispatch
-    } = this;
+    const { container, title, content, footer, type, status, dispatch } = this;
 
     ReactDOM.unmountComponentAtNode(container);
     ReactDOM.render(
@@ -176,7 +169,8 @@ class AlertConfirm implements AlertConfirmInterface {
           document.body.removeChild(container);
         }}
       />,
-      container);
+      container
+    );
   }
 }
 

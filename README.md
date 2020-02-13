@@ -1,25 +1,28 @@
 > A react component confirm dialog. （一个react的弹窗组件，支持 alert、confirm）
 
-![GIF](https://raw.githubusercontent.com/jaceyi/react-alert-confirm/master/images/illustrate.gif)
+在线预览 [CodeSandbox](https://codesandbox.io/s/react-alert-confirm-edvb8)
 
 ## Installing
 
-```
+```bash
 yarn add react-alert-confirm
 // or
 npm install react-alert-confirm --save
 ```
 
 ## Import
-提供按钮组件便于样式统一
-```$xslt
+
+```typescript
 import 'react-alert-confirm/dist/index.css';
-import alertConfirm, { alert, asyncConfirm, Button } from 'react-alert-confirm';
 ```
 
 ## Example
+
 ### Confirm
-```$xslt
+
+```typescript
+import alertConfirm from 'react-alert-confirm';
+
 alertConfirm('This is Content!');
 // or
 alertConfirm({
@@ -33,8 +36,12 @@ alertConfirm({
   }
 })
 ```
+
 ### Alert
-```
+
+```typescript
+import alertConfirm, { alert } from 'react-alert-confirm';
+
 // Alert
 alertConfirm({
   type: 'alert',
@@ -43,8 +50,12 @@ alertConfirm({
 // or
 alert('This is Content!')
 ```
+
 ### Async
-```$xslt
+
+```typescript
+import alertConfirm, { asyncConfirm } from 'react-alert-confirm';
+
 async function handleClick() {
   await asyncConfirm('This is async dialog!');
   // ... ok events
@@ -55,8 +66,10 @@ async function handleClick() {
   // ... ok events
 }
 ```
+
 ## Options
-```
+
+```typescript
 {
   // 弹窗的类型
   type?: 'confirm' | 'alert' = 'confirm';
@@ -69,6 +82,9 @@ async function handleClick() {
 
   // 弹窗底部 用于自定义底部按钮
   footer?: React.ReactNode | { (dispatch): React.ReactNode };
+
+  // 默认按钮的语言
+  language?: 'zh' | 'en' = ’zh‘;
 
   // 弹层的 z-index 默认为1000
   zIndex?: number = 1000;
@@ -85,10 +101,11 @@ async function handleClick() {
   // 点击取消或者关闭弹窗的回调
   onCancel?: { (): void }
 
-  // 关闭弹窗之前的回调 [tip:此方法会导致 onOk 和 onCancel 失效，且异步方法 (resolve, reject) 会被此方法拦截]
+  // 关闭弹窗之前的回调 [tip:此方法会导致 onOk 和 onCancel 失效，并且 Promise 的 resolve 和 reject 会被此方法拦截]
   closeBefore?: {
     /**
-     * @params action 触发关闭的来源，默认（ok: 确认按钮 | cancel: 取消按钮 | close: 关闭按钮）
+     * @params action 触发关闭的来源
+     *         默认情况（ok: 确认按钮 | cancel: 取消按钮 | close: 关闭按钮）
      * @params closePopup 关闭弹窗的方法
      */
     (action: string | number, closePopup: { (): void }): void
@@ -97,8 +114,11 @@ async function handleClick() {
 ```
 
 ## Instance
-```
-const instance: AlertConfirmInterface = alertConfirm({ ... }):
+
+```typescript
+import alertConfirm, { alert } from 'react-alert-confirm';
+
+const instance: AlertConfirmInterface = alertConfirm({ /* ... */ });
 
 interface AlertConfirmInterface {
 
@@ -147,17 +167,25 @@ interface AlertConfirmInterface {
 ```
 
 ## Button Props
-```
+
+```typescript
 {
   // 按钮样式
   type?: 'default' | 'primary' | 'danger' = 'default';
-  ...ReactNode Props
+
+  children?: ReactNode;
+
+  style?: CSSProperties;
+
+  onClick?: React.MouseEventHandler;
 }
 ```
 
 ## Advanced
+
 ### 自定义 Footer
-```
+提供按钮组件便于样式统一
+```typescript
 import alertConfirm, { Button } from 'react-alert-confirm';
 
 const instance = alertConfirm({
@@ -181,8 +209,10 @@ const instance = alertConfirm({
   }
 })
 ```
+
 ### 异步弹窗
-```$xslt
+
+```typescript
 import alertConfirm from 'react-alert-confirm';
 
 async function handleClickDelete() {
@@ -198,11 +228,13 @@ async function handleClickDelete() {
   }
 }
 ```
+
 ### 自定义 Footer & 异步弹窗
-```$xslt
+
+```typescript
 import { asyncConfirm, Button } from 'react-alert-confirm';
 
-async function handleClickDelte() {
+async function handleClickDelete() {
   await asyncConfirm({
     content: '这是一个异步弹窗！',
     footer(dispatch) {

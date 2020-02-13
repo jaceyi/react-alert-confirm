@@ -21,6 +21,7 @@ export interface optionsInterface {
     title?: React.ReactNode;
     content?: React.ReactNode;
     footer?: React.ReactNode | getFooterInterface;
+    language?: 'zh' | 'en';
     zIndex?: number;
     okText?: string;
     cancelText?: string;
@@ -78,7 +79,7 @@ declare class AlertConfirm implements AlertConfirmInterface {
     reject?: {
         (instance?: AlertConfirmInterface): void;
     };
-    constructor({ title, content, footer, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: optionsInterface);
+    constructor({ title, content, footer, language, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: optionsInterface);
     dispatch: dispatchInterface;
     closePopup: () => void;
     async: asyncInterface;

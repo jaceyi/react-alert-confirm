@@ -16,7 +16,10 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx'],
+    alias: {
+      '@': path.resolve(__dirname, '../src/')
+    }
   },
 
   module: {
@@ -28,12 +31,7 @@ module.exports = {
       {
         test: /\.scss$/,
         include: /src/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader',
-          'sass-loader'
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
       }
     ]
   },

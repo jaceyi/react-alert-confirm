@@ -11,22 +11,13 @@ export namespace Button {
 
 class Button extends React.Component<Button.Props> {
   render() {
-    const {
-      type,
-      children,
-      onClick,
-      style
-    } = this.props;
+    const { type, children, onClick, style } = this.props;
 
     return (
-      <button
-        style={style}
-        onClick={onClick}
-        className={`alert-confirm-button ${type || 'default'}`}
-      >
+      <button style={style} onClick={onClick} className={`alert-confirm-button ${type || 'default'}`}>
         {children}
       </button>
-    )
+    );
   }
 }
 

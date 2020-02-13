@@ -1,42 +1,35 @@
+import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import confirm, { Button, alert, asyncConfirm } from '../dist';
+import confirm, { Button, alert, asyncConfirm } from '../dist/index';
 import { Fragment } from 'react';
 import '../dist/index.css';
-import 'regenerator-runtime/runtime';
 
 class App extends React.Component {
   render() {
     return (
       <div>
-        <Button
-          type="primary"
-          onClick={this.handleClickConfirm}
-        >Confirm</Button>
-        <Button
-          style={{ marginLeft: 10 }}
-          onClick={this.handleClickAlert}
-        >Alert</Button>
-        <Button
-          type="danger"
-          style={{ marginLeft: 10 }}
-          onClick={this.handleClickDanger}
-        >Danger</Button>
-        <Button
-          style={{ marginLeft: 10 }}
-          type="primary"
-          onClick={this.handleClickAsync}
-        >Async Confirm</Button>
+        <Button type="primary" onClick={this.handleClickConfirm}>
+          Confirm
+        </Button>
+        <Button style={{ marginLeft: 10 }} onClick={this.handleClickAlert}>
+          Alert
+        </Button>
+        <Button type="danger" style={{ marginLeft: 10 }} onClick={this.handleClickDanger}>
+          Danger
+        </Button>
+        <Button style={{ marginLeft: 10 }} type="primary" onClick={this.handleClickAsync}>
+          Async Confirm
+        </Button>
       </div>
-    )
+    );
   }
 
   handleClickConfirm = () => {
     const instance = confirm({
       title: '提示',
       content: '这是 Confirm，支持ReactNode',
-      okText: 'OK',
-      cancelText: 'Cancel',
+      language: 'en',
       onOk: () => {
         console.log('ok', instance);
       },
@@ -59,10 +52,9 @@ class App extends React.Component {
       footer: dispatch => (
         <Fragment>
           <Button onClick={() => dispatch('cancel')}>取 消</Button>
-          <Button
-            onClick={() => dispatch('ok')}
-            type="danger"
-          >确 认</Button>
+          <Button onClick={() => dispatch('ok')} type="danger">
+            删 除
+          </Button>
         </Fragment>
       ),
       closeBefore: (action, close) => {
@@ -79,7 +71,9 @@ class App extends React.Component {
     const instance = await asyncConfirm({
       content: '这是一个异步弹窗！',
       footer: dispatch => (
-        <Button onClick={() => dispatch('hello')} type="primary">按 钮</Button>
+        <Button onClick={() => dispatch('hello')} type="primary">
+          按 钮
+        </Button>
       ),
       closeBefore(action, close) {
         if (action === 'hello') {
@@ -87,14 +81,11 @@ class App extends React.Component {
         } else {
           this.reject(this);
         }
-        close()
+        close();
       }
     });
     console.log(instance);
-  }
+  };
 }
 
-ReactDOM.render(
-  <App/>,
-  document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));
