@@ -1,88 +1,38 @@
 import * as React from 'react';
-interface closeBeforeInterface {
-    (action: string | number, closePopup: {
-        (): void;
-    }): void;
-}
-interface dispatchInterface {
-    (action: string | number): void;
-}
-interface resolveInterface {
-    (instance?: AlertConfirmInterface): void;
-}
-interface asyncInterface {
-    (): Promise<AlertConfirmInterface>;
-}
-interface getFooterInterface {
-    (dispatch: dispatchInterface): React.ReactNode;
-}
-export interface optionsInterface {
-    type?: 'confirm' | 'alert';
+import { Dispatch, DispatchAction, ClosePopup, Type, Status } from './components/Popup';
+declare type CloseBefore = (action: DispatchAction, closePopup: ClosePopup) => void;
+declare type AlertConfirmEvent = (instance?: AlertConfirm) => void;
+declare type GetFooter = (dispatch: Dispatch) => React.ReactNode;
+declare type Footer = React.ReactNode | GetFooter;
+declare type Lang = 'zh' | 'en';
+export declare type Options = {
+    type?: Type;
     title?: React.ReactNode;
     content?: React.ReactNode;
-    footer?: React.ReactNode | getFooterInterface;
-    language?: 'zh' | 'en';
+    footer?: Footer;
+    lang?: Lang;
     zIndex?: number;
     okText?: string;
     cancelText?: string;
-    onOk?: {
-        (): void;
-    };
-    onCancel?: {
-        (): void;
-    };
-    closeBefore?: closeBeforeInterface;
-}
-export interface AlertConfirmInterface {
+    onOk?: AlertConfirmEvent;
+    onCancel?: AlertConfirmEvent;
+    closeBefore?: CloseBefore;
+};
+declare class AlertConfirm {
     title?: React.ReactNode;
     content?: React.ReactNode;
     footer?: React.ReactNode;
     zIndex: number;
-    type: 'confirm' | 'alert';
-    status: 'mount' | 'unmount';
-    action: string | number;
+    type: Type;
+    status: Status;
+    action: DispatchAction;
     container: Element;
-    onOk?: {
-        (): void;
-    };
-    onCancel?: {
-        (): void;
-    };
-    closeBefore: closeBeforeInterface;
-    resolve?: resolveInterface;
-    reject?: resolveInterface;
-    dispatch: dispatchInterface;
-    closePopup: {
-        (): void;
-    };
-    async: asyncInterface;
-}
-declare class AlertConfirm implements AlertConfirmInterface {
-    title?: React.ReactNode;
-    content?: React.ReactNode;
-    footer?: React.ReactNode;
-    zIndex: number;
-    type: 'confirm' | 'alert';
-    status: 'mount' | 'unmount';
-    action: string | number;
-    container: Element;
-    onOk?: {
-        (): void;
-    };
-    onCancel?: {
-        (): void;
-    };
-    closeBefore: closeBeforeInterface;
-    resolve?: {
-        (instance?: AlertConfirmInterface): void;
-    };
-    reject?: {
-        (instance?: AlertConfirmInterface): void;
-    };
-    constructor({ title, content, footer, language, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: optionsInterface);
-    dispatch: dispatchInterface;
+    onOk?: AlertConfirmEvent;
+    onCancel?: AlertConfirmEvent;
+    closeBefore: CloseBefore;
+    constructor({ title, content, footer, lang, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: Options);
+    dispatch: Dispatch;
     closePopup: () => void;
-    async: asyncInterface;
     render(): void;
 }
 export default AlertConfirm;

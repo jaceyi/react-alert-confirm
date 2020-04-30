@@ -1,76 +1,68 @@
 import * as React from 'react';
 
-declare namespace Popup {
-  interface Props {
-    title?: React.ReactNode;
-    content?: React.ReactNode;
-    footer?: React.ReactNode;
-    dispatch: {
-      (action: string | number): void;
-    };
-    type?: 'alert' | 'confirm';
-    status: 'mount' | 'unmount';
-    onClosePopup: { (): void };
-  }
+export type Type = 'alert' | 'confirm';
+export type Status = 'mount' | 'unmount';
+export type DispatchAction = string | number;
+export type Dispatch = (action: DispatchAction) => void;
+export type ClosePopup = () => void;
 
-  interface State {
-    maskClassName: string;
-    mainClassName: string;
-  }
+interface PopupProps {
+  title?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
+  dispatch: Dispatch;
+  type?: Type;
+  status: Status;
+  onClosePopup: ClosePopup;
 }
 
-class Popup extends React.Component<Popup.Props, Popup.State> {
-  state = {
+const Popup: React.FC<PopupProps> = ({ title, content, footer, dispatch, type, status, onClosePopup }) => {
+  const [classNames, setClassNames] = React.useState({
     maskClassName: '',
     mainClassName: ''
-  };
+  });
 
-  componentDidMount() {
-    if (this.props.status === 'mount') {
-      this.setState({
+  React.useEffect(() => {
+    if (status === 'mount') {
+      setClassNames({
         maskClassName: 'fadeIn',
         mainClassName: 'zoomIn'
       });
     } else {
-      this.setState({
+      setClassNames({
         maskClassName: 'fadeOut',
         mainClassName: 'zoomOut'
       });
     }
-  }
+  }, []);
 
-  animationEnd = () => {
-    this.setState({
-      maskClassName: '',
-      mainClassName: ''
-    });
-    const { status, onClosePopup } = this.props;
+  const handleAnimationEnd = () => {
     if (status === 'unmount') {
       onClosePopup();
+    } else {
+      setClassNames({
+        maskClassName: '',
+        mainClassName: ''
+      });
     }
   };
 
-  render() {
-    const { maskClassName, mainClassName } = this.state;
-    const { title, content, footer, dispatch, type } = this.props;
-
-    return (
-      <div className={`alert-confirm-mask ${maskClassName}`}>
-        <div className={`alert-confirm-main ${mainClassName} ${type}`} onAnimationEnd={this.animationEnd}>
-          <div className="alert-confirm-header">{title}</div>
-          {type !== 'alert' && (
-            <div className="alert-confirm-header-close">
-              <span className="icon" onClick={() => dispatch('close')}>
-                ✕
-              </span>
-            </div>
-          )}
-          <div className="alert-confirm-content">{content}</div>
-          <div className="alert-confirm-footer">{footer}</div>
-        </div>
+  return (
+    <div className={`alert-confirm-mask ${classNames.maskClassName}`}>
+      <div className={`alert-confirm-main ${classNames.mainClassName} ${type}`} onAnimationEnd={handleAnimationEnd}>
+        <div className="alert-confirm-header">{title}</div>
+        {type !== 'alert' && (
+          <div className="alert-confirm-header-close">
+            <span className="icon" onClick={() => dispatch('close')}>
+              ✕
+            </span>
+          </div>
+        )}
+        <div className="alert-confirm-content">{content}</div>
+        <div className="alert-confirm-footer">{footer}</div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Popup;

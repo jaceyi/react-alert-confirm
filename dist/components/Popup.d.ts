@@ -1,30 +1,17 @@
 import * as React from 'react';
-declare namespace Popup {
-    interface Props {
-        title?: React.ReactNode;
-        content?: React.ReactNode;
-        footer?: React.ReactNode;
-        dispatch: {
-            (action: string | number): void;
-        };
-        type?: 'alert' | 'confirm';
-        status: 'mount' | 'unmount';
-        onClosePopup: {
-            (): void;
-        };
-    }
-    interface State {
-        maskClassName: string;
-        mainClassName: string;
-    }
+export declare type Type = 'alert' | 'confirm';
+export declare type Status = 'mount' | 'unmount';
+export declare type DispatchAction = string | number;
+export declare type Dispatch = (action: DispatchAction) => void;
+export declare type ClosePopup = () => void;
+interface PopupProps {
+    title?: React.ReactNode;
+    content?: React.ReactNode;
+    footer?: React.ReactNode;
+    dispatch: Dispatch;
+    type?: Type;
+    status: Status;
+    onClosePopup: ClosePopup;
 }
-declare class Popup extends React.Component<Popup.Props, Popup.State> {
-    state: {
-        maskClassName: string;
-        mainClassName: string;
-    };
-    componentDidMount(): void;
-    animationEnd: () => void;
-    render(): JSX.Element;
-}
+declare const Popup: React.FC<PopupProps>;
 export default Popup;

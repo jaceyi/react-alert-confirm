@@ -1,82 +1,47 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Popup from './components/Popup';
+import Popup, { Dispatch, DispatchAction, ClosePopup, Type, Status } from './components/Popup';
 import Button from './components/Button';
 import languages from './languages';
 
-interface closeBeforeInterface {
-  (action: string | number, closePopup: { (): void }): void;
-}
+type CloseBefore = (action: DispatchAction, closePopup: ClosePopup) => void;
+type AlertConfirmEvent = (instance?: AlertConfirm) => void;
+type GetFooter = (dispatch: Dispatch) => React.ReactNode;
+type Footer = React.ReactNode | GetFooter;
+type Lang = 'zh' | 'en';
 
-interface dispatchInterface {
-  (action: string | number): void;
-}
-
-interface resolveInterface {
-  (instance?: AlertConfirmInterface): void;
-}
-
-interface asyncInterface {
-  (): Promise<AlertConfirmInterface>;
-}
-
-interface getFooterInterface {
-  (dispatch: dispatchInterface): React.ReactNode;
-}
-
-export interface optionsInterface {
-  type?: 'confirm' | 'alert';
+export type Options = {
+  type?: Type;
   title?: React.ReactNode;
   content?: React.ReactNode;
-  footer?: React.ReactNode | getFooterInterface;
-  language?: 'zh' | 'en';
+  footer?: Footer;
+  lang?: Lang;
   zIndex?: number;
   okText?: string;
   cancelText?: string;
-  onOk?: { (): void };
-  onCancel?: { (): void };
-  closeBefore?: closeBeforeInterface;
-}
+  onOk?: AlertConfirmEvent;
+  onCancel?: AlertConfirmEvent;
+  closeBefore?: CloseBefore;
+};
 
-export interface AlertConfirmInterface {
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  footer?: React.ReactNode;
-  zIndex: number;
-  type: 'confirm' | 'alert';
-  status: 'mount' | 'unmount';
-  action: string | number;
-  container: Element;
-  onOk?: { (): void };
-  onCancel?: { (): void };
-  closeBefore: closeBeforeInterface;
-  resolve?: resolveInterface;
-  reject?: resolveInterface;
-  dispatch: dispatchInterface;
-  closePopup: { (): void };
-  async: asyncInterface;
-}
-
-class AlertConfirm implements AlertConfirmInterface {
+class AlertConfirm {
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
   zIndex: number = 1000;
-  type: 'confirm' | 'alert' = 'confirm';
-  status: 'mount' | 'unmount' = 'mount';
-  action: string | number = null;
+  type: Type = 'confirm';
+  status: Status = 'mount';
+  action: DispatchAction = null;
   container: Element = null;
-  onOk?: { (): void };
-  onCancel?: { (): void };
-  closeBefore: closeBeforeInterface = null;
-  resolve?: { (instance?: AlertConfirmInterface): void };
-  reject?: { (instance?: AlertConfirmInterface): void };
+  onOk?: AlertConfirmEvent;
+  onCancel?: AlertConfirmEvent;
+  closeBefore: CloseBefore = null;
 
   constructor({
     title,
     content,
     footer,
-    language = 'zh',
+    lang = 'zh',
     zIndex,
     closeBefore,
     type = 'confirm',
@@ -84,7 +49,7 @@ class AlertConfirm implements AlertConfirmInterface {
     onCancel,
     okText,
     cancelText
-  }: optionsInterface) {
+  }: Options) {
     const container: HTMLDivElement = document.createElement('div');
     container.className = 'alert-confirm-container';
     document.body.appendChild(container);
@@ -99,17 +64,17 @@ class AlertConfirm implements AlertConfirmInterface {
 
     if (footer) {
       const type = Object.prototype.toString.call(footer);
-      this.footer = type === '[object Function]' ? (footer as getFooterInterface).call(this, this.dispatch) : footer;
+      this.footer = type === '[object Function]' ? (footer as GetFooter).call(this, this.dispatch) : footer;
     } else {
-      const defaultLanguage = languages[language];
+      const defaultLang = languages[lang];
 
       this.footer = (
         <>
           {type !== 'alert' && (
-            <Button onClick={() => this.dispatch('cancel')}>{cancelText || defaultLanguage?.cancel}</Button>
+            <Button onClick={() => this.dispatch('cancel')}>{cancelText || defaultLang?.cancel}</Button>
           )}
-          <Button type="primary" onClick={() => this.dispatch('ok')}>
-            {okText || defaultLanguage?.ok}
+          <Button styleType="primary" onClick={() => this.dispatch('ok')}>
+            {okText || defaultLang?.ok}
           </Button>
         </>
       );
@@ -121,35 +86,26 @@ class AlertConfirm implements AlertConfirmInterface {
     this.render();
   }
 
-  dispatch: dispatchInterface = action => {
+  dispatch: Dispatch = action => {
     this.action = action;
-    const { closeBefore, onOk, onCancel, resolve, reject } = this;
+    const { closeBefore, onOk, onCancel } = this;
 
-    if (closeBefore) {
-      closeBefore.call(this, action, this.closePopup.bind(this));
-      return;
-    }
     if (action === 'ok') {
-      onOk?.();
-      resolve?.(this);
+      onOk?.(this);
     }
     if (action === 'cancel' || action === 'close') {
-      onCancel?.();
-      reject?.(this);
+      onCancel?.(this);
     }
-    this.closePopup();
+    if (closeBefore) {
+      closeBefore.call(this, action, this.closePopup.bind(this));
+    } else {
+      this.closePopup();
+    }
   };
 
   closePopup = (): void => {
     this.status = 'unmount';
     this.render();
-  };
-
-  async: asyncInterface = () => {
-    return new Promise((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
-    });
   };
 
   render() {

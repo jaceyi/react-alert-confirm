@@ -118,9 +118,9 @@ async function handleClick() {
 ```typescript
 import alertConfirm, { alert } from 'react-alert-confirm';
 
-const instance: AlertConfirmInterface = alertConfirm({ /* ... */ });
+const instance: IAlertConfirm = alertConfirm({ /* ... */ });
 
-interface AlertConfirmInterface {
+interface IAlertConfirm {
 
   title?: React.ReactNode;
 
@@ -148,9 +148,9 @@ interface AlertConfirmInterface {
   closeBefore: (action: string | number, closePopup: { (): void }): void;
 
   // 异步组件时才有 可以通过自定义 resolve 和 reject 来完成高阶用法
-  resolve?: { (instance?: AlertConfirmInterface): void };
+  resolve?: { (instance?: IAlertConfirm): void };
 
-  reject?: { (instance?: AlertConfirmInterface): void };
+  reject?: { (instance?: IAlertConfirm): void };
 
    // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
   dispatch: {
@@ -161,7 +161,7 @@ interface AlertConfirmInterface {
   closePopup: { (): void };
 
   // 返回 Promise，只有点击 ok 才会 执行 resolve 返回实例内容
-  async: { (): Promise<AlertConfirmInterface>};
+  async: { (): Promise<IAlertConfirm>};
 
 }
 ```

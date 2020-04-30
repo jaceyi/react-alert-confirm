@@ -1,13 +1,9 @@
 import * as React from 'react';
-export declare namespace Button {
-    interface Props {
-        type?: 'primary' | 'default' | 'danger';
-        children?: React.ReactNode;
-        style?: React.CSSProperties;
-        onClick?: React.MouseEventHandler;
+declare namespace Button {
+    type styleType = 'primary' | 'default' | 'danger';
+    interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+        styleType?: styleType;
     }
 }
-declare class Button extends React.Component<Button.Props> {
-    render(): JSX.Element;
-}
+declare const Button: React.FC<Button.Props>;
 export default Button;
