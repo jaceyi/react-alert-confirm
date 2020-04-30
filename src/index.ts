@@ -14,7 +14,7 @@ const createInstance = (options: Options | React.ReactNode, defaultOptions: Opti
     throw new Error('options required type is object or and React.ReactNode!');
   }
 
-  if (!defaultOptions.onOk && !defaultOptions.onCancel) {
+  if (!defaultOptions.onOk && !defaultOptions.onCancel && !defaultOptions.closeBefore) {
     return new Promise((resolve, reject) => {
       new AlertConfirm(
         Object.assign(defaultOptions, {

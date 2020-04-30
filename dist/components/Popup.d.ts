@@ -5,12 +5,12 @@ export declare type DispatchAction = string | number;
 export declare type Dispatch = (action: DispatchAction) => void;
 export declare type ClosePopup = () => void;
 interface PopupProps {
+    type?: Type;
     title?: React.ReactNode;
     content?: React.ReactNode;
     footer?: React.ReactNode;
-    dispatch: Dispatch;
-    type?: Type;
     status: Status;
+    dispatch: Dispatch;
     onClosePopup: ClosePopup;
 }
 declare const Popup: React.FC<PopupProps>;

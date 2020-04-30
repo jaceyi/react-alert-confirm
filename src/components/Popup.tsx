@@ -7,28 +7,23 @@ export type Dispatch = (action: DispatchAction) => void;
 export type ClosePopup = () => void;
 
 interface PopupProps {
+  type?: Type;
   title?: React.ReactNode;
   content?: React.ReactNode;
   footer?: React.ReactNode;
-  dispatch: Dispatch;
-  type?: Type;
   status: Status;
+  dispatch: Dispatch;
   onClosePopup: ClosePopup;
 }
 
 const Popup: React.FC<PopupProps> = ({ title, content, footer, dispatch, type, status, onClosePopup }) => {
   const [classNames, setClassNames] = React.useState({
-    maskClassName: '',
-    mainClassName: ''
+    maskClassName: 'fadeIn',
+    mainClassName: 'zoomIn'
   });
 
   React.useEffect(() => {
-    if (status === 'mount') {
-      setClassNames({
-        maskClassName: 'fadeIn',
-        mainClassName: 'zoomIn'
-      });
-    } else {
+    if (status !== 'mount') {
       setClassNames({
         maskClassName: 'fadeOut',
         mainClassName: 'zoomOut'

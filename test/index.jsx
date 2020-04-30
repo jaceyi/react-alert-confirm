@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import confirm, { Button, alert } from '../dist/index';

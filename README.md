@@ -23,7 +23,12 @@ import 'react-alert-confirm/dist/index.css';
 ```typescript
 import alertConfirm from 'react-alert-confirm';
 
-alertConfirm('This is Content!');
+try {
+  await alertConfirm('This is Content!');
+  console.log('ok')
+} catch (e) {
+  console.log(e, 'cancel')
+}
 // or
 alertConfirm({
   title: 'Title',
@@ -51,22 +56,6 @@ alertConfirm({
 alert('This is Content!')
 ```
 
-### Async
-
-```typescript
-import alertConfirm, { asyncConfirm } from 'react-alert-confirm';
-
-async function handleClick() {
-  await asyncConfirm('This is async dialog!');
-  // ... ok events
-}
-// or
-async function handleClick() {
-  await alertConfirm('This is async dialog!').async();
-  // ... ok events
-}
-```
-
 ## Options
 
 ```typescript
@@ -81,12 +70,12 @@ async function handleClick() {
   content?: React.ReactNode;
 
   // 弹窗底部 用于自定义底部按钮
-  footer?: React.ReactNode | { (dispatch): React.ReactNode };
+  footer?: React.ReactNode | (dispatch) => React.ReactNode;
 
   // 默认按钮的语言
-  language?: 'zh' | 'en' = ’zh‘;
+  lang?: 'zh' | 'en' = 'zh';
 
-  // 弹层的 z-index 默认为1000
+  // 弹层的 z-index
   zIndex?: number = 1000;
 
   // 确认按钮的文字
@@ -101,7 +90,7 @@ async function handleClick() {
   // 点击取消或者关闭弹窗的回调
   onCancel?: { (): void }
 
-  // 关闭弹窗之前的回调 [tip:此方法会导致 onOk 和 onCancel 失效，并且 Promise 的 resolve 和 reject 会被此方法拦截]
+  // 关闭弹窗之前的回调，调用 closePopup 关闭弹窗
   closeBefore?: {
     /**
      * @params action 触发关闭的来源
@@ -113,71 +102,16 @@ async function handleClick() {
 }
 ```
 
-## Instance
-
-```typescript
-import alertConfirm, { alert } from 'react-alert-confirm';
-
-const instance: IAlertConfirm = alertConfirm({ /* ... */ });
-
-interface IAlertConfirm {
-
-  title?: React.ReactNode;
-
-  content?: React.ReactNode;
-
-  footer?: React.ReactNode;
-
-  zIndex: number = 1000;
-
-  type: 'confirm' | 'alert' = 'confirm';
-
-  // 实例状态
-  status: 'mount' | 'unmount' = 'mount';
-
-  // 实例被 dispatch 时候传入的 action
-  action: string | number;
-
-  container: Element;
-
-  onOk?: { (): void };
-
-  onCancel?: { (): void };
-
-  // 关闭实例弹窗的方法 可以手动调用此方法来关闭实例弹窗你并卸载
-  closeBefore: (action: string | number, closePopup: { (): void }): void;
-
-  // 异步组件时才有 可以通过自定义 resolve 和 reject 来完成高阶用法
-  resolve?: { (instance?: IAlertConfirm): void };
-
-  reject?: { (instance?: IAlertConfirm): void };
-
-   // 触发事件，传入自定义的 action，会在 closeBefore 中第一个参数返回
-  dispatch: {
-    (action: string | number): void;
-  };
-
-   // 关闭当前实例弹窗
-  closePopup: { (): void };
-
-  // 返回 Promise，只有点击 ok 才会 执行 resolve 返回实例内容
-  async: { (): Promise<IAlertConfirm>};
-
-}
-```
+> Options 传 onOk、 onCancel、closeBefore 后将不会返回 Promise
 
 ## Button Props
 
 ```typescript
 {
   // 按钮样式
-  type?: 'default' | 'primary' | 'danger' = 'default';
+  styleType?: 'default' | 'primary' | 'danger' = 'default';
 
-  children?: ReactNode;
-
-  style?: CSSProperties;
-
-  onClick?: React.MouseEventHandler;
+  ...ButtonHTMLAttributes
 }
 ```
 
@@ -188,14 +122,16 @@ interface IAlertConfirm {
 ```typescript
 import alertConfirm, { Button } from 'react-alert-confirm';
 
-const instance = alertConfirm({
+alertConfirm({
   title: 'Title',
   content: 'Content',
-  footer: (
-    <Button onClick={() => instance.dispatch('hello')}>
-      Hello
-    </Button>
-  ),
+  footer(dispatch) {
+    return (
+      <Button onClick={() => dispatch('hello')}>
+        Hello
+      </Button>
+    )
+  },
   closeBefore(action, close) {
     switch (action) {
       case 'close':
@@ -208,51 +144,4 @@ const instance = alertConfirm({
     close() // close popup
   }
 })
-```
-
-### 异步弹窗
-
-```typescript
-import alertConfirm from 'react-alert-confirm';
-
-async function handleClickDelete() {
-  try {
-    await alertConfirm('确认删除？').async();
-    // ok events
-  } catch ({ action }) {
-    if (action === 'close') {
-      // close events
-    } else {
-      // cancel events
-    }
-  }
-}
-```
-
-### 自定义 Footer & 异步弹窗
-
-```typescript
-import { asyncConfirm, Button } from 'react-alert-confirm';
-
-async function handleClickDelete() {
-  await asyncConfirm({
-    content: '这是一个异步弹窗！',
-    footer(dispatch) {
-      return (
-        <Button
-          onClick={() => dispatch('hello')}
-          type="primary">按 钮</Button>
-      )
-    },
-    closeBefore(action, close) {
-      if (action === 'hello') {
-        this.resolve(this);
-      } else {
-        this.reject(this);
-      }
-      close()
-    }
-  });
-  // ok events
-}
 ```
