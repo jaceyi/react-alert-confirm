@@ -1,12 +1,9 @@
 import './index.scss';
 import * as React from 'react';
 import AlertConfirm, { Options } from './main';
-import ConfirmButton from './components/Button';
 declare type AlertConfirmType = AlertConfirm | Promise<AlertConfirm>;
-interface IAlert {
-    (options: Options | React.ReactNode): AlertConfirmType;
-}
-export declare const Button: React.FC<ConfirmButton.Props>;
-export declare const alert: IAlert;
-declare const _default: (options: any) => AlertConfirmType;
+declare type Params = Options | React.ReactNode;
+export { default as Button } from './components/Button';
+export declare const alert: (params: Params) => AlertConfirmType;
+declare const _default: (params: Params) => AlertConfirmType;
 export default _default;

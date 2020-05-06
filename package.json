@@ -1,8 +1,8 @@
 {
   "name": "react-alert-confirm",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
-  "main": "dist",
+  "main": "dist/index.js",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",
   "author": "Jace Yi <yijinchun@outlook.com>",
   "license": "MIT",
@@ -10,11 +10,7 @@
     "react",
     "dialog",
     "confirm",
-    "react alert",
-    "react dialog",
-    "react confirm",
-    "react-alert-confirm",
-    "alert confirm dialog react"
+    "react-alert-confirm"
   ],
   "files": [
     "README.md",

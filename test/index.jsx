@@ -19,7 +19,7 @@ const App = () => {
     });
   };
 
-  const handleClickAlert = async cb => {
+  const handleClickAlert = async (cb) => {
     const instance = await alert(<span>这是 Alert ，支持ReactNode</span>);
     console.log(instance);
     if (cb instanceof Function) cb();
@@ -29,15 +29,17 @@ const App = () => {
     confirm({
       title: '警告',
       content: '此操作将删除该任务，请确认！',
-      footer: dispatch => (
-        <Fragment>
-          <Button onClick={() => dispatch('cancel')}>取 消</Button>
-          <Button onClick={() => dispatch('ok')} styleType="danger">
-            删 除
-          </Button>
-        </Fragment>
-      ),
-      closeBefore: (action, close) => {
+      footer(dispatch) {
+        return (
+          <Fragment>
+            <Button onClick={() => dispatch('cancel')}>取 消</Button>
+            <Button onClick={() => dispatch('ok')} styleType="danger">
+              删 除
+            </Button>
+          </Fragment>
+        );
+      },
+      closeBefore(action, close) {
         if (action === 'cancel') {
           handleClickAlert(close);
         } else {

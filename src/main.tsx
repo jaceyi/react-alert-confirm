@@ -10,7 +10,7 @@ type GetFooter = (dispatch: Dispatch) => React.ReactNode;
 type Footer = React.ReactNode | GetFooter;
 type Lang = 'zh' | 'en';
 
-export type Options = {
+export interface Options {
   type?: Type;
   title?: React.ReactNode;
   content?: React.ReactNode;
@@ -22,7 +22,7 @@ export type Options = {
   onOk?: AlertConfirmEvent;
   onCancel?: AlertConfirmEvent;
   closeBefore?: CloseBefore;
-};
+}
 
 class AlertConfirm {
   title?: React.ReactNode;
@@ -86,7 +86,7 @@ class AlertConfirm {
     this.render();
   }
 
-  dispatch: Dispatch = action => {
+  dispatch: Dispatch = (action) => {
     this.action = action;
     const { closeBefore, onOk, onCancel } = this;
 
@@ -118,7 +118,7 @@ class AlertConfirm {
         title={title}
         content={content}
         footer={footer}
-        dispatch={action => dispatch(action)}
+        dispatch={(action) => dispatch(action)}
         status={status}
         onClosePopup={() => {
           ReactDOM.unmountComponentAtNode(container);

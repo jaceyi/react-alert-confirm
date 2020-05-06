@@ -63,6 +63,7 @@
     "@typescript-eslint/consistent-type-definitions": [
       "error",
       "interface"
-    ]
+    ],
+    "react/prop-types": 0
   }
 }

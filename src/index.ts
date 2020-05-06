@@ -1,15 +1,15 @@
 import './index.scss';
 import * as React from 'react';
 import AlertConfirm, { Options } from './main';
-import ConfirmButton from './components/Button';
 
 type AlertConfirmType = AlertConfirm | Promise<AlertConfirm>;
+type Params = Options | React.ReactNode;
 
-const createInstance = (options: Options | React.ReactNode, defaultOptions: Options = {}): AlertConfirmType => {
-  if (typeof options === 'string' || React.isValidElement(options)) {
-    defaultOptions.content = options;
-  } else if (typeof options === 'object') {
-    Object.assign(defaultOptions, options);
+const createInstance = (params: Params, defaultOptions: Options = {}): AlertConfirmType => {
+  if (typeof params === 'string' || React.isValidElement(params)) {
+    defaultOptions.content = params;
+  } else if (typeof params === 'object') {
+    Object.assign(defaultOptions, params);
   } else {
     throw new Error('options required type is object or and React.ReactNode!');
   }
@@ -28,16 +28,11 @@ const createInstance = (options: Options | React.ReactNode, defaultOptions: Opti
   return new AlertConfirm(defaultOptions);
 };
 
-interface IAlert {
-  (options: Options | React.ReactNode): AlertConfirmType;
-}
+export { default as Button } from './components/Button';
 
-export const Button = ConfirmButton;
-
-export const alert: IAlert = options => {
-  return createInstance(options, {
+export const alert = (params: Params) =>
+  createInstance(params, {
     type: 'alert'
   });
-};
 
-export default options => createInstance(options);
+export default (params: Params) => createInstance(params);
