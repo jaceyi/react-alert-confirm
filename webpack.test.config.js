@@ -7,15 +7,14 @@ module.exports = {
   entry: './test',
 
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.ts', '.tsx'],
   },
 
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
+        test: /\.(ts|tsx)$/,
+        loader: 'ts-loader'
       },
       {
         test: /\.(css)$/,

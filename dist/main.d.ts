@@ -5,7 +5,7 @@ declare type AlertConfirmEvent = (instance?: AlertConfirm) => void;
 declare type GetFooter = (dispatch: Dispatch) => React.ReactNode;
 declare type Footer = React.ReactNode | GetFooter;
 declare type Lang = 'zh' | 'en';
-export declare type Options = {
+export interface Options {
     type?: Type;
     title?: React.ReactNode;
     content?: React.ReactNode;
@@ -17,7 +17,7 @@ export declare type Options = {
     onOk?: AlertConfirmEvent;
     onCancel?: AlertConfirmEvent;
     closeBefore?: CloseBefore;
-};
+}
 declare class AlertConfirm {
     title?: React.ReactNode;
     content?: React.ReactNode;
