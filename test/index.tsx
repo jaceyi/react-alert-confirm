@@ -57,7 +57,11 @@ const App = () => {
       <Button style={{ marginLeft: 10 }} onClick={handleClickAlert}>
         Alert
       </Button>
-      <Button styleType="danger" style={{ marginLeft: 10 }} onClick={handleClickDanger}>
+      <Button
+        styleType="danger"
+        style={{ marginLeft: 10 }}
+        onClick={handleClickDanger}
+      >
         Danger
       </Button>
     </div>

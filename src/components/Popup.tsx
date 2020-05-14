@@ -16,35 +16,46 @@ interface PopupProps {
   onClosePopup: ClosePopup;
 }
 
-const Popup: React.FC<PopupProps> = ({ title, content, footer, dispatch, type, status, onClosePopup }) => {
-  const [classNames, setClassNames] = React.useState({
-    maskClassName: 'fadeIn',
-    mainClassName: 'zoomIn'
-  });
+const classNames = {
+  mount: 'alert-confirm-in',
+  unmount: 'alert-confirm-out'
+};
+
+const Popup: React.FC<PopupProps> = ({
+  title,
+  content,
+  footer,
+  dispatch,
+  type,
+  status,
+  onClosePopup
+}) => {
+  const maskRef = React.useRef<HTMLDivElement>(null);
+  const [className, setClassName] = React.useState(classNames[status]);
 
   React.useEffect(() => {
-    if (status !== 'mount') {
-      setClassNames({
-        maskClassName: 'fadeOut',
-        mainClassName: 'zoomOut'
-      });
+    const { animationName } = getComputedStyle(maskRef.current);
+    if (animationName === 'none') {
+      animationEnd();
+    } else {
+      maskRef.current.addEventListener('animationend', animationEnd);
+
+      return () =>
+        maskRef.current.removeEventListener('animationend', animationEnd);
     }
   }, []);
 
-  const handleAnimationEnd = () => {
+  const animationEnd = () => {
     if (status === 'unmount') {
       onClosePopup();
     } else {
-      setClassNames({
-        maskClassName: '',
-        mainClassName: ''
-      });
+      setClassName('');
     }
   };
 
   return (
-    <div className={`alert-confirm-mask ${classNames.maskClassName}`}>
-      <div className={`alert-confirm-main ${classNames.mainClassName} ${type}`} onAnimationEnd={handleAnimationEnd}>
+    <div ref={maskRef} className={`alert-confirm-mask ${className}`}>
+      <div className={`alert-confirm-main ${type}`}>
         <div className="alert-confirm-header">{title}</div>
         {type !== 'alert' && (
           <div className="alert-confirm-header-close">

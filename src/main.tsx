@@ -1,6 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Popup, { Dispatch, DispatchAction, ClosePopup, Type, Status } from './components/Popup';
+import Popup, {
+  Dispatch,
+  DispatchAction,
+  ClosePopup,
+  Type,
+  Status
+} from './components/Popup';
 import Button from './components/Button';
 import languages from './languages';
 
@@ -64,14 +70,19 @@ class AlertConfirm {
 
     if (footer) {
       const type = Object.prototype.toString.call(footer);
-      this.footer = type === '[object Function]' ? (footer as GetFooter).call(this, this.dispatch) : footer;
+      this.footer =
+        type === '[object Function]'
+          ? (footer as GetFooter).call(this, this.dispatch)
+          : footer;
     } else {
       const defaultLang = languages[lang];
 
       this.footer = (
         <>
           {type !== 'alert' && (
-            <Button onClick={() => this.dispatch('cancel')}>{cancelText || defaultLang?.cancel}</Button>
+            <Button onClick={() => this.dispatch('cancel')}>
+              {cancelText || defaultLang?.cancel}
+            </Button>
           )}
           <Button styleType="primary" onClick={() => this.dispatch('ok')}>
             {okText || defaultLang?.ok}
