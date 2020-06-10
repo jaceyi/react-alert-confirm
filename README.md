@@ -65,8 +65,8 @@ alertConfirm({
 |footer|弹窗底部，用于自定义底部按钮|`ReactNode` &#124; `dispatch => React.ReactNode`|确认、取消按钮|
 |lang|默认按钮的语言|`'zh'` &#124; `'en'`|`'zh'`|
 |zIndex|弹层的 z-index|`number`|`1000`|
-|okText|确认按钮的文字|`string` &#124; `ReactNode`|`确认/OK`|
-|cancelText|取消按钮的文字|`string` &#124; `ReactNode`|`取消/Cancel`|
+|okText|确认按钮的文字|`string` &#124; `ReactNode`|确认/OK|
+|cancelText|取消按钮的文字|`string` &#124; `ReactNode`|取消/Cancel|
 |onOk|点击确认的回调|`function(e)`|-|
 |onCancel|点击取消或者关闭弹窗的回调|`function(e)`|-|
 |closeBefore|关闭弹窗之前的回调，调用 close 关闭弹窗|`function(action, close)`|-|

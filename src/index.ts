@@ -14,7 +14,7 @@ const createInstance = (
   } else if (typeof params === 'object') {
     Object.assign(defaultOptions, params);
   } else {
-    throw new Error('options required type is object or and React.ReactNode!');
+    console.warn('options required type is object or and React.ReactNode!');
   }
 
   if (
@@ -35,6 +35,8 @@ const createInstance = (
   return new AlertConfirm(defaultOptions);
 };
 
+const alertConfirm = (params: Params) => createInstance(params);
+
 export { default as Button } from './components/Button';
 
 export const alert = (params: Params) =>
@@ -42,4 +44,4 @@ export const alert = (params: Params) =>
     type: 'alert'
   });
 
-export default (params: Params) => createInstance(params);
+export default alertConfirm;

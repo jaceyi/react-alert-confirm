@@ -1,9 +1,12 @@
 {
   "name": "react-alert-confirm",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",
+  "homepage": "https://github.com/jaceyi/react-alert-confirm",
   "author": "Jace Yi <yijinchun@outlook.com>",
   "license": "MIT",
   "keywords": [
@@ -20,7 +23,7 @@
     "test": "webpack-dev-server --open --config webpack.test.config.js",
     "watch": "webpack --watch --config webpack.build.config.js",
     "build": "webpack --config webpack.build.config.js",
-    "prettier": "prettier --write 'src/**/*.{ts,tsx,scss}' 'test/**/*.{ts,tsx}'",
+    "prettier": "prettier --write '**/*.{ts,tsx,scss}'",
     "lint": "tsc --noEmit && eslint 'src/**/*.{ts,tsx}' 'test/**/*.{ts,tsx}' --quiet --fix"
   },
   "dependencies": {

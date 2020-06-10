@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -28,15 +27,17 @@ module.exports = {
       {
         test: /\.scss$/,
         include: /src/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ]
       }
     ]
   },
 
   plugins: [
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
     new OptimizeCSSAssetsPlugin({
       cssProcessor: require('cssnano'),
       cssProcessorPluginOptions: {
@@ -58,7 +59,7 @@ module.exports = {
   ],
 
   externals: {
-    'react': 'react',
+    react: 'react',
     'react-dom': 'react-dom'
   }
 };
