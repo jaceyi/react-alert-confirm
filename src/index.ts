@@ -1,47 +1,53 @@
 import './index.scss';
 import * as React from 'react';
+import { DispatchAction } from './components/Popup';
 import AlertConfirm, { Options } from './main';
 
-type AlertConfirmType = AlertConfirm | Promise<AlertConfirm>;
+export type { DispatchAction } from './components/Popup';
+
 type Params = Options | React.ReactNode;
+
+type ConfirmActionResolve = [boolean, DispatchAction];
 
 const createInstance = (
   params: Params,
-  defaultOptions: Options = {}
-): AlertConfirmType => {
+  options: Options = {}
+): Promise<ConfirmActionResolve> => {
   if (typeof params === 'string' || React.isValidElement(params)) {
-    defaultOptions.content = params;
+    options.content = params;
   } else if (typeof params === 'object') {
-    Object.assign(defaultOptions, params);
+    Object.assign(options, params);
   } else {
     console.warn('options required type is object or and React.ReactNode!');
   }
 
-  if (
-    !defaultOptions.onOk &&
-    !defaultOptions.onCancel &&
-    !defaultOptions.closeBefore
-  ) {
-    return new Promise((resolve, reject) => {
-      new AlertConfirm(
-        Object.assign(defaultOptions, {
-          onOk: resolve,
-          onCancel: reject
-        })
-      );
+  const { closeBefore, ...rest } = options;
+  return new Promise((resolve) => {
+    new AlertConfirm({
+      ...rest,
+      closeBefore(action, close) {
+        const resolveClose = () => {
+          close();
+          resolve([action === 'ok', action]);
+        };
+        if (closeBefore) {
+          closeBefore(action, resolveClose);
+        } else {
+          resolveClose();
+        }
+      }
     });
-  }
-
-  return new AlertConfirm(defaultOptions);
+  });
 };
 
 const alertConfirm = (params: Params) => createInstance(params);
 
 export { default as Button } from './components/Button';
 
-export const alert = (params: Params) =>
-  createInstance(params, {
+export const alert = (params: Params) => {
+  return createInstance(params, {
     type: 'alert'
   });
+};
 
 export default alertConfirm;

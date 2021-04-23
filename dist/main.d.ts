@@ -25,11 +25,10 @@ declare class AlertConfirm {
     zIndex: number;
     type: Type;
     status: Status;
-    action: DispatchAction;
-    container: Element;
+    container: Element | null;
     onOk?: AlertConfirmEvent;
     onCancel?: AlertConfirmEvent;
-    closeBefore: CloseBefore;
+    closeBefore: CloseBefore | null;
     constructor({ title, content, footer, lang, zIndex, closeBefore, type, onOk, onCancel, okText, cancelText }: Options);
     dispatch: Dispatch;
     closePopup: () => void;

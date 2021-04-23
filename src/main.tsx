@@ -37,11 +37,10 @@ class AlertConfirm {
   zIndex: number = 1000;
   type: Type = 'confirm';
   status: Status = 'mount';
-  action: DispatchAction = null;
-  container: Element = null;
+  container: Element | null = null;
   onOk?: AlertConfirmEvent;
   onCancel?: AlertConfirmEvent;
-  closeBefore: CloseBefore = null;
+  closeBefore: CloseBefore | null = null;
 
   constructor({
     title,
@@ -60,7 +59,7 @@ class AlertConfirm {
     container.className = 'alert-confirm-container';
     document.body.appendChild(container);
 
-    if (!Number.isNaN(zIndex) && typeof zIndex === 'number') {
+    if (zIndex && !Number.isNaN(zIndex)) {
       container.style.zIndex = String(zIndex);
       this.zIndex = zIndex;
     }
@@ -98,7 +97,6 @@ class AlertConfirm {
   }
 
   dispatch: Dispatch = (action) => {
-    this.action = action;
     const { closeBefore, onOk, onCancel } = this;
 
     if (action === 'ok') {
@@ -109,8 +107,6 @@ class AlertConfirm {
     }
     if (closeBefore) {
       closeBefore.call(this, action, this.closePopup.bind(this));
-    } else {
-      this.closePopup();
     }
   };
 
@@ -122,7 +118,7 @@ class AlertConfirm {
   render() {
     const { container, title, content, footer, type, status, dispatch } = this;
 
-    ReactDOM.unmountComponentAtNode(container);
+    ReactDOM.unmountComponentAtNode(container!);
     ReactDOM.render(
       <Popup
         type={type}
@@ -132,8 +128,8 @@ class AlertConfirm {
         dispatch={(action) => dispatch(action)}
         status={status}
         onClosePopup={() => {
-          ReactDOM.unmountComponentAtNode(container);
-          document.body.removeChild(container);
+          ReactDOM.unmountComponentAtNode(container!);
+          document.body.removeChild(container!);
         }}
       />,
       container

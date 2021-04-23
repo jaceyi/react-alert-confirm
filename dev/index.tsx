@@ -1,52 +1,64 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import confirm, { Button, alert } from '../dist/index';
-import { Fragment } from 'react';
 import '../dist/index.css';
 
 const App = () => {
   const handleClickConfirm = () => {
-    const instance = confirm({
+    confirm({
       title: 'title',
       content: 'This is the confirmation popup !',
       lang: 'en',
       onOk: () => {
-        console.log('ok', instance);
+        console.log('ok');
       },
       onCancel: () => {
-        console.log('cancel', instance);
+        console.log('cancel');
       }
     });
   };
 
-  const handleClickAlert = async (cb) => {
-    const instance = await alert(<span>这是 Alert ，支持ReactNode</span>);
-    console.log(instance);
-    if (cb instanceof Function) cb();
+  const handleClickAlert = async () => {
+    await alert(<span>这是 Alert ，支持ReactNode</span>);
+    console.log('alert ok');
   };
 
-  const handleClickDanger = () => {
-    confirm({
+  const handleClickDanger = async () => {
+    const [isOk, action] = await confirm({
+      title: '警告',
+      content: '此操作将删除该任务，请确认！'
+    });
+    if (isOk) {
+      console.log('Click Ok');
+    } else {
+      console.log(action);
+    }
+  };
+
+  const handleClickAdvanced = async () => {
+    const [isOk, action] = await confirm({
       title: '警告',
       content: '此操作将删除该任务，请确认！',
       footer(dispatch) {
         return (
-          <Fragment>
-            <Button onClick={() => dispatch('cancel')}>取 消</Button>
-            <Button onClick={() => dispatch('ok')} styleType="danger">
-              删 除
+          <>
+            <Button onClick={() => dispatch('ok')}>OK</Button>
+            <Button onClick={() => dispatch('no')} styleType="primary">
+              NO
             </Button>
-          </Fragment>
+          </>
         );
       },
-      closeBefore(action, close) {
-        if (action === 'cancel') {
-          handleClickAlert(close);
+      async closeBefore(action, close) {
+        if (action === 'no') {
+          await alert('Click NO');
+          close();
         } else {
           close();
         }
       }
     });
+    console.log(isOk, action);
   };
 
   return (
@@ -63,6 +75,13 @@ const App = () => {
         onClick={handleClickDanger}
       >
         Danger
+      </Button>
+      <Button
+        styleType="primary"
+        style={{ marginLeft: 10 }}
+        onClick={handleClickAdvanced}
+      >
+        Advanced
       </Button>
     </div>
   );

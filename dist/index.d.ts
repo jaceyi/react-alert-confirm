@@ -1,9 +1,11 @@
 import './index.scss';
 import * as React from 'react';
-import AlertConfirm, { Options } from './main';
-declare type AlertConfirmType = AlertConfirm | Promise<AlertConfirm>;
+import { DispatchAction } from './components/Popup';
+import { Options } from './main';
+export type { DispatchAction } from './components/Popup';
 declare type Params = Options | React.ReactNode;
-declare const alertConfirm: (params: Params) => AlertConfirmType;
+declare type ConfirmActionResolve = [boolean, DispatchAction];
+declare const alertConfirm: (params: Params) => Promise<ConfirmActionResolve>;
 export { default as Button } from './components/Button';
-export declare const alert: (params: Params) => AlertConfirmType;
+export declare const alert: (params: Params) => Promise<ConfirmActionResolve>;
 export default alertConfirm;

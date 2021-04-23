@@ -6,4 +6,5 @@ declare namespace Button {
     };
 }
 declare const Button: React.FC<Button.Props>;
-export default Button;
+declare const _default: React.NamedExoticComponent<Button.Props>;
+export default _default;

@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+const { useRef, useState, useEffect } = React;
+
 export type Type = 'alert' | 'confirm';
 export type Status = 'mount' | 'unmount';
 export type DispatchAction = string | number;
@@ -30,18 +32,21 @@ const Popup: React.FC<PopupProps> = ({
   status,
   onClosePopup
 }) => {
-  const maskRef = React.useRef<HTMLDivElement>(null);
-  const [className, setClassName] = React.useState(classNames[status]);
+  const maskRef = useRef<HTMLDivElement>(null);
+  const [className, setClassName] = useState(classNames[status]);
 
-  React.useEffect(() => {
-    const { animationName } = getComputedStyle(maskRef.current);
-    if (animationName === 'none') {
-      animationEnd();
-    } else {
-      maskRef.current.addEventListener('animationend', animationEnd);
+  useEffect(() => {
+    if (maskRef.current) {
+      const { animationName } = getComputedStyle(maskRef.current);
+      if (animationName === 'none') {
+        animationEnd();
+      } else {
+        maskRef.current.addEventListener('animationend', animationEnd);
 
-      return () =>
-        maskRef.current.removeEventListener('animationend', animationEnd);
+        return () => {
+          maskRef.current?.removeEventListener('animationend', animationEnd);
+        };
+      }
     }
   }, []);
 

@@ -2,20 +2,14 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
     "sourceMap": true,
     "declaration": true,
     "declarationDir": "./dist",
     "jsx": "react",
-    "locale": "zh-CN"
+    "locale": "zh-CN",
+    "strict": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "src/**/*", "@types"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["src/**/*", "@types"]
 }

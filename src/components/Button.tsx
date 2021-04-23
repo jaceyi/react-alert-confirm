@@ -15,4 +15,4 @@ const Button: React.FC<Button.Props> = ({ styleType, ...props }) => (
   />
 );
 
-export default Button;
+export default React.memo(Button);
