@@ -6,7 +6,7 @@
     "sourceMap": true,
     "declaration": true,
     "declarationDir": "./dist",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "locale": "zh-CN",
     "strict": true
   },

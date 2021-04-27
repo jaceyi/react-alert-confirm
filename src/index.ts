@@ -1,11 +1,12 @@
 import './index.scss';
-import * as React from 'react';
+import { isValidElement } from 'react';
+import type { ReactNode } from 'react';
 import { DispatchAction } from './components/Popup';
 import AlertConfirm, { Options } from './main';
 
 export type { DispatchAction } from './components/Popup';
 
-type Params = Options | React.ReactNode;
+type Params = Options | ReactNode;
 
 type ConfirmActionResolve = [boolean, DispatchAction];
 
@@ -13,7 +14,7 @@ const createInstance = (
   params: Params,
   options: Options = {}
 ): Promise<ConfirmActionResolve> => {
-  if (typeof params === 'string' || React.isValidElement(params)) {
+  if (typeof params === 'string' || isValidElement(params)) {
     options.content = params;
   } else if (typeof params === 'object') {
     Object.assign(options, params);

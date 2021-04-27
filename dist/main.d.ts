@@ -1,14 +1,14 @@
-import * as React from 'react';
+import type { ReactNode } from 'react';
 import { Dispatch, DispatchAction, ClosePopup, Type, Status } from './components/Popup';
 declare type CloseBefore = (action: DispatchAction, closePopup: ClosePopup) => void;
 declare type AlertConfirmEvent = (instance?: AlertConfirm) => void;
-declare type GetFooter = (dispatch: Dispatch) => React.ReactNode;
-declare type Footer = React.ReactNode | GetFooter;
+declare type GetFooter = (dispatch: Dispatch) => ReactNode;
+declare type Footer = ReactNode | GetFooter;
 declare type Lang = 'zh' | 'en';
 export interface Options {
     type?: Type;
-    title?: React.ReactNode;
-    content?: React.ReactNode;
+    title?: ReactNode;
+    content?: ReactNode;
     footer?: Footer;
     lang?: Lang;
     zIndex?: number;
@@ -19,9 +19,9 @@ export interface Options {
     closeBefore?: CloseBefore;
 }
 declare class AlertConfirm {
-    title?: React.ReactNode;
-    content?: React.ReactNode;
-    footer?: React.ReactNode;
+    title?: ReactNode;
+    content?: ReactNode;
+    footer?: ReactNode;
     zIndex: number;
     type: Type;
     status: Status;

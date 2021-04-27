@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import type { ReactNode } from 'react';
+import { unmountComponentAtNode, render } from 'react-dom';
 import Popup, {
   Dispatch,
   DispatchAction,
@@ -12,14 +12,14 @@ import languages from './languages';
 
 type CloseBefore = (action: DispatchAction, closePopup: ClosePopup) => void;
 type AlertConfirmEvent = (instance?: AlertConfirm) => void;
-type GetFooter = (dispatch: Dispatch) => React.ReactNode;
-type Footer = React.ReactNode | GetFooter;
+type GetFooter = (dispatch: Dispatch) => ReactNode;
+type Footer = ReactNode | GetFooter;
 type Lang = 'zh' | 'en';
 
 export interface Options {
   type?: Type;
-  title?: React.ReactNode;
-  content?: React.ReactNode;
+  title?: ReactNode;
+  content?: ReactNode;
   footer?: Footer;
   lang?: Lang;
   zIndex?: number;
@@ -31,9 +31,9 @@ export interface Options {
 }
 
 class AlertConfirm {
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  footer?: React.ReactNode;
+  title?: ReactNode;
+  content?: ReactNode;
+  footer?: ReactNode;
   zIndex: number = 1000;
   type: Type = 'confirm';
   status: Status = 'mount';
@@ -55,9 +55,16 @@ class AlertConfirm {
     okText,
     cancelText
   }: Options) {
-    const container: HTMLDivElement = document.createElement('div');
-    container.className = 'alert-confirm-container';
-    document.body.appendChild(container);
+    const container: HTMLDivElement = (() => {
+      const className = 'alert-confirm-conatiner';
+      let el: HTMLDivElement | null = document.querySelector('.' + className);
+      if (!el) {
+        el = document.createElement('div');
+        el.className = className;
+        document.body.appendChild(el);
+      }
+      return el;
+    })();
 
     if (zIndex && !Number.isNaN(zIndex)) {
       container.style.zIndex = String(zIndex);
@@ -118,8 +125,8 @@ class AlertConfirm {
   render() {
     const { container, title, content, footer, type, status, dispatch } = this;
 
-    ReactDOM.unmountComponentAtNode(container!);
-    ReactDOM.render(
+    unmountComponentAtNode(container!);
+    render(
       <Popup
         type={type}
         title={title}
@@ -128,8 +135,7 @@ class AlertConfirm {
         dispatch={(action) => dispatch(action)}
         status={status}
         onClosePopup={() => {
-          ReactDOM.unmountComponentAtNode(container!);
-          document.body.removeChild(container!);
+          unmountComponentAtNode(container!);
         }}
       />,
       container

@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { memo } from 'react';
+import type { FC } from 'react';
 
 declare namespace Button {
   type styleType = 'primary' | 'default' | 'danger';
@@ -8,11 +9,11 @@ declare namespace Button {
   };
 }
 
-const Button: React.FC<Button.Props> = ({ styleType, ...props }) => (
+const Button: FC<Button.Props> = ({ styleType, ...props }) => (
   <button
     className={`alert-confirm-button ${styleType || 'default'}-button`}
     {...props}
   />
 );
 
-export default React.memo(Button);
+export default memo(Button);

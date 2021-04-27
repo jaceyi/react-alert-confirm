@@ -7,8 +7,10 @@ module.exports = {
   entry: './dev',
 
   resolve: {
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.js', '.ts', '.tsx']
   },
+
+  devtool: 'inline-source-map',
 
   module: {
     rules: [

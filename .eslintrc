@@ -22,10 +22,7 @@
     "sourceType": "module",
     "parser": "babel-eslint"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint"
-  ],
+  "plugins": ["react", "@typescript-eslint"],
   "settings": {
     "react": {
       "version": "detect"
@@ -33,26 +30,28 @@
   },
   "rules": {
     "indent": [
-      "error", 2,
+      "error",
+      2,
       {
         "SwitchCase": 1,
-        "VariableDeclarator": "first",
+        "VariableDeclarator": 2,
         "MemberExpression": 1,
         "FunctionDeclaration": {
           "body": 1,
-          "parameters": "first"
+          "parameters": 1
         },
-        "CallExpression": {"arguments": "first"},
+        "FunctionExpression": {
+          "body": 1,
+          "parameters": 1
+        },
+        "CallExpression": { "arguments": 1 },
         "ArrayExpression": 1,
         "ObjectExpression": 1,
         "ImportDeclaration": 1,
         "flatTernaryExpressions": true
       }
     ],
-    "array-bracket-newline": [
-      "error",
-      "consistent"
-    ],
+    "array-bracket-newline": ["error", "consistent"],
     "brace-style": ["error", "1tbs"],
     "array-bracket-spacing": ["error", "never"],
     "quotes": ["error", "single"],
@@ -60,10 +59,8 @@
     "arrow-parens": 0,
     "jsx-quotes": ["error", "prefer-double"],
     "no-var": "error",
-    "@typescript-eslint/consistent-type-definitions": [
-      "error",
-      "interface"
-    ],
-    "react/prop-types": 0
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "react/prop-types": 0,
+    "react/display-name": 0
   }
 }

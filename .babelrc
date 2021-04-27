@@ -4,7 +4,6 @@
     "@babel/preset-env"
   ],
   "plugins": [
-    "@babel/plugin-proposal-optional-chaining",
     "@babel/plugin-transform-modules-umd",
     "@babel/plugin-transform-runtime"
   ]

@@ -1,6 +1,6 @@
-import * as React from 'react';
-
-const { useRef, useState, useEffect } = React;
+import { useRef, useState, useEffect } from 'react';
+import type { ReactNode, FC } from 'react';
+import { debounce } from '../utils';
 
 export type Type = 'alert' | 'confirm';
 export type Status = 'mount' | 'unmount';
@@ -10,9 +10,9 @@ export type ClosePopup = () => void;
 
 interface PopupProps {
   type?: Type;
-  title?: React.ReactNode;
-  content?: React.ReactNode;
-  footer?: React.ReactNode;
+  title?: ReactNode;
+  content?: ReactNode;
+  footer?: ReactNode;
   status: Status;
   dispatch: Dispatch;
   onClosePopup: ClosePopup;
@@ -23,7 +23,7 @@ const classNames = {
   unmount: 'alert-confirm-out'
 };
 
-const Popup: React.FC<PopupProps> = ({
+const Popup: FC<PopupProps> = ({
   title,
   content,
   footer,
@@ -37,6 +37,14 @@ const Popup: React.FC<PopupProps> = ({
 
   useEffect(() => {
     if (maskRef.current) {
+      const animationEnd = () => {
+        if (status === 'unmount') {
+          onClosePopup();
+        } else {
+          setClassName('');
+        }
+      };
+
       const { animationName } = getComputedStyle(maskRef.current);
       if (animationName === 'none') {
         animationEnd();
@@ -49,14 +57,6 @@ const Popup: React.FC<PopupProps> = ({
       }
     }
   }, []);
-
-  const animationEnd = () => {
-    if (status === 'unmount') {
-      onClosePopup();
-    } else {
-      setClassName('');
-    }
-  };
 
   return (
     <div ref={maskRef} className={`alert-confirm-mask ${className}`}>
