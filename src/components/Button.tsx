@@ -1,10 +1,10 @@
 import { memo } from 'react';
-import type { FC } from 'react';
+import type { FC, ButtonHTMLAttributes } from 'react';
 
-declare namespace Button {
+export declare namespace Button {
   type styleType = 'primary' | 'default' | 'danger';
 
-  type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
     styleType?: styleType;
   };
 }

@@ -5,17 +5,7 @@ import '../dist/index.css';
 
 const App = () => {
   const handleClickConfirm = () => {
-    confirm({
-      title: 'title',
-      content: 'This is the confirmation popup !',
-      lang: 'en',
-      onOk: () => {
-        console.log('ok');
-      },
-      onCancel: () => {
-        console.log('cancel');
-      }
-    });
+    confirm('This is the confirmation popup !');
   };
 
   const handleClickAlert = async () => {

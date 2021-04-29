@@ -56,7 +56,7 @@ class AlertConfirm {
     cancelText
   }: Options) {
     const container: HTMLDivElement = (() => {
-      const className = 'alert-confirm-conatiner';
+      const className = 'alert-confirm-container';
       let el: HTMLDivElement | null = document.querySelector('.' + className);
       if (!el) {
         el = document.createElement('div');

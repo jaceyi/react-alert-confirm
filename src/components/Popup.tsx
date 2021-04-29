@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
 import type { ReactNode, FC } from 'react';
-import { debounce } from '../utils';
 
 export type Type = 'alert' | 'confirm';
 export type Status = 'mount' | 'unmount';
@@ -46,7 +45,7 @@ const Popup: FC<PopupProps> = ({
       };
 
       const { animationName } = getComputedStyle(maskRef.current);
-      if (animationName === 'none') {
+      if (!animationName || animationName === 'none') {
         animationEnd();
       } else {
         maskRef.current.addEventListener('animationend', animationEnd);
@@ -63,7 +62,7 @@ const Popup: FC<PopupProps> = ({
       <div className={`alert-confirm-main ${type}`}>
         <div className="alert-confirm-header">{title}</div>
         {type !== 'alert' && (
-          <div className="alert-confirm-header-close">
+          <div className="alert-confirm-close">
             <span className="icon" onClick={() => dispatch('close')}>
               ✕
             </span>
