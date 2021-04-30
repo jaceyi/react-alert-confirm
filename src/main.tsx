@@ -1,3 +1,4 @@
+import React from 'react';
 import type { ReactNode } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
 import Popup, {
@@ -123,7 +124,7 @@ class AlertConfirm {
   };
 
   render() {
-    const { container, title, content, footer, type, status, dispatch } = this;
+    const { container, title, content, footer, type, status } = this;
 
     unmountComponentAtNode(container!);
     render(
@@ -132,7 +133,6 @@ class AlertConfirm {
         title={title}
         content={content}
         footer={footer}
-        dispatch={(action) => dispatch(action)}
         status={status}
         onClosePopup={() => {
           unmountComponentAtNode(container!);

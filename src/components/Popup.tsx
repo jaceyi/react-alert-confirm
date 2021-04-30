@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import type { ReactNode, FC } from 'react';
 
 export type Type = 'alert' | 'confirm';
@@ -13,7 +13,6 @@ interface PopupProps {
   content?: ReactNode;
   footer?: ReactNode;
   status: Status;
-  dispatch: Dispatch;
   onClosePopup: ClosePopup;
 }
 
@@ -26,7 +25,6 @@ const Popup: FC<PopupProps> = ({
   title,
   content,
   footer,
-  dispatch,
   type,
   status,
   onClosePopup
@@ -60,15 +58,10 @@ const Popup: FC<PopupProps> = ({
   return (
     <div ref={maskRef} className={`alert-confirm-mask ${className}`}>
       <div className={`alert-confirm-main ${type}`}>
-        <div className="alert-confirm-header">{title}</div>
-        {type !== 'alert' && (
-          <div className="alert-confirm-close">
-            <span className="icon" onClick={() => dispatch('close')}>
-              ✕
-            </span>
-          </div>
-        )}
-        <div className="alert-confirm-content">{content}</div>
+        <div className="alert-confirm-body">
+          <div className="alert-confirm-title">{title}</div>
+          <div className="alert-confirm-content">{content}</div>
+        </div>
         <div className="alert-confirm-footer">{footer}</div>
       </div>
     </div>

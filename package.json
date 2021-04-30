@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -72,5 +72,9 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   }
 }

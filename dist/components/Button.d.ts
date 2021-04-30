@@ -1,3 +1,4 @@
+import React from 'react';
 import type { ButtonHTMLAttributes } from 'react';
 export declare namespace Button {
     type styleType = 'primary' | 'default' | 'danger';
@@ -5,5 +6,5 @@ export declare namespace Button {
         styleType?: styleType;
     };
 }
-declare const _default: import("react").NamedExoticComponent<Button.Props>;
+declare const _default: React.NamedExoticComponent<Button.Props>;
 export default _default;

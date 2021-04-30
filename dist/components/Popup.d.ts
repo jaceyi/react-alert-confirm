@@ -10,7 +10,6 @@ interface PopupProps {
     content?: ReactNode;
     footer?: ReactNode;
     status: Status;
-    dispatch: Dispatch;
     onClosePopup: ClosePopup;
 }
 declare const Popup: FC<PopupProps>;
