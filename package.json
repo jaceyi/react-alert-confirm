@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "3.2.0",
+  "version": "3.2.3",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -27,12 +27,6 @@
     "lint": "tsc --noEmit && eslint 'src/**/*.{ts,tsx}' 'dev/**/*.{ts,tsx}' --quiet --fix",
     "test": "jest"
   },
-  "dependencies": {
-    "@types/react": "^17.0.3",
-    "@types/react-dom": "^17.0.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
   "devDependencies": {
     "@babel/core": "^7.13.16",
     "@babel/plugin-transform-modules-umd": "^7.13.0",
@@ -42,9 +36,10 @@
     "@babel/runtime": "^7.13.17",
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^26.0.23",
+    "@types/react": "^16.8.0",
+    "@types/react-dom": "^16.8.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
     "autoprefixer": "^9.7.3",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.2.2",
@@ -63,6 +58,8 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
     "prettier": "^2.0.5",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.1.2",
@@ -74,7 +71,10 @@
     "webpack-dev-server": "^3.10.3"
   },
   "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "react": ">=16.8.0 || ^17.0.1",
+    "react-dom": ">=16.8.0 || ^17.0.1"
+  },
+  "dependencies": {
+    "enzyme-adapter-react-16": "^1.15.6"
   }
 }

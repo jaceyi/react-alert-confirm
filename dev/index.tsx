@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import confirm, { Button, alert } from '../dist/index';
+import alertConfirm, { Button, alert } from '../dist/index';
 import '../dist/index.css';
 
 const App = () => {
   const handleClickConfirm = () => {
-    confirm('This is the confirmation popup !');
+    alertConfirm('This is the confirmation popup !');
   };
 
   const handleClickAlert = async () => {
@@ -13,35 +13,23 @@ const App = () => {
     console.log('alert ok');
   };
 
-  const handleClickDanger = async () => {
-    const [isOk, action] = await confirm({
-      title: '警告',
-      content: '此操作将删除该任务，请确认！'
-    });
-    if (isOk) {
-      console.log('Click Ok');
-    } else {
-      console.log(action);
-    }
-  };
-
   const handleClickAdvanced = async () => {
-    const [isOk, action] = await confirm({
+    const [isOk, action] = await alertConfirm({
       title: '警告',
       content: '此操作将删除该任务，请确认！',
       footer(dispatch) {
         return (
           <>
-            <Button onClick={() => dispatch('ok')}>OK</Button>
-            <Button onClick={() => dispatch('no')} styleType="primary">
-              NO
+            <Button onClick={() => dispatch('no')}>OK</Button>
+            <Button onClick={() => dispatch('delete')} styleType="danger">
+              删除
             </Button>
           </>
         );
       },
       async closeBefore(action, close) {
-        if (action === 'no') {
-          await alert('Click NO');
+        if (action === 'delete') {
+          await alert('删除成功！');
           close();
         } else {
           close();
@@ -61,13 +49,6 @@ const App = () => {
       </Button>
       <Button
         styleType="danger"
-        style={{ marginLeft: 10 }}
-        onClick={handleClickDanger}
-      >
-        Danger
-      </Button>
-      <Button
-        styleType="primary"
         style={{ marginLeft: 10 }}
         onClick={handleClickAdvanced}
       >
