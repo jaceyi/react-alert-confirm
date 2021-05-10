@@ -9,7 +9,7 @@ const App = () => {
   };
 
   const handleClickAlert = async () => {
-    await alert(<span>这是 Alert ，支持ReactNode</span>);
+    await alertConfirm.alert(<span>这是 Alert ，支持ReactNode</span>);
     console.log('alert ok');
   };
 

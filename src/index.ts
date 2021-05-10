@@ -10,10 +10,14 @@ type Params = Options | ReactNode;
 
 type ConfirmActionResolve = [boolean, DispatchAction];
 
-const createInstance = (
-  params: Params,
-  options: Options = {}
-): Promise<ConfirmActionResolve> => {
+interface CreateAlertConfirm {
+  (params: Params, options?: Options): Promise<ConfirmActionResolve>;
+}
+
+const createAlertConfirm: CreateAlertConfirm = (
+  params,
+  options = {}
+) => {
   if (typeof params === 'string' || isValidElement(params)) {
     options.content = params;
   } else if (typeof params === 'object') {
@@ -41,14 +45,25 @@ const createInstance = (
   });
 };
 
-const alertConfirm = (params: Params) => createInstance(params);
 
 export { default as Button } from './components/Button';
 
-export const alert = (params: Params) => {
-  return createInstance(params, {
+export const alert: CreateAlertConfirm = params => {
+  return createAlertConfirm(params, {
     type: 'alert'
   });
 };
+
+export const confirm: CreateAlertConfirm = createAlertConfirm;
+
+interface Popup {
+  (params: Params): Promise<ConfirmActionResolve>;
+  alert: CreateAlertConfirm;
+  confirm: CreateAlertConfirm;
+}
+
+const alertConfirm: Popup = params => createAlertConfirm(params);
+alertConfirm.alert = alert;
+alertConfirm.confirm = alertConfirm;
 
 export default alertConfirm;

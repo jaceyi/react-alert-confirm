@@ -22,13 +22,17 @@ import alertConfirm from 'react-alert-confirm';
 ### Confirm
 
 ```typescript jsx
-import alertConfirm from 'react-alert-confirm';
+import alertConfirm, { confirm } from 'react-alert-confirm';
 
-const [isOk, action] = await alertConfirm('Content!');
+const [isOk, action] = await alertConfirm('Content');
 if (isOk) {
   // some event
 }
 console.log('ok');
+// or
+alertConfirm.confirm('Content');
+// or
+confirm('Content');
 // or
 alertConfirm({
   title: 'Title',
@@ -47,10 +51,12 @@ alertConfirm({
 ```typescript jsx
 import alertConfirm, { alert } from 'react-alert-confirm';
 
+alertConfirm.alert('Content');
+// or
 alert('Content');
 // or
 alertConfirm({
-  type: 'alert',
+  type: 'Title',
   content: 'Content'
 });
 ```
