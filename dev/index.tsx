@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import alertConfirm, { Button, alert } from '../dist/index';
 import '../dist/index.css';
 
+alertConfirm.config({
+  lang: 'en'
+});
+
 const App = () => {
   const handleClickConfirm = () => {
     alertConfirm('This is the confirmation popup !');
@@ -22,7 +26,7 @@ const App = () => {
           <>
             <Button onClick={() => dispatch('no')}>OK</Button>
             <Button onClick={() => dispatch('delete')} styleType="danger">
-              删除
+              删 除
             </Button>
           </>
         );
@@ -52,7 +56,7 @@ const App = () => {
         style={{ marginLeft: 10 }}
         onClick={handleClickAdvanced}
       >
-        Advanced
+        Custom Footer
       </Button>
     </div>
   );

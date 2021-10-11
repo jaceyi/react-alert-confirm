@@ -17,6 +17,13 @@ type GetFooter = (dispatch: Dispatch) => ReactNode;
 type Footer = ReactNode | GetFooter;
 type Lang = 'zh' | 'en';
 
+export interface Config {
+  lang: Lang;
+}
+export const config: Config = {
+  lang: 'zh'
+};
+
 export interface Options {
   type?: Type;
   title?: ReactNode;
@@ -47,7 +54,7 @@ class AlertConfirm {
     title,
     content,
     footer,
-    lang = 'zh',
+    lang = config.lang,
     zIndex,
     closeBefore,
     type = 'confirm',

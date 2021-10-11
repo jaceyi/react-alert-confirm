@@ -1,8 +1,7 @@
 import './index.scss';
-import { isValidElement } from 'react';
-import type { ReactNode } from 'react';
+import { isValidElement, ReactNode } from 'react';
 import { DispatchAction } from './components/Popup';
-import AlertConfirm, { Options } from './main';
+import AlertConfirm, { Options, config as _config, Config } from './main';
 
 export type { DispatchAction } from './components/Popup';
 
@@ -14,16 +13,13 @@ interface CreateAlertConfirm {
   (params: Params, options?: Options): Promise<ConfirmActionResolve>;
 }
 
-const createAlertConfirm: CreateAlertConfirm = (
-  params,
-  options = {}
-) => {
+const createAlertConfirm: CreateAlertConfirm = (params, options = {}) => {
   if (typeof params === 'string' || isValidElement(params)) {
     options.content = params;
   } else if (typeof params === 'object') {
     Object.assign(options, params);
   } else {
-    console.warn('options required type is object or and React.ReactNode!');
+    console.warn('options required type is object or ReactNode!');
   }
 
   const { closeBefore, ...rest } = options;
@@ -45,10 +41,9 @@ const createAlertConfirm: CreateAlertConfirm = (
   });
 };
 
-
 export { default as Button } from './components/Button';
 
-export const alert: CreateAlertConfirm = params => {
+export const alert: CreateAlertConfirm = (params) => {
   return createAlertConfirm(params, {
     type: 'alert'
   });
@@ -60,10 +55,18 @@ interface Popup {
   (params: Params): Promise<ConfirmActionResolve>;
   alert: CreateAlertConfirm;
   confirm: CreateAlertConfirm;
+  config: (config: Partial<Config>) => Config;
 }
 
-const alertConfirm: Popup = params => createAlertConfirm(params);
+const alertConfirm: Popup = (params) => createAlertConfirm(params);
 alertConfirm.alert = alert;
 alertConfirm.confirm = alertConfirm;
+
+alertConfirm.config = (config?: Partial<Config>) => {
+  if (config) {
+    return Object.assign(_config, config);
+  }
+  return _config;
+};
 
 export default alertConfirm;
