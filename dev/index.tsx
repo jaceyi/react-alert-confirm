@@ -24,9 +24,9 @@ const App = () => {
       footer(dispatch) {
         return (
           <>
-            <Button onClick={() => dispatch('no')}>OK</Button>
+            <Button onClick={() => dispatch('cancel')}>Cancel</Button>
             <Button onClick={() => dispatch('delete')} styleType="danger">
-              删 除
+              Delete
             </Button>
           </>
         );

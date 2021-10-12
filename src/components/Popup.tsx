@@ -16,9 +16,11 @@ interface PopupProps {
   onClosePopup: ClosePopup;
 }
 
-const classNames = {
-  mount: 'alert-confirm-in',
-  unmount: 'alert-confirm-out'
+const classNames = (...names: string[]) => names.filter((n) => n).join(' ');
+
+const classNameMaps = {
+  mount: 'alert-confirm-animation-in',
+  unmount: 'alert-confirm-animation-out'
 };
 
 const Popup: FC<PopupProps> = ({
@@ -30,7 +32,7 @@ const Popup: FC<PopupProps> = ({
   onClosePopup
 }) => {
   const maskRef = useRef<HTMLDivElement>(null);
-  const [className, setClassName] = useState(classNames[status]);
+  const [className, setClassName] = useState(classNameMaps[status]);
 
   useEffect(() => {
     if (maskRef.current) {
@@ -56,8 +58,16 @@ const Popup: FC<PopupProps> = ({
   }, []);
 
   return (
-    <div ref={maskRef} className={`alert-confirm-mask ${className}`}>
-      <div className={`alert-confirm-main ${type}`}>
+    <div className="alert-confirm-root">
+      <div className={classNames('alert-confirm-mask', className)} />
+      <div
+        ref={maskRef}
+        className={classNames(
+          'alert-confirm-main',
+          `alert-confirm-${type}`,
+          className
+        )}
+      >
         <div className="alert-confirm-body">
           <div className="alert-confirm-title">{title}</div>
           <div className="alert-confirm-content">{content}</div>

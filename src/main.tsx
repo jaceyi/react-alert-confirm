@@ -45,7 +45,7 @@ class AlertConfirm {
   zIndex: number = 1000;
   type: Type = 'confirm';
   status: Status = 'mount';
-  container: Element | null = null;
+  container: Element;
   onOk?: AlertConfirmEvent;
   onCancel?: AlertConfirmEvent;
   closeBefore: CloseBefore | null = null;
@@ -63,16 +63,8 @@ class AlertConfirm {
     okText,
     cancelText
   }: Options) {
-    const container: HTMLDivElement = (() => {
-      const className = 'alert-confirm-container';
-      let el: HTMLDivElement | null = document.querySelector('.' + className);
-      if (!el) {
-        el = document.createElement('div');
-        el.className = className;
-        document.body.appendChild(el);
-      }
-      return el;
-    })();
+    const container: HTMLDivElement = document.createElement('div');
+    document.body.appendChild(container);
 
     if (zIndex && !Number.isNaN(zIndex)) {
       container.style.zIndex = String(zIndex);
@@ -143,6 +135,7 @@ class AlertConfirm {
         status={status}
         onClosePopup={() => {
           unmountComponentAtNode(container!);
+          document.body.removeChild(container!);
         }}
       />,
       container
