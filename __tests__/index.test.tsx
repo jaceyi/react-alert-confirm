@@ -2,6 +2,7 @@ import * as React from 'react';
 import Button, { Button as ButtonType } from '../src/components/Button';
 import alertConfirm, { alert } from '../src/index';
 import { mount, configure } from 'enzyme';
+// @ts-ignore
 import Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });
