@@ -2,7 +2,6 @@ import * as React from 'react';
 import Button, { Button as ButtonType } from '../src/components/Button';
 import alertConfirm, { alert } from '../src/index';
 import { mount, configure } from 'enzyme';
-// @ts-ignore
 import Adapter from 'enzyme-adapter-react-16';
 
 configure({ adapter: new Adapter() });
@@ -49,8 +48,9 @@ describe('Confirm', () => {
     const text = 'Hello World!';
     const wrapper = mount<ButtonType.Props>(
       <Button
-        onClick={() => {
-          alertConfirm(text);
+        onClick={async () => {
+          const [isOk] = await alertConfirm(text);
+          expect(isOk).toBe(true);
         }}
       >
         button
@@ -63,11 +63,44 @@ describe('Confirm', () => {
       text
     );
 
-    (document.querySelector(
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
       '.alert-confirm-button'
-    ) as HTMLButtonElement).click();
+    );
+    expect(buttons.length).toBe(2);
+    buttons[1].click();
+
     await sleep(100);
     expect(document.querySelectorAll('.alert-confirm-main').length).toBe(0);
+  });
+
+  test('custom footer', async () => {
+    const wrapper = mount<ButtonType.Props>(
+      <Button
+        onClick={async () => {
+          const [isOk, action] = await alertConfirm({
+            title: 'title',
+            content: 'content',
+            footer(dispatch) {
+              return (
+                <>
+                  <Button onClick={() => dispatch('one')}>One</Button>
+                  <Button>Two</Button>
+                </>
+              );
+            }
+          });
+          expect(action).toBe('one');
+        }}
+      >
+        button
+      </Button>
+    );
+    wrapper.simulate('click');
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
+      '.alert-confirm-button'
+    );
+    expect(buttons.length).toBe(2);
+    buttons[0].click();
   });
 
   test('alert', async () => {
