@@ -45,7 +45,8 @@
   top: 26vh;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+  box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
+    0 9px 28px 8px #0000000d;
   max-width: 90vw;
 }
 
@@ -76,7 +77,7 @@
   padding: 0 24px 24px;
   font-size: 12px;
 
-  &>* {
+  & > * {
     margin-left: 10px;
   }
 }
@@ -98,7 +99,6 @@ $primaryColor: #148bed;
     0 2px 4px 0 rgba(228, 229, 242, 0.2);
 
   &.default-button {
-
     &:hover,
     &:focus {
       box-shadow: 0 2px 4px 0 rgba(162, 166, 191, 0.2),
