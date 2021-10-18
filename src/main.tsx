@@ -24,7 +24,7 @@ export interface Config {
   cancelText: string;
 }
 
-// 默认全局配置
+/* 默认全局配置 */
 export const config: Config = {
   lang: 'zh',
   okText: languages.zh.ok,
@@ -62,7 +62,7 @@ class AlertConfirm {
     title,
     content,
     footer,
-    lang = config.lang,
+    lang,
     zIndex,
     closeBefore,
     type = 'confirm',
@@ -100,6 +100,7 @@ class AlertConfirm {
           : footer;
     } else {
       const langConfig = languages[lang || _lang];
+      console.log(langConfig, lang, _lang);
 
       this.footer = (
         <>

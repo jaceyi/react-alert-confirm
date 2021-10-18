@@ -2,6 +2,7 @@ import './index.scss';
 import { isValidElement, ReactNode } from 'react';
 import { DispatchAction } from './components/Popup';
 import AlertConfirm, { Options, config as _config, Config } from './main';
+import languages from './languages';
 
 export type { DispatchAction } from './components/Popup';
 
@@ -64,6 +65,17 @@ alertConfirm.confirm = alertConfirm;
 
 alertConfirm.config = (config?: Partial<Config>) => {
   if (config) {
+    const { lang } = config;
+    if (lang) {
+      /* 更改语言时更新按钮文字 */
+      const langs = languages[lang];
+      Object.assign(_config, {
+        okText: langs.ok,
+        cancelText: langs.cancel
+      });
+    }
+
+    /* 如果传入了文字则会讲默认的语言文字覆盖 */
     return Object.assign(_config, config);
   }
   return _config;

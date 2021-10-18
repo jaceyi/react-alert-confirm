@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import alertConfirm, { Button, alert } from '../dist/index';
 import '../dist/index.css';
 
+alertConfirm.config({
+  lang: 'en'
+});
+
 const App = () => {
   const handleClickConfirm = () => {
     alertConfirm('This is the confirmation popup !');
@@ -41,7 +45,6 @@ const App = () => {
 
   const handleClickChangeConfig = () => {
     alertConfirm.config({
-      lang: 'en',
       zIndex: 1024,
       okText: '😊😊',
       cancelText: '🥺🥺'
