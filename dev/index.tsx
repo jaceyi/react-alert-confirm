@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom';
 import alertConfirm, { Button, alert } from '../dist/index';
 import '../dist/index.css';
 
-alertConfirm.config({
-  lang: 'en'
-});
-
 const App = () => {
   const handleClickConfirm = () => {
     alertConfirm('This is the confirmation popup !');
@@ -18,7 +14,7 @@ const App = () => {
   };
 
   const handleClickAdvanced = async () => {
-    const [isOk, action] = await alertConfirm({
+    const [isOk, action, instance] = await alertConfirm({
       title: '警告',
       content: '此操作将删除该任务，请确认！',
       footer(dispatch) {
@@ -40,7 +36,17 @@ const App = () => {
         }
       }
     });
-    console.log(isOk, action);
+    console.log(isOk, action, instance);
+  };
+
+  const handleClickChangeConfig = () => {
+    alertConfirm.config({
+      lang: 'en',
+      zIndex: 1024,
+      okText: '😊😊',
+      cancelText: '🥺🥺'
+    });
+    alert('OK => 😊😊, Cancel => 🥺🥺, zIndex => 1024');
   };
 
   return (
@@ -56,7 +62,10 @@ const App = () => {
         style={{ marginLeft: 10 }}
         onClick={handleClickAdvanced}
       >
-        Custom Footer
+        Custom footer
+      </Button>
+      <Button style={{ marginLeft: 10 }} onClick={handleClickChangeConfig}>
+        Change config
       </Button>
     </div>
   );

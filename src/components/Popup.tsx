@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, CSSProperties } from 'react';
 import type { ReactNode, FC } from 'react';
 
 export type Type = 'alert' | 'confirm';
@@ -12,6 +12,7 @@ interface PopupProps {
   title?: ReactNode;
   content?: ReactNode;
   footer?: ReactNode;
+  zIndex: number;
   status: Status;
   onClosePopup: ClosePopup;
 }
@@ -27,6 +28,7 @@ const Popup: FC<PopupProps> = ({
   title,
   content,
   footer,
+  zIndex,
   type,
   status,
   onClosePopup
@@ -57,11 +59,20 @@ const Popup: FC<PopupProps> = ({
     }
   }, []);
 
+  const style: CSSProperties = {};
+  if (zIndex !== 1000) {
+    Object.assign(style, { zIndex });
+  }
+
   return (
     <div className="alert-confirm-root">
-      <div className={classNames('alert-confirm-mask', className)} />
+      <div
+        className={classNames('alert-confirm-mask', className)}
+        style={style}
+      />
       <div
         ref={maskRef}
+        style={style}
         className={classNames(
           'alert-confirm-main',
           `alert-confirm-${type}`,

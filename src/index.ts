@@ -7,7 +7,7 @@ export type { DispatchAction } from './components/Popup';
 
 type Params = Options | ReactNode;
 
-type ConfirmActionResolve = [boolean, DispatchAction];
+type ConfirmActionResolve = [boolean, DispatchAction, AlertConfirm];
 
 interface CreateAlertConfirm {
   (params: Params, options?: Options): Promise<ConfirmActionResolve>;
@@ -24,12 +24,12 @@ const createAlertConfirm: CreateAlertConfirm = (params, options = {}) => {
 
   const { closeBefore, ...rest } = options;
   return new Promise((resolve) => {
-    new AlertConfirm({
+    const instance = new AlertConfirm({
       ...rest,
       closeBefore(action, close) {
         const resolveClose = () => {
           close();
-          resolve([action === 'ok', action]);
+          resolve([action === 'ok', action, instance]);
         };
         if (closeBefore) {
           closeBefore(action, resolveClose);

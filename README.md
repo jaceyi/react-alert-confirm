@@ -24,11 +24,10 @@ import alertConfirm from 'react-alert-confirm';
 ```typescript jsx
 import alertConfirm, { confirm } from 'react-alert-confirm';
 
-const [isOk, action] = await alertConfirm('Content');
+const [isOk] = await alertConfirm('Content');
 if (isOk) {
-  // some event
+  console.log('ok');
 }
-console.log('ok');
 // or
 alertConfirm.confirm('Content');
 // or
@@ -88,7 +87,7 @@ alertConfirm({
 ```typescript jsx
 import alertConfirm, { Button } from 'react-alert-confirm';
 
-const [isOk, action] = await alertConfirm({
+const [isOk, action, instance] = await alertConfirm({
   title: '警告',
   content: '此操作将删除该任务，请确认！',
   footer(dispatch) {
@@ -110,21 +109,7 @@ const [isOk, action] = await alertConfirm({
     }
   }
 });
-console.log(isOk, action);
-```
-
-### Custom Languages
-
-设置全局语言
-
-```typescript jsx
-import alertConfirm, { Button } from 'react-alert-confirm';
-
-alertConfirm.config({
-  lang: 'en'
-});
-
-alertConfirm.config(); // 获取当前配置
+console.log(isOk, action, instance);
 ```
 
 ### Return Values
@@ -137,6 +122,46 @@ const [isOk, action] = alert('Alert info');
 | ------ | -------------- | --------- |
 | isOk   | 是否点击的确认 | `booleal` |
 | action | 选择的 action  | `string`  |
+
+## Custom
+
+### Languages
+
+设置全局语言
+
+```typescript jsx
+import alertConfirm from 'react-alert-confirm';
+
+alertConfirm.config({
+  lang: 'en'
+});
+
+alertConfirm.config(); // 获取当前配置
+```
+
+### Other config
+
+| 属性        | 说明                                    | 类型                        | 默认值      |
+| ----------- | --------------------------------------- | --------------------------- | ----------- |
+| lang        | 默认按钮的语言                          | `'zh'` &#124; `'en'`        | `'zh'`      |
+| zIndex      | 弹层的 z-index                          | `number`                    | `1000`      |
+| okText      | 确认按钮的文字                          | `string` &#124; `ReactNode` | 确认/OK     |
+| cancelText  | 取消按钮的文字                          | `string` &#124; `ReactNode` | 取消/Cancel |
+| closeBefore | 关闭弹窗之前的回调，调用 close 关闭弹窗 | `function(action, close)`   | -           |
+
+```typescript jsx
+import alertConfirm from 'react-alert-confirm';
+
+alertConfirm.config({
+  lang: 'en',
+  zIndex: 1024,
+  okText: 'YES',
+  cancelText: 'NO',
+  closeBefore: (action, close) => {}
+});
+
+alertConfirm.config(); // 获取当前配置
+```
 
 ## Button
 

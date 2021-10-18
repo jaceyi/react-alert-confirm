@@ -16,7 +16,7 @@ const sleep = (duration: number): Promise<void> => {
 };
 
 describe('Button', () => {
-  test('style and text', () => {
+  test('Base', () => {
     const styleType = 'primary';
     const text = 'button';
     const wrapper = mount<ButtonType.Props>(
@@ -44,8 +44,8 @@ describe('Button', () => {
   });
 });
 
-describe('Confirm', () => {
-  test('base', async () => {
+describe('Popup', () => {
+  test('Base', async () => {
     const text = 'Hello World!';
     const wrapper = mount<ButtonType.Props>(
       <Button
@@ -74,7 +74,34 @@ describe('Confirm', () => {
     expect(document.querySelectorAll('.alert-confirm-main').length).toBe(0);
   });
 
-  test('custom footer', async () => {
+  test('Option event', async () => {
+    const wrapper = mount<ButtonType.Props>(
+      <Button
+        onClick={async () => {
+          let text = '';
+          await alertConfirm({
+            title: 'title',
+            content: 'content',
+            onOk() {
+              console.log('ok');
+              text = 'ok';
+            }
+          });
+          console.log(text);
+          expect(text).toBe('ok');
+        }}
+      >
+        button
+      </Button>
+    );
+    wrapper.simulate('click');
+    await sleep(100);
+    document
+      .querySelector<HTMLButtonElement>('.alert-confirm-button .primary-button')
+      ?.click();
+  });
+
+  test('Custom footer', async () => {
     const wrapper = mount<ButtonType.Props>(
       <Button
         onClick={async () => {
@@ -84,13 +111,15 @@ describe('Confirm', () => {
             footer(dispatch) {
               return (
                 <>
-                  <Button onClick={() => dispatch('one')}>One</Button>
-                  <Button>Two</Button>
+                  <Button>One</Button>
+                  <Button onClick={() => dispatch('two')}>Two</Button>
+                  <Button>Three</Button>
                 </>
               );
             }
           });
-          expect(action).toBe('one');
+          expect(isOk).toBe(false);
+          expect(action).toBe('two');
         }}
       >
         button
@@ -100,11 +129,11 @@ describe('Confirm', () => {
     const buttons = document.querySelectorAll<HTMLButtonElement>(
       '.alert-confirm-button'
     );
-    expect(buttons.length).toBe(2);
-    buttons[0].click();
+    expect(buttons.length).toBe(3);
+    buttons[1].click();
   });
 
-  test('alert', async () => {
+  test('Alert', async () => {
     const text = 'Alert text';
     const wrapper = mount<ButtonType.Props>(
       <Button
@@ -121,6 +150,7 @@ describe('Confirm', () => {
     );
     expect(buttons.length).toBe(1);
 
+    console.log(document.querySelector('.alert-confirm-content')?.textContent);
     expect(document.querySelector('.alert-confirm-content')?.textContent).toBe(
       text
     );

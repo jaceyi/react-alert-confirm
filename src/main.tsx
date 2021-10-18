@@ -19,9 +19,17 @@ type Lang = 'zh' | 'en';
 
 export interface Config {
   lang: Lang;
+  zIndex: number;
+  okText: string;
+  cancelText: string;
 }
+
+// 默认全局配置
 export const config: Config = {
-  lang: 'zh'
+  lang: 'zh',
+  okText: languages.zh.ok,
+  cancelText: languages.zh.cancel,
+  zIndex: 1000
 };
 
 export interface Options {
@@ -42,7 +50,7 @@ class AlertConfirm {
   title?: ReactNode;
   content?: ReactNode;
   footer?: ReactNode;
-  zIndex: number = 1000;
+  zIndex!: number;
   type: Type = 'confirm';
   status: Status = 'mount';
   container: Element;
@@ -63,12 +71,22 @@ class AlertConfirm {
     okText,
     cancelText
   }: Options) {
+    const {
+      lang: _lang,
+      okText: _okText,
+      cancelText: _cancelText,
+      zIndex: _zIndex
+    } = config;
+
     const container: HTMLDivElement = document.createElement('div');
     document.body.appendChild(container);
 
-    if (zIndex && !Number.isNaN(zIndex)) {
-      container.style.zIndex = String(zIndex);
-      this.zIndex = zIndex;
+    if (zIndex && !Number.isNaN(+zIndex)) {
+      this.zIndex = +zIndex;
+    } else if (config.hasOwnProperty('zIndex')) {
+      this.zIndex = _zIndex;
+    } else {
+      this.zIndex = 1000;
     }
     this.container = container;
     this.title = title;
@@ -81,17 +99,17 @@ class AlertConfirm {
           ? (footer as GetFooter).call(this, this.dispatch)
           : footer;
     } else {
-      const defaultLang = languages[lang];
+      const langConfig = languages[lang || _lang];
 
       this.footer = (
         <>
           {type !== 'alert' && (
             <Button onClick={() => this.dispatch('cancel')}>
-              {cancelText || defaultLang?.cancel}
+              {cancelText || _cancelText || langConfig.cancel}
             </Button>
           )}
           <Button styleType="primary" onClick={() => this.dispatch('ok')}>
-            {okText || defaultLang?.ok}
+            {okText || _okText || langConfig.ok}
           </Button>
         </>
       );
@@ -123,7 +141,7 @@ class AlertConfirm {
   };
 
   render() {
-    const { container, title, content, footer, type, status } = this;
+    const { container, title, content, footer, type, status, zIndex } = this;
 
     unmountComponentAtNode(container!);
     render(
@@ -133,6 +151,7 @@ class AlertConfirm {
         content={content}
         footer={footer}
         status={status}
+        zIndex={zIndex}
         onClosePopup={() => {
           unmountComponentAtNode(container!);
           document.body.removeChild(container!);
