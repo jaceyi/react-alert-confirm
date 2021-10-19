@@ -59,7 +59,6 @@ describe('Popup', () => {
     );
     wrapper.simulate('click');
     expect(document.querySelectorAll('.alert-confirm-main').length).toBe(1);
-
     expect(document.querySelector('.alert-confirm-content')?.textContent).toBe(
       text
     );
@@ -75,30 +74,45 @@ describe('Popup', () => {
   });
 
   test('Option event', async () => {
+    let count = 0;
     const wrapper = mount<ButtonType.Props>(
       <Button
         onClick={async () => {
+          count++;
           let text = '';
           await alertConfirm({
             title: 'title',
             content: 'content',
             onOk() {
-              console.log('ok');
               text = 'ok';
+            },
+            onCancel() {
+              text = 'cancel';
             }
           });
-          console.log(text);
-          expect(text).toBe('ok');
+          if (count === 1) {
+            expect(text).toBe('ok');
+          } else if (count === 2) {
+            expect(text).toBe('cancel');
+          }
         }}
       >
         button
       </Button>
     );
     wrapper.simulate('click');
-    await sleep(100);
+    expect(count).toBe(1);
+
     document
-      .querySelector<HTMLButtonElement>('.alert-confirm-button .primary-button')
-      ?.click();
+      .querySelector<HTMLButtonElement>('.alert-confirm-main .primary-button')!
+      .click();
+
+    wrapper.simulate('click');
+    expect(count).toBe(2);
+
+    document
+      .querySelector<HTMLButtonElement>('.alert-confirm-main .default-button')!
+      .click();
   });
 
   test('Custom footer', async () => {
@@ -127,7 +141,7 @@ describe('Popup', () => {
     );
     wrapper.simulate('click');
     const buttons = document.querySelectorAll<HTMLButtonElement>(
-      '.alert-confirm-button'
+      '.alert-confirm-main .alert-confirm-button'
     );
     expect(buttons.length).toBe(3);
     buttons[1].click();
@@ -146,16 +160,15 @@ describe('Popup', () => {
     );
     wrapper.simulate('click');
     const buttons = document.querySelectorAll<HTMLButtonElement>(
-      '.alert-confirm-button'
+      '.alert-confirm-main .alert-confirm-button'
     );
     expect(buttons.length).toBe(1);
-
-    console.log(document.querySelector('.alert-confirm-content')?.textContent);
     expect(document.querySelector('.alert-confirm-content')?.textContent).toBe(
       text
     );
 
     buttons[0].click();
+
     await sleep(100);
     expect(document.querySelectorAll('.alert-confirm-main').length).toBe(0);
   });

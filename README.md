@@ -29,8 +29,6 @@ if (isOk) {
   console.log('ok');
 }
 // or
-alertConfirm.confirm('Content');
-// or
 confirm('Content');
 // or
 alertConfirm({
@@ -115,7 +113,7 @@ console.log(isOk, action, instance);
 ### Return Values
 
 ```typescript jsx
-const [isOk, action] = alert('Alert info');
+const [isOk, action] = await alert('Alert info');
 ```
 
 | 属性   | 说明           | 类型      |
@@ -136,7 +134,7 @@ alertConfirm.config({
   lang: 'en'
 });
 
-alertConfirm.config(); // 获取当前配置
+alertConfirm.config(); // Get current config
 ```
 
 ### Other config

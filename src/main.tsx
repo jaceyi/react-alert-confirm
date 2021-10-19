@@ -17,7 +17,7 @@ type GetFooter = (dispatch: Dispatch) => ReactNode;
 type Footer = ReactNode | GetFooter;
 type Lang = 'zh' | 'en';
 
-export interface Config {
+export interface GlobalConfig {
   lang: Lang;
   zIndex: number;
   okText: string;
@@ -25,7 +25,7 @@ export interface Config {
 }
 
 /* 默认全局配置 */
-export const config: Config = {
+export const globalConfig: GlobalConfig = {
   lang: 'zh',
   okText: languages.zh.ok,
   cancelText: languages.zh.cancel,
@@ -76,14 +76,14 @@ class AlertConfirm {
       okText: _okText,
       cancelText: _cancelText,
       zIndex: _zIndex
-    } = config;
+    } = globalConfig;
 
     const container: HTMLDivElement = document.createElement('div');
     document.body.appendChild(container);
 
     if (zIndex && !Number.isNaN(+zIndex)) {
       this.zIndex = +zIndex;
-    } else if (config.hasOwnProperty('zIndex')) {
+    } else if (globalConfig.hasOwnProperty('zIndex')) {
       this.zIndex = _zIndex;
     } else {
       this.zIndex = 1000;
@@ -100,7 +100,6 @@ class AlertConfirm {
           : footer;
     } else {
       const langConfig = languages[lang || _lang];
-      console.log(langConfig, lang, _lang);
 
       this.footer = (
         <>
