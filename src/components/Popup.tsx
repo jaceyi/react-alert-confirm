@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect, CSSProperties } from 'react';
 import type { ReactNode, FC } from 'react';
+import { classNames } from '../util';
+import { Dispatch } from '../main';
 
 export type Type = 'alert' | 'confirm';
 export type Status = 'mount' | 'unmount';
-export type DispatchAction = string | number;
-export type Dispatch = (action: DispatchAction) => void;
 export type ClosePopup = () => void;
 
 interface PopupProps {
@@ -14,10 +14,14 @@ interface PopupProps {
   footer?: ReactNode;
   zIndex: number;
   status: Status;
+  className?: string;
+  maskClassName?: string;
+  style?: CSSProperties;
+  maskStyle?: CSSProperties;
+  maskClosable?: boolean;
+  dispatch: Dispatch;
   onClosePopup: ClosePopup;
 }
-
-const classNames = (...names: string[]) => names.filter((n) => n).join(' ');
 
 const classNameMaps = {
   mount: 'alert-confirm-animation-in',
@@ -31,10 +35,18 @@ const Popup: FC<PopupProps> = ({
   zIndex,
   type,
   status,
+  className,
+  maskClassName,
+  style,
+  maskStyle,
+  maskClosable,
+  dispatch,
   onClosePopup
 }) => {
   const maskRef = useRef<HTMLDivElement>(null);
-  const [className, setClassName] = useState(classNameMaps[status]);
+  const [animationClassName, setAnimationClassName] = useState(
+    classNameMaps[status]
+  );
 
   useEffect(() => {
     if (maskRef.current) {
@@ -42,7 +54,7 @@ const Popup: FC<PopupProps> = ({
         if (status === 'unmount') {
           onClosePopup();
         } else {
-          setClassName('');
+          setAnimationClassName('');
         }
       };
 
@@ -59,23 +71,29 @@ const Popup: FC<PopupProps> = ({
     }
   }, []);
 
-  const style: CSSProperties = {};
+  const zIndexStyle: CSSProperties = {};
   if (zIndex !== 1000) {
-    Object.assign(style, { zIndex });
+    Object.assign(zIndexStyle, { zIndex });
   }
 
   return (
     <div className="alert-confirm-root">
       <div
-        className={classNames('alert-confirm-mask', className)}
-        style={style}
+        onClick={() => maskClosable && dispatch('cancel')}
+        className={classNames(
+          'alert-confirm-mask',
+          animationClassName,
+          maskClassName
+        )}
+        style={Object.assign({}, zIndexStyle, maskStyle)}
       />
       <div
         ref={maskRef}
-        style={style}
+        style={Object.assign({}, zIndexStyle, style)}
         className={classNames(
           'alert-confirm-main',
           `alert-confirm-${type}`,
+          animationClassName,
           className
         )}
       >

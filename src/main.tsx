@@ -1,16 +1,12 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import type { ReactNode } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
-import Popup, {
-  Dispatch,
-  DispatchAction,
-  ClosePopup,
-  Type,
-  Status
-} from './components/Popup';
+import Popup, { ClosePopup, Type, Status } from './components/Popup';
 import Button from './components/Button';
 import languages from './languages';
 
+export type DispatchAction = string | number;
+export type Dispatch = (action: DispatchAction) => void;
 type CloseBefore = (action: DispatchAction, closePopup: ClosePopup) => void;
 type AlertConfirmEvent = (instance?: AlertConfirm) => void;
 type GetFooter = (dispatch: Dispatch) => ReactNode;
@@ -22,6 +18,7 @@ export interface GlobalConfig {
   zIndex: number;
   okText: string;
   cancelText: string;
+  maskClosable: boolean;
 }
 
 /* 默认全局配置 */
@@ -29,7 +26,8 @@ export const globalConfig: GlobalConfig = {
   lang: 'zh',
   okText: languages.zh.ok,
   cancelText: languages.zh.cancel,
-  zIndex: 1000
+  zIndex: 1000,
+  maskClosable: false
 };
 
 export interface Options {
@@ -41,56 +39,59 @@ export interface Options {
   zIndex?: number;
   okText?: string;
   cancelText?: string;
+  className?: string;
+  maskClassName?: string;
+  style?: CSSProperties;
+  maskStyle?: CSSProperties;
+  maskClosable?: boolean;
+
   onOk?: AlertConfirmEvent;
   onCancel?: AlertConfirmEvent;
   closeBefore?: CloseBefore;
 }
 
 class AlertConfirm {
+  type: Type = 'confirm';
   title?: ReactNode;
   content?: ReactNode;
   footer?: ReactNode;
   zIndex!: number;
-  type: Type = 'confirm';
+  className?: string;
+  maskClassName?: string;
+  style?: CSSProperties;
+  maskStyle?: CSSProperties;
+  maskClosable: boolean = false;
+
   status: Status = 'mount';
   container: Element;
   onOk?: AlertConfirmEvent;
   onCancel?: AlertConfirmEvent;
-  closeBefore: CloseBefore | null = null;
+  closeBefore?: CloseBefore;
 
   constructor({
-    title,
-    content,
     footer,
     lang,
     zIndex,
-    closeBefore,
-    type = 'confirm',
-    onOk,
-    onCancel,
     okText,
-    cancelText
+    cancelText,
+    maskClosable,
+    ...rest
   }: Options) {
+    Object.assign(this, rest);
     const {
       lang: _lang,
       okText: _okText,
       cancelText: _cancelText,
-      zIndex: _zIndex
+      zIndex: _zIndex,
+      maskClosable: _maskClosable
     } = globalConfig;
 
     const container: HTMLDivElement = document.createElement('div');
     document.body.appendChild(container);
 
-    if (zIndex && !Number.isNaN(+zIndex)) {
-      this.zIndex = +zIndex;
-    } else if (globalConfig.hasOwnProperty('zIndex')) {
-      this.zIndex = _zIndex;
-    } else {
-      this.zIndex = 1000;
-    }
     this.container = container;
-    this.title = title;
-    this.content = content;
+    this.zIndex = zIndex ?? _zIndex ?? 1000;
+    this.maskClosable = maskClosable ?? _maskClosable ?? false;
 
     if (footer) {
       const type = Object.prototype.toString.call(footer);
@@ -98,12 +99,12 @@ class AlertConfirm {
         type === '[object Function]'
           ? (footer as GetFooter).call(this, this.dispatch)
           : footer;
-    } else {
+    } else if (footer === void 0) {
       const langConfig = languages[lang || _lang];
 
       this.footer = (
         <>
-          {type !== 'alert' && (
+          {this.type !== 'alert' && (
             <Button onClick={() => this.dispatch('cancel')}>
               {cancelText || _cancelText || langConfig.cancel}
             </Button>
@@ -114,10 +115,7 @@ class AlertConfirm {
         </>
       );
     }
-    this.type = type;
-    this.onOk = onOk;
-    this.onCancel = onCancel;
-    closeBefore && (this.closeBefore = closeBefore);
+
     this.render();
   }
 
@@ -141,7 +139,21 @@ class AlertConfirm {
   };
 
   render() {
-    const { container, title, content, footer, type, status, zIndex } = this;
+    const {
+      container,
+      title,
+      content,
+      footer,
+      type,
+      status,
+      zIndex,
+      className,
+      style,
+      maskClassName,
+      maskStyle,
+      maskClosable,
+      dispatch
+    } = this;
 
     unmountComponentAtNode(container!);
     render(
@@ -152,6 +164,12 @@ class AlertConfirm {
         footer={footer}
         status={status}
         zIndex={zIndex}
+        className={className}
+        maskClassName={maskClassName}
+        style={style}
+        maskStyle={maskStyle}
+        maskClosable={maskClosable}
+        dispatch={dispatch}
         onClosePopup={() => {
           unmountComponentAtNode(container!);
           document.body.removeChild(container!);

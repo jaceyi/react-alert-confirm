@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Button, { Button as ButtonType } from '../src/components/Button';
-import alertConfirm, { alert } from '../src/index';
+import alertConfirm, { Button, alert } from '../dist/index';
 import { mount, configure } from 'enzyme';
 // @ts-ignore
 import Adapter from 'enzyme-adapter-react-16';
@@ -19,9 +18,7 @@ describe('Button', () => {
   test('Base', () => {
     const styleType = 'primary';
     const text = 'button';
-    const wrapper = mount<ButtonType.Props>(
-      <Button styleType={styleType}>{text}</Button>
-    );
+    const wrapper = mount(<Button styleType={styleType}>{text}</Button>);
 
     expect(
       wrapper.find(`.alert-confirm-button.${styleType}-button`).length
@@ -32,9 +29,7 @@ describe('Button', () => {
 
   test('bind event', () => {
     const onClick = jest.fn();
-    const wrapper = mount<ButtonType.Props>(
-      <Button onClick={onClick}>button</Button>
-    );
+    const wrapper = mount(<Button onClick={onClick}>button</Button>);
     wrapper.simulate('click');
     expect(onClick).toHaveBeenCalledTimes(1);
 
@@ -47,7 +42,7 @@ describe('Button', () => {
 describe('Popup', () => {
   test('Base', async () => {
     const text = 'Hello World!';
-    const wrapper = mount<ButtonType.Props>(
+    const wrapper = mount(
       <Button
         onClick={async () => {
           const [isOk] = await alertConfirm(text);
@@ -75,7 +70,7 @@ describe('Popup', () => {
 
   test('Option event', async () => {
     let count = 0;
-    const wrapper = mount<ButtonType.Props>(
+    const wrapper = mount(
       <Button
         onClick={async () => {
           count++;
@@ -104,19 +99,19 @@ describe('Popup', () => {
     expect(count).toBe(1);
 
     document
-      .querySelector<HTMLButtonElement>('.alert-confirm-main .primary-button')!
+      .querySelectorAll<HTMLButtonElement>('.alert-confirm-main')[0]!
       .click();
 
     wrapper.simulate('click');
     expect(count).toBe(2);
 
     document
-      .querySelector<HTMLButtonElement>('.alert-confirm-main .default-button')!
+      .querySelectorAll<HTMLButtonElement>('.alert-confirm-main')[1]!
       .click();
   });
 
   test('Custom footer', async () => {
-    const wrapper = mount<ButtonType.Props>(
+    const wrapper = mount(
       <Button
         onClick={async () => {
           const [isOk, action] = await alertConfirm({
@@ -126,7 +121,12 @@ describe('Popup', () => {
               return (
                 <>
                   <Button>One</Button>
-                  <Button onClick={() => dispatch('two')}>Two</Button>
+                  <Button
+                    className="two-button"
+                    onClick={() => dispatch('two')}
+                  >
+                    Two
+                  </Button>
                   <Button>Three</Button>
                 </>
               );
@@ -144,12 +144,14 @@ describe('Popup', () => {
       '.alert-confirm-main .alert-confirm-button'
     );
     expect(buttons.length).toBe(3);
-    buttons[1].click();
+    document
+      .querySelector<HTMLButtonElement>('.alert-confirm-main .two-button')!
+      .click();
   });
 
   test('Alert', async () => {
     const text = 'Alert text';
-    const wrapper = mount<ButtonType.Props>(
+    const wrapper = mount(
       <Button
         onClick={() => {
           alert(text);

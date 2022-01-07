@@ -1,10 +1,14 @@
 import './index.scss';
 import { isValidElement, ReactNode } from 'react';
-import { DispatchAction } from './components/Popup';
-import AlertConfirm, { Options, globalConfig, GlobalConfig } from './main';
+import AlertConfirm, {
+  Options,
+  globalConfig,
+  GlobalConfig,
+  DispatchAction
+} from './main';
 import languages from './languages';
 
-export type { DispatchAction } from './components/Popup';
+export type { DispatchAction };
 export { default as Button } from './components/Button';
 
 interface Confirg {

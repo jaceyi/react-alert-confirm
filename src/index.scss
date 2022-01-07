@@ -73,6 +73,7 @@
 .alert-confirm-footer {
   position: relative;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   padding: 0 24px 24px;
   font-size: 12px;
@@ -131,7 +132,7 @@ $primaryColor: #148bed;
   }
 
   &:active {
-    filter: contrast(85%);
+    filter: brightness(96%);
   }
 }
 

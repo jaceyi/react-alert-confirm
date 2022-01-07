@@ -2,9 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import alertConfirm, { Button, alert } from '../dist/index';
 import '../dist/index.css';
+import './style.css';
 
 alertConfirm.config({
-  lang: 'en'
+  lang: 'en',
+  maskClosable: true
 });
 
 const App = () => {
@@ -17,14 +19,19 @@ const App = () => {
     console.log('alert ok');
   };
 
-  const handleClickAdvanced = async () => {
+  const handleClickCustomFooter = async () => {
     const [isOk, action, instance] = await alertConfirm({
       title: '警告',
       content: '此操作将删除该任务，请确认！',
       footer(dispatch) {
         return (
           <>
-            <Button onClick={() => dispatch('cancel')}>Cancel</Button>
+            <span
+              style={{ color: '#777', padding: 8 }}
+              onClick={() => dispatch('cancel')}
+            >
+              Cancel
+            </span>
             <Button onClick={() => dispatch('delete')} styleType="danger">
               Delete
             </Button>
@@ -52,6 +59,17 @@ const App = () => {
     alert('OK => 😊😊, Cancel => 🥺🥺, zIndex => 1024');
   };
 
+  const handleClickCustomPopup = () => {
+    alertConfirm({
+      className: 'my-alert-confirm',
+      style: { width: '80%' },
+      title: 'Custom Popup',
+      maskClosable: true,
+      content: <div>Some text ...</div>,
+      footer: null
+    });
+  };
+
   return (
     <div>
       <Button styleType="primary" onClick={handleClickConfirm}>
@@ -63,12 +81,15 @@ const App = () => {
       <Button
         styleType="danger"
         style={{ marginLeft: 10 }}
-        onClick={handleClickAdvanced}
+        onClick={handleClickCustomFooter}
       >
         Custom footer
       </Button>
       <Button style={{ marginLeft: 10 }} onClick={handleClickChangeConfig}>
         Change config
+      </Button>
+      <Button style={{ marginLeft: 10 }} onClick={handleClickCustomPopup}>
+        Custom Popup
       </Button>
     </div>
   );
