@@ -68,6 +68,10 @@
   color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
   padding-top: 10px;
+
+  &:first-child {
+    padding-top: 0;
+  }
 }
 
 .alert-confirm-footer {

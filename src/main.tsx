@@ -62,6 +62,7 @@ class AlertConfirm {
   zIndex!: number;
   className?: string;
   maskClassName?: string;
+  containerClassName?: string;
   style?: CSSProperties;
   maskStyle?: CSSProperties;
   maskClosable: boolean = false;
@@ -161,8 +162,9 @@ class AlertConfirm {
       status,
       zIndex,
       className,
-      style,
       maskClassName,
+      containerClassName,
+      style,
       maskStyle,
       maskClosable,
       dispatch
@@ -179,6 +181,7 @@ class AlertConfirm {
         zIndex={zIndex}
         className={className}
         maskClassName={maskClassName}
+        containerClassName={containerClassName}
         style={style}
         maskStyle={maskStyle}
         maskClosable={maskClosable}

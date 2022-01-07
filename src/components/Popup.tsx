@@ -16,6 +16,7 @@ interface PopupProps {
   status: Status;
   className?: string;
   maskClassName?: string;
+  containerClassName?: string;
   style?: CSSProperties;
   maskStyle?: CSSProperties;
   maskClosable?: boolean;
@@ -37,6 +38,7 @@ const Popup: FC<PopupProps> = ({
   status,
   className,
   maskClassName,
+  containerClassName,
   style,
   maskStyle,
   maskClosable,
@@ -77,7 +79,7 @@ const Popup: FC<PopupProps> = ({
   }
 
   return (
-    <div className="alert-confirm-container">
+    <div className={classNames('alert-confirm-container', containerClassName)}>
       <div
         onClick={() => maskClosable && dispatch('cancel')}
         className={classNames(
@@ -98,10 +100,10 @@ const Popup: FC<PopupProps> = ({
         )}
       >
         <div className="alert-confirm-body">
-          <div className="alert-confirm-title">{title}</div>
+          {!!title && <div className="alert-confirm-title">{title}</div>}
           <div className="alert-confirm-content">{content}</div>
         </div>
-        <div className="alert-confirm-footer">{footer}</div>
+        {!!footer && <div className="alert-confirm-footer">{footer}</div>}
       </div>
     </div>
   );

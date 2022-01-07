@@ -60,24 +60,25 @@ alertConfirm({
 
 ## Options
 
-| 属性          | 说明                                    | 类型                                             | 默认值         |
-| ------------- | --------------------------------------- | ------------------------------------------------ | -------------- |
-| type          | 弹窗的类型                              | `'confirm'` &#124; `'alert'`                     | `'confirm'`    |
-| title         | 弹窗标题                                | `string` &#124; `ReactNode`                      | -              |
-| content       | 弹窗内容                                | `string` &#124; `ReactNode`                      | -              |
-| footer        | 弹窗底部，用于自定义底部按钮            | `ReactNode` &#124; `dispatch => React.ReactNode` | 确认、取消按钮 |
-| lang          | 默认按钮的语言                          | `'zh'` &#124; `'en'`                             | `'zh'`         |
-| zIndex        | 弹层的 z-index                          | `number`                                         | `1000`         |
-| okText        | 确认按钮的文字                          | `string` &#124; `ReactNode`                      | 确认/OK        |
-| cancelText    | 取消按钮的文字                          | `string` &#124; `ReactNode`                      | 取消/Cancel    |
-| className     | 对话框的 className                      | `string`                                         | -              |
-| maskClassName | 遮罩的 className                        | `string`                                         | -              |
-| style         | 对话框的样式                            | `CSSProperties`                                  | -              |
-| maskStyle     | 遮罩的样式                              | `CSSProperties`                                  | -              |
-| maskClosable  | 点击遮罩可关闭                          | `boolean`                                        | false          |
-| onOk          | 点击确认的回调                          | `function(e)`                                    | -              |
-| onCancel      | 点击取消或者关闭弹窗的回调              | `function(e)`                                    | -              |
-| closeBefore   | 关闭弹窗之前的回调，调用 close 关闭弹窗 | `function(action, close)`                        | -              |
+| 属性               | 说明                                    | 类型                                             | 默认值         |
+| ------------------ | --------------------------------------- | ------------------------------------------------ | -------------- |
+| type               | 弹窗的类型                              | `'confirm'` &#124; `'alert'`                     | `'confirm'`    |
+| title              | 弹窗标题                                | `string` &#124; `ReactNode`                      | -              |
+| content            | 弹窗内容                                | `string` &#124; `ReactNode`                      | -              |
+| footer             | 弹窗底部，用于自定义底部按钮            | `ReactNode` &#124; `dispatch => React.ReactNode` | 确认、取消按钮 |
+| lang               | 默认按钮的语言                          | `'zh'` &#124; `'en'`                             | `'zh'`         |
+| zIndex             | 弹层的 z-index                          | `number`                                         | `1000`         |
+| okText             | 确认按钮的文字                          | `string` &#124; `ReactNode`                      | 确认/OK        |
+| cancelText         | 取消按钮的文字                          | `string` &#124; `ReactNode`                      | 取消/Cancel    |
+| className          | 对话框的 className                      | `string`                                         | -              |
+| maskClassName      | 遮罩的 className                        | `string`                                         | -              |
+| containerClassName | 大容器的 className                      | `string`                                         | -              |
+| style              | 对话框的样式                            | `CSSProperties`                                  | -              |
+| maskStyle          | 遮罩的样式                              | `CSSProperties`                                  | -              |
+| maskClosable       | 点击遮罩可关闭                          | `boolean`                                        | false          |
+| onOk               | 点击确认的回调                          | `function(e)`                                    | -              |
+| onCancel           | 点击取消或者关闭弹窗的回调              | `function(e)`                                    | -              |
+| closeBefore        | 关闭弹窗之前的回调，调用 close 关闭弹窗 | `function(action, close)`                        | -              |
 
 ## Advanced
 
