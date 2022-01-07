@@ -166,6 +166,14 @@ alertConfirm.config({
 alertConfirm.config(); // 获取当前配置
 ```
 
+### destroyAll
+
+```typescript jsx
+import alertConfirm from 'react-alert-confirm';
+
+alertConfirm.destroyAll(); // 销毁全部弹窗
+```
+
 ## Button
 
 为了自定义按钮时样式统一，增加了 Button 组件。

@@ -4,17 +4,15 @@ import AlertConfirm, {
   Options,
   globalConfig,
   GlobalConfig,
-  DispatchAction
+  DispatchAction,
+  instanceMap
 } from './main';
 import languages from './languages';
 
 export type { DispatchAction };
 export { default as Button } from './components/Button';
 
-interface Confirg {
-  (config?: Partial<GlobalConfig>): GlobalConfig;
-}
-export const config: Confirg = (config?) => {
+export const config = (config?: Partial<GlobalConfig>): GlobalConfig => {
   if (config) {
     const { lang } = config;
     if (lang) {
@@ -32,6 +30,12 @@ export const config: Confirg = (config?) => {
   return globalConfig;
 };
 
+export const destroyAll = () => {
+  instanceMap.forEach((instance) => {
+    instance.closePopup();
+  });
+};
+
 type Params = Options | ReactNode;
 type ConfirmActionResolve = [boolean, DispatchAction, AlertConfirm];
 interface CreateAlertConfirm {
@@ -40,7 +44,8 @@ interface CreateAlertConfirm {
 interface Popup {
   (params: Params): Promise<ConfirmActionResolve>;
   alert: CreateAlertConfirm;
-  config: Confirg;
+  config: typeof config;
+  destroyAll: typeof destroyAll;
 }
 
 const createAlertConfirm: CreateAlertConfirm = (params, options = {}) => {
@@ -81,5 +86,6 @@ export const confirm: CreateAlertConfirm = createAlertConfirm;
 const alertConfirm: Popup = (params) => createAlertConfirm(params);
 alertConfirm.alert = alert;
 alertConfirm.config = config;
+alertConfirm.destroyAll = destroyAll;
 
 export default alertConfirm;

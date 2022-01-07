@@ -21,15 +21,12 @@ const App = () => {
 
   const handleClickCustomFooter = async () => {
     const [isOk, action, instance] = await alertConfirm({
-      title: '警告',
-      content: '此操作将删除该任务，请确认！',
+      title: 'Confirm',
+      content: 'This action will delete the product!',
       footer(dispatch) {
         return (
           <>
-            <span
-              style={{ color: '#777', padding: 8 }}
-              onClick={() => dispatch('cancel')}
-            >
+            <span className="pointer" onClick={() => dispatch('cancel')}>
               Cancel
             </span>
             <Button onClick={() => dispatch('delete')} styleType="danger">
@@ -40,8 +37,14 @@ const App = () => {
       },
       async closeBefore(action, close) {
         if (action === 'delete') {
-          await alert('删除成功！');
-          close();
+          await alert(
+            <div>
+              <span className="red">Delete error !</span>
+              <em className="pointer" onClick={() => alertConfirm.destroyAll()}>
+                Click to destroy all
+              </em>
+            </div>
+          );
         } else {
           close();
         }

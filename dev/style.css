@@ -1,3 +1,13 @@
+.red {
+  color: red;
+}
+
+.pointer {
+  cursor: pointer;
+  color: #777;
+  padding: 0 7px;
+}
+
 .my-alert-confirm {
   top: 20vh;
 }

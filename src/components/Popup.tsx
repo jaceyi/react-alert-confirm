@@ -77,7 +77,7 @@ const Popup: FC<PopupProps> = ({
   }
 
   return (
-    <div className="alert-confirm-root">
+    <div className="alert-confirm-container">
       <div
         onClick={() => maskClosable && dispatch('cancel')}
         className={classNames(

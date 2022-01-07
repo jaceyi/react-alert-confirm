@@ -50,7 +50,11 @@ export interface Options {
   closeBefore?: CloseBefore;
 }
 
+let parent: HTMLDivElement | null = null;
+export const instanceMap = new Map<number, AlertConfirm>();
+
 class AlertConfirm {
+  $id: number;
   type: Type = 'confirm';
   title?: ReactNode;
   content?: ReactNode;
@@ -63,7 +67,7 @@ class AlertConfirm {
   maskClosable: boolean = false;
 
   status: Status = 'mount';
-  container: Element;
+  container: HTMLDivElement;
   onOk?: AlertConfirmEvent;
   onCancel?: AlertConfirmEvent;
   closeBefore?: CloseBefore;
@@ -86,8 +90,17 @@ class AlertConfirm {
       maskClosable: _maskClosable
     } = globalConfig;
 
+    this.$id = instanceMap.size + 1;
+    instanceMap.set(this.$id, this);
+
+    if (!parent) {
+      parent = document.createElement('div');
+      parent.className = 'alert-confirm-root';
+      document.body.appendChild(parent);
+    }
     const container: HTMLDivElement = document.createElement('div');
-    document.body.appendChild(container);
+    parent.appendChild(container);
+    container.setAttribute('data-id', String(this.$id));
 
     this.container = container;
     this.zIndex = zIndex ?? _zIndex ?? 1000;
@@ -172,7 +185,8 @@ class AlertConfirm {
         dispatch={dispatch}
         onClosePopup={() => {
           unmountComponentAtNode(container!);
-          document.body.removeChild(container!);
+          instanceMap.delete(this.$id);
+          parent?.removeChild(container!);
         }}
       />,
       container
