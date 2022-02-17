@@ -1,5 +1,5 @@
-import React, { CSSProperties } from 'react';
-import type { ReactNode } from 'react';
+import React from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
 import Popup, { ClosePopup, Type, Status } from './components/Popup';
 import Button from './components/Button';
@@ -133,7 +133,7 @@ class AlertConfirm {
     this.render();
   }
 
-  dispatch: Dispatch = (action) => {
+  dispatch: Dispatch = action => {
     const { closeBefore, onOk, onCancel } = this;
 
     if (action === 'ok') {

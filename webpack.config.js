@@ -1,5 +1,4 @@
 const path = require('path');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -38,20 +37,6 @@ module.exports = {
   },
 
   plugins: [
-    new OptimizeCSSAssetsPlugin({
-      cssProcessor: require('cssnano'),
-      cssProcessorPluginOptions: {
-        preset: [
-          'default',
-          {
-            discardComments: {
-              removeAll: true
-            }
-          }
-        ]
-      },
-      canPrint: true
-    }),
     new MiniCssExtractPlugin({
       filename: 'index.css',
       ignoreOrder: true

@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect, CSSProperties } from 'react';
-import type { ReactNode, FC } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import type { ReactNode, FC, CSSProperties } from 'react';
 import { classNames } from '../util';
 import { Dispatch } from '../main';
 

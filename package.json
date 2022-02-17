@@ -20,9 +20,9 @@
     "dist"
   ],
   "scripts": {
-    "dev": "webpack-dev-server --open --config webpack.dev.config.js",
-    "watch": "webpack --watch --config webpack.build.config.js",
-    "build": "webpack --config webpack.build.config.js",
+    "dev": "webpack serve --open --config webpack.dev.config.js",
+    "watch": "webpack --watch --config webpack.config.js",
+    "build": "webpack --config webpack.config.js",
     "prettier": "prettier --write '**/*.{ts,tsx,scss}'",
     "lint": "tsc --noEmit && eslint 'src/**/*.{ts,tsx}' 'dev/**/*.{ts,tsx}' --quiet --fix",
     "test": "jest"
@@ -52,11 +52,10 @@
     "eslint-loader": "^4.0.2",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.23.2",
-    "html-webpack-plugin": "^4.2.1",
+    "html-webpack-plugin": "^5.5.0",
     "jest": "^26.6.3",
     "jest-css-modules": "^2.1.0",
-    "mini-css-extract-plugin": "^0.9.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "mini-css-extract-plugin": "^2.5.3",
     "postcss-loader": "^3.0.0",
     "prettier": "^2.0.5",
     "react": "^16.8.0",
@@ -67,9 +66,9 @@
     "ts-jest": "^26.5.5",
     "ts-loader": "^7.0.2",
     "typescript": "^4.2.4",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.3"
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
   },
   "peerDependencies": {
     "react": ">=16.8.0 || ^17.0.1",
