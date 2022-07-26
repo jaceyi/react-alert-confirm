@@ -31,7 +31,7 @@ export const config = (config?: Partial<GlobalConfig>): GlobalConfig => {
 };
 
 export const destroyAll = () => {
-  instanceMap.forEach((instance) => {
+  instanceMap.forEach(instance => {
     instance.closePopup();
   });
 };
@@ -58,7 +58,7 @@ const createAlertConfirm: CreateAlertConfirm = (params, options = {}) => {
   }
 
   const { closeBefore, ...rest } = options;
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const instance = new AlertConfirm({
       ...rest,
       closeBefore(action, close) {
@@ -76,14 +76,14 @@ const createAlertConfirm: CreateAlertConfirm = (params, options = {}) => {
   });
 };
 
-export const alert: CreateAlertConfirm = (params) => {
+export const alert: CreateAlertConfirm = params => {
   return createAlertConfirm(params, {
     type: 'alert'
   });
 };
 export const confirm: CreateAlertConfirm = createAlertConfirm;
 
-const alertConfirm: Popup = (params) => createAlertConfirm(params);
+const alertConfirm: Popup = params => createAlertConfirm(params);
 alertConfirm.alert = alert;
 alertConfirm.config = config;
 alertConfirm.destroyAll = destroyAll;
