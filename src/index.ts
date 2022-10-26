@@ -1,4 +1,3 @@
-import './index.scss';
 import { isValidElement, ReactNode } from 'react';
 import AlertConfirm, {
   Options,

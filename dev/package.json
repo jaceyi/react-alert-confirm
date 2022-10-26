@@ -1,0 +1,16 @@
+{
+  "name": "dev",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite --port=8080"
+  },
+  "dependencies": {
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "vite": "^3.1.8"
+  }
+}

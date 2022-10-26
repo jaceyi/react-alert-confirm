@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import alertConfirm, { Button, alert } from '../dist/index';
-import '../dist/index.css';
+import alertConfirm, { Button, alert } from '../lib/index';
+import '../lib/style.css';
 import './style.css';
 
 alertConfirm.config({

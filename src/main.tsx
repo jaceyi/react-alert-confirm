@@ -112,7 +112,7 @@ class AlertConfirm {
       this.footer =
         type === '[object Function]'
           ? (footer as GetFooter).call(this, this.dispatch)
-          : footer;
+          : (footer as ReactNode);
     } else if (footer === void 0) {
       const langConfig = languages[lang || _lang];
 

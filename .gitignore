@@ -1,7 +1,10 @@
-/node_modules
-/.idea
-*.log
-yarn.lock
-.DS_Store
+# dependencies
+node_modules
 
-/dist
+# misc
+.DS_Store
+/lib
+
+# DraftEditor
+/.idea
+/.vscode
