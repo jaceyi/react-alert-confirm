@@ -1,8 +1,8 @@
 import React from 'react';
 import type { FC, ButtonHTMLAttributes } from 'react';
-import { classNames } from '../utils';
+import { classNames } from './Popup';
 
-export declare namespace Button {
+export declare namespace ButtonTypes {
   type styleType = 'primary' | 'default' | 'danger';
 
   type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -11,7 +11,7 @@ export declare namespace Button {
   };
 }
 
-const Button: FC<Button.Props> = ({ styleType, className, ...props }) => (
+const Button: FC<ButtonTypes.Props> = ({ styleType, className, ...props }) => (
   <button
     className={classNames(
       'alert-confirm-button',

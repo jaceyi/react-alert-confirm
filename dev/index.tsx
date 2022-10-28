@@ -1,26 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import alertConfirm, { Button, alert } from '../lib/index';
+import AlertConfirm, { Button } from '../lib/index';
 import '../lib/style.css';
 import './style.css';
 
-alertConfirm.config({
-  lang: 'en',
+AlertConfirm.config({
   maskClosable: true
 });
 
 const App = () => {
   const handleClickConfirm = () => {
-    alertConfirm('This is the confirmation popup !');
+    AlertConfirm('This is the confirmation popup !');
   };
 
   const handleClickAlert = async () => {
-    await alertConfirm.alert(<span>这是 Alert ，支持ReactNode</span>);
+    await AlertConfirm.alert(<span>这是 Alert ，支持ReactNode</span>);
     console.log('alert ok');
   };
 
   const handleClickCustomFooter = async () => {
-    const [isOk, action, instance] = await alertConfirm({
+    const [action, instance] = await AlertConfirm({
       title: 'Confirm',
       content: 'This action will delete the product!',
       footer(dispatch) {
@@ -40,7 +39,7 @@ const App = () => {
           await alert(
             <div>
               <span className="red">Delete error !</span>
-              <em className="pointer" onClick={() => alertConfirm.destroyAll()}>
+              <em className="pointer" onClick={() => AlertConfirm.closeAll()}>
                 Click to destroy all
               </em>
             </div>
@@ -50,31 +49,41 @@ const App = () => {
         }
       }
     });
-    console.log(isOk, action, instance);
+    console.log(action, instance);
   };
 
   const handleClickChangeConfig = () => {
-    alertConfirm.config({
+    AlertConfirm.config({
       zIndex: 1024,
       okText: '😊😊',
       cancelText: '🥺🥺'
     });
-    alert('OK => 😊😊, Cancel => 🥺🥺, zIndex => 1024');
+    AlertConfirm.alert('OK => 😊😊, Cancel => 🥺🥺, zIndex => 1024');
   };
 
   const handleClickCustomPopup = () => {
-    alertConfirm({
+    AlertConfirm.confirm({
       className: 'my-alert-confirm',
       style: { width: '80%' },
-      title: 'Custom Popup',
+      title: 'Custom AlertConfirm',
       maskClosable: true,
       content: <div>Some text ...</div>,
       footer: null
     });
   };
 
+  const [visible, setVisible] = useState(true);
+
   return (
     <div>
+      <AlertConfirm
+        maskClosable
+        title="Hello"
+        content="content"
+        visible={visible}
+        onOk={() => setVisible(false)}
+        onCancel={() => setVisible(false)}
+      />
       <Button styleType="primary" onClick={handleClickConfirm}>
         Confirm
       </Button>
@@ -92,7 +101,7 @@ const App = () => {
         Change config
       </Button>
       <Button style={{ marginLeft: 10 }} onClick={handleClickCustomPopup}>
-        Custom Popup
+        Custom AlertConfirm
       </Button>
     </div>
   );

@@ -1,112 +1,214 @@
-import React, { useRef, useState, useEffect } from 'react';
-import type { ReactNode, FC, CSSProperties } from 'react';
-import { classNames } from '../utils';
-import { Dispatch } from '../main';
+import React, { createRef, Component } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
+import Button from './Button';
+import languages from '../languages';
 
-export type Type = 'alert' | 'confirm';
-export type Status = 'mount' | 'unmount';
-export type ClosePopup = () => void;
+export const classNames = (...names: Array<string | undefined>) =>
+  names?.filter(n => n).join(' ');
+const isFunc = (o: any) =>
+  Object.prototype.toString.call(o) === '[object Function]';
+const getClassName = (visible: boolean) => ({
+  animationClassName: visible ? AnimationNames.in : AnimationNames.out
+});
 
-interface PopupProps {
-  type?: Type;
-  title?: ReactNode;
-  content?: ReactNode;
-  footer?: ReactNode;
-  zIndex: number;
-  status: Status;
-  className?: string;
-  maskClassName?: string;
-  containerClassName?: string;
-  style?: CSSProperties;
-  maskStyle?: CSSProperties;
-  maskClosable?: boolean;
-  dispatch: Dispatch;
-  onClosePopup: ClosePopup;
+type HandleEvent = () => void;
+type RenderNode = ReactNode | (() => ReactNode);
+enum AnimationNames {
+  in = 'alert-confirm-animation-in',
+  out = 'alert-confirm-animation-out',
+  empty = ''
 }
+export declare namespace PopupTypes {
+  type Type = 'alert' | 'confirm';
+  type Lang = keyof typeof languages;
 
-const classNameMaps = {
-  mount: 'alert-confirm-animation-in',
-  unmount: 'alert-confirm-animation-out'
-};
+  interface Config {
+    type?: Type;
 
-const Popup: FC<PopupProps> = ({
-  title,
-  content,
-  footer,
-  zIndex,
-  type,
-  status,
-  className,
-  maskClassName,
-  containerClassName,
-  style,
-  maskStyle,
-  maskClosable,
-  dispatch,
-  onClosePopup
-}) => {
-  const maskRef = useRef<HTMLDivElement>(null);
-  const [animationClassName, setAnimationClassName] = useState(
-    classNameMaps[status]
-  );
+    style?: CSSProperties;
+    zIndex?: number;
+    className?: string;
+    maskClassName?: string;
+    maskStyle?: CSSProperties;
+    maskClosable?: boolean;
 
-  useEffect(() => {
-    if (maskRef.current) {
-      const animationEnd = () => {
-        if (status === 'unmount') {
-          onClosePopup();
-        } else {
-          setAnimationClassName('');
-        }
-      };
+    title?: RenderNode;
+    footer?: RenderNode;
+    content?: RenderNode;
 
-      const { animationName } = getComputedStyle(maskRef.current);
-      if (!animationName || animationName === 'none') {
-        animationEnd();
-      } else {
-        maskRef.current.addEventListener('animationend', animationEnd);
-
-        return () => {
-          maskRef.current?.removeEventListener('animationend', animationEnd);
-        };
-      }
-    }
-  }, []);
-
-  const zIndexStyle: CSSProperties = {};
-  if (zIndex !== 1000) {
-    Object.assign(zIndexStyle, { zIndex });
+    lang?: Lang;
+    okText?: string;
+    cancelText?: string;
+    onOk?: HandleEvent;
+    onCancel?: HandleEvent;
   }
 
-  return (
-    <div className={classNames('alert-confirm-container', containerClassName)}>
-      <div
-        onClick={() => maskClosable && dispatch('cancel')}
-        className={classNames(
-          'alert-confirm-mask',
-          animationClassName,
-          maskClassName
-        )}
-        style={Object.assign({}, zIndexStyle, maskStyle)}
-      />
-      <div
-        ref={maskRef}
-        style={Object.assign({}, zIndexStyle, style)}
-        className={classNames(
-          'alert-confirm-main',
-          `alert-confirm-${type}`,
-          animationClassName,
-          className
-        )}
-      >
-        <div className="alert-confirm-body">
-          {!!title && <div className="alert-confirm-title">{title}</div>}
-          <div className="alert-confirm-content">{content}</div>
-        </div>
-        {!!footer && <div className="alert-confirm-footer">{footer}</div>}
-      </div>
-    </div>
-  );
+  interface Props extends Partial<Config> {
+    visible?: boolean;
+    onCloseAfter?: HandleEvent;
+  }
+
+  interface State {
+    visible: boolean;
+    animationClassName: AnimationNames;
+  }
+}
+
+export const globalConfig: PopupTypes.Config = {
+  lang: 'en',
+  okText: languages.en.ok,
+  cancelText: languages.en.cancel,
+  maskClosable: false
 };
+
+class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
+  constructor(props: PopupTypes.Props) {
+    super(props);
+
+    const { visible = false } = props;
+
+    this.state = {
+      ...getClassName(visible),
+      visible
+    };
+  }
+
+  componentDidMount() {
+    this.bindAnimation();
+  }
+
+  componentDidUpdate(prevProps: PopupTypes.Props) {
+    const { visible = false } = this.props;
+    if (prevProps.visible !== visible) {
+      this.setState(getClassName(visible), () => {
+        this.bindAnimation();
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.animationElements.forEach(element => {
+      element.removeEventListener('animationend', this.animationEnd);
+    });
+  }
+
+  animationCount = 0;
+  animationElements: HTMLDivElement[] = [];
+  bindAnimation = () => {
+    const { maskRef, mainRef } = this;
+    if (!maskRef.current || !mainRef.current) return;
+    const elements = [maskRef.current, mainRef.current] as HTMLDivElement[];
+    const bindAnimationEnd = (element: HTMLDivElement) => {
+      const { animationName } = getComputedStyle(element);
+      if (!animationName || animationName === 'none') {
+        this.animationEnd();
+      } else {
+        element.removeEventListener('animationend', this.animationEnd);
+        element.addEventListener('animationend', this.animationEnd);
+      }
+    };
+    elements.forEach(bindAnimationEnd);
+    this.animationCount = elements.length;
+    this.animationElements = elements;
+  };
+
+  animationEnd = () => {
+    const { visible = false, onCloseAfter } = this.props;
+    this.animationCount--;
+    if (this.animationCount <= 0) {
+      this.setState({
+        visible
+      });
+      if (!visible) {
+        onCloseAfter?.();
+      }
+    }
+  };
+
+  containerRef = createRef<HTMLDivElement>();
+  maskRef = createRef<HTMLDivElement>();
+  mainRef = createRef<HTMLDivElement>();
+
+  render() {
+    const {
+      title,
+      content,
+      footer,
+      zIndex,
+      lang = globalConfig.lang || 'en',
+      okText = globalConfig.okText || languages[lang].ok,
+      cancelText = globalConfig.cancelText || languages[lang].cancel,
+      type,
+      className,
+      maskClassName,
+      style,
+      maskStyle,
+      maskClosable,
+      onOk,
+      onCancel
+    } = this.props;
+    const { visible, animationClassName } = this.state;
+
+    // merge props
+    const zIndexStyle: CSSProperties = {};
+    if (zIndex !== void 0) {
+      Object.assign(zIndexStyle, { zIndex });
+    }
+
+    // handle node
+    const renderNode = (node: RenderNode) =>
+      isFunc(node) ? (node as Function)() : (node as ReactNode);
+    const titleNode = title && renderNode(title);
+
+    const footerNode =
+      footer === void 0 ? (
+        <>
+          {type !== 'alert' && <Button onClick={onCancel}>{cancelText}</Button>}
+          <Button styleType="primary" onClick={onOk}>
+            {okText}
+          </Button>
+        </>
+      ) : (
+        renderNode(footer)
+      );
+
+    if (!visible) return null;
+
+    return (
+      <div ref={this.containerRef} className="alert-confirm-container">
+        <div
+          ref={this.maskRef}
+          onClick={() => maskClosable && onCancel?.()}
+          className={classNames(
+            'alert-confirm-mask',
+            animationClassName,
+            maskClassName
+          )}
+          style={Object.assign({}, zIndexStyle, maskStyle)}
+        />
+        <div
+          ref={this.mainRef}
+          style={Object.assign({}, zIndexStyle, style)}
+          className={classNames(
+            'alert-confirm-main',
+            `alert-confirm-${type}`,
+            animationClassName,
+            className
+          )}
+        >
+          <div className="alert-confirm-body">
+            {!!titleNode && (
+              <div className="alert-confirm-title">{titleNode}</div>
+            )}
+            <div className="alert-confirm-content">{renderNode(content)}</div>
+          </div>
+          {!!footerNode && (
+            <div className="alert-confirm-footer">{footerNode}</div>
+          )}
+        </div>
+      </div>
+    );
+  }
+}
 
 export default Popup;

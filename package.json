@@ -21,9 +21,11 @@
   ],
   "scripts": {
     "build": "yarn build:es && yarn build:type && yarn build:style",
-    "build:es": "babel src --out-dir lib --extensions \".ts,.tsx\"",
+    "build:ts": "yarn build:es && yarn build:type",
+    "build:es": "babel src --out-dir lib --extensions '.ts,.tsx'",
     "build:type": "tsc --emitDeclarationOnly",
-    "build:style": "sass --no-source-map src/index.scss lib/style.css"
+    "build:style": "sass --no-source-map src/index.scss lib/style.css",
+    "watch:ts": "onchange 'src/**/*.ts' 'src/**/*.tsx' -- yarn build:ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -33,6 +35,7 @@
     "@babel/preset-typescript": "^7.18.6",
     "@types/react": "^18.0.23",
     "@types/react-dom": "^18.0.7",
+    "onchange": "^7.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.55.0",
