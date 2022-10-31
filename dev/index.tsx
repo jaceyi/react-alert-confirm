@@ -14,8 +14,10 @@ const App = () => {
   };
 
   const handleClickAlert = async () => {
-    await AlertConfirm.alert(<span>这是 Alert ，支持ReactNode</span>);
-    console.log('alert ok');
+    const [action] = await AlertConfirm.alert(
+      <span>这是 Alert ，支持ReactNode</span>
+    );
+    action && console.log('alert ok');
   };
 
   const handleClickCustomFooter = async () => {
@@ -36,11 +38,11 @@ const App = () => {
       },
       async closeBefore(action, close) {
         if (action === 'delete') {
-          await alert(
+          await AlertConfirm.alert(
             <div>
               <span className="red">Delete error !</span>
               <em className="pointer" onClick={() => AlertConfirm.closeAll()}>
-                Click to destroy all
+                Click here to close all popup
               </em>
             </div>
           );
@@ -52,24 +54,27 @@ const App = () => {
     console.log(action, instance);
   };
 
-  const handleClickChangeConfig = () => {
-    AlertConfirm.config({
-      zIndex: 1024,
-      okText: '😊😊',
-      cancelText: '🥺🥺'
-    });
-    AlertConfirm.alert('OK => 😊😊, Cancel => 🥺🥺, zIndex => 1024');
+  const handleClickChangeConfig = async () => {
+    const [action] = await AlertConfirm('OK => 😊, Cancel => 😭');
+    if (action) {
+      AlertConfirm.config({
+        okText: '😊',
+        cancelText: '😭'
+      });
+      AlertConfirm.alert('Config changed successfully!');
+    }
   };
 
-  const handleClickCustomPopup = () => {
-    AlertConfirm.confirm({
+  const handleClickCustomPopup = async () => {
+    const [action] = await AlertConfirm({
       className: 'my-alert-confirm',
       style: { width: '80%' },
-      title: 'Custom AlertConfirm',
+      title: 'Custom Popup',
       maskClosable: true,
       content: <div>Some text ...</div>,
       footer: null
     });
+    console.log(action);
   };
 
   const [visible, setVisible] = useState(true);
@@ -101,7 +106,7 @@ const App = () => {
         Change config
       </Button>
       <Button style={{ marginLeft: 10 }} onClick={handleClickCustomPopup}>
-        Custom AlertConfirm
+        Custom Popup
       </Button>
     </div>
   );

@@ -1,7 +1,6 @@
-'use strict';
 import React, { isValidElement, ReactNode } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
-import Popup, { PopupTypes, globalConfig } from './components/Popup';
+import Popup, { PopupTypes } from './components/Popup';
 import languages from './languages';
 
 export { default as Button } from './components/Button';
@@ -9,28 +8,26 @@ export { default as Button } from './components/Button';
 type DispatchAction = boolean | string | number;
 type Dispatch = (action: DispatchAction) => void;
 type CloseBefore = (action: DispatchAction, close: () => void) => void;
+type DispatchFooter = (dispatch: Dispatch) => ReactNode;
 
-interface Options extends Partial<PopupTypes.Config> {
+interface Options extends Omit<Partial<PopupTypes.Config>, 'footer'> {
   closeBefore?: CloseBefore;
-  // footer?: (dispatch: Dispatch) => ReactNode
+  footer?: PopupTypes.Config['footer'] | DispatchFooter;
 }
 
 let parent: HTMLDivElement | null = null;
-const instanceMap = new Map<number, PopupAenerator>();
+const instanceMap = new Map<number, PopupGenerator>();
 
-class PopupAenerator {
+class PopupGenerator {
   static $length = 0;
 
   $id: number;
-  type!: PopupTypes.Type;
   visible: boolean = false;
   container: HTMLDivElement;
 
   constructor(public options: Options = {}) {
-    this.type = options.type || 'confirm';
-
-    PopupAenerator.$length++;
-    this.$id = PopupAenerator.$length;
+    PopupGenerator.$length++;
+    this.$id = PopupGenerator.$length;
     instanceMap.set(this.$id, this);
 
     const container: HTMLDivElement = document.createElement('div');
@@ -87,7 +84,7 @@ class PopupAenerator {
 
   private render() {
     const { visible, container, onOk, onCancel, destroy, options } = this;
-    const { closeBefore, ...props } = options;
+    const { closeBefore, footer, ...props } = options;
 
     if (!parent) {
       parent = document.createElement('div');
@@ -98,9 +95,17 @@ class PopupAenerator {
       parent.appendChild(container);
     }
 
+    let _footer: ReactNode;
+    if (typeof footer === 'function') {
+      _footer = footer(this.dispatch);
+    } else {
+      _footer = footer;
+    }
+
     render(
       <Popup
         {...props}
+        footer={_footer}
         visible={visible}
         onOk={onOk}
         onCancel={onCancel}
@@ -113,12 +118,11 @@ class PopupAenerator {
 }
 
 type Params = Options | ReactNode;
-type ConfirmActionResolve = [DispatchAction, PopupAenerator];
+type ConfirmActionResolve = [DispatchAction, PopupGenerator];
 
 interface AlertConfirm {
   new (props: PopupTypes.Props): Popup;
   (this: any, params: Params, options?: Options): Promise<ConfirmActionResolve>;
-  confirm: AlertConfirm;
   alert: typeof alert;
   config: typeof config;
   closeAll: typeof closeAll;
@@ -141,7 +145,7 @@ const AlertConfirm: AlertConfirm = function (
 
   const { closeBefore, ...rest } = options;
   return new Promise(resolve => {
-    const instance = new PopupAenerator({
+    const instance = new PopupGenerator({
       ...rest,
       closeBefore(action, close) {
         const resolveClose = () => {
@@ -170,7 +174,11 @@ const closeAll = () => {
   });
 };
 
-type Config = Options;
+interface Config extends Partial<PopupTypes.Config> {
+  closeBefore?: CloseBefore;
+}
+const _config: Config = Popup.config;
+
 const config = (config?: Config): Config => {
   if (config) {
     const { lang } = config;
@@ -180,23 +188,17 @@ const config = (config?: Config): Config => {
         console.error(
           `config lang must be one of ${Object.keys(languages).join(',')}.`
         );
-        return globalConfig;
+        return _config;
       }
-      Object.assign(globalConfig, {
+      Object.assign(_config, {
         okText: langs.ok,
         cancelText: langs.cancel
       });
     }
-    return Object.assign(globalConfig, config);
+    return Object.assign(_config, config);
   }
-  return globalConfig;
+  return _config;
 };
-
-if (new Date().getTimezoneOffset() / -60 === 8) {
-  config({
-    lang: 'zh'
-  });
-}
 
 AlertConfirm.alert = alert;
 AlertConfirm.config = config;

@@ -5,8 +5,6 @@ import languages from '../languages';
 
 export const classNames = (...names: Array<string | undefined>) =>
   names?.filter(n => n).join(' ');
-const isFunc = (o: any) =>
-  Object.prototype.toString.call(o) === '[object Function]';
 const getClassName = (visible: boolean) => ({
   animationClassName: visible ? AnimationNames.in : AnimationNames.out
 });
@@ -24,12 +22,11 @@ export declare namespace PopupTypes {
 
   interface Config {
     type?: Type;
-
-    style?: CSSProperties;
     zIndex?: number;
+    style?: CSSProperties;
     className?: string;
-    maskClassName?: string;
     maskStyle?: CSSProperties;
+    maskClassName?: string;
     maskClosable?: boolean;
 
     title?: RenderNode;
@@ -54,14 +51,14 @@ export declare namespace PopupTypes {
   }
 }
 
-export const globalConfig: PopupTypes.Config = {
-  lang: 'en',
-  okText: languages.en.ok,
-  cancelText: languages.en.cancel,
-  maskClosable: false
-};
-
 class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
+  static config: PopupTypes.Config = {
+    lang: 'en',
+    okText: languages.en.ok,
+    cancelText: languages.en.cancel,
+    maskClosable: false
+  };
+
   constructor(props: PopupTypes.Props) {
     super(props);
 
@@ -130,22 +127,25 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   mainRef = createRef<HTMLDivElement>();
 
   render() {
+    const { config } = Popup;
     const {
-      title,
-      content,
-      footer,
-      zIndex,
-      lang = globalConfig.lang || 'en',
-      okText = globalConfig.okText || languages[lang].ok,
-      cancelText = globalConfig.cancelText || languages[lang].cancel,
-      type,
-      className,
-      maskClassName,
-      style,
-      maskStyle,
-      maskClosable,
-      onOk,
-      onCancel
+      type = (config.type = 'confirm'),
+      zIndex = config.zIndex,
+      style = config.maskStyle,
+      className = config.maskClassName,
+      maskStyle = config.maskStyle,
+      maskClassName = config.maskClassName,
+      maskClosable = config.maskClosable,
+
+      title = config.title,
+      content = config.content,
+      footer = config.footer,
+
+      lang = config.lang || 'en',
+      okText = config.okText || languages[lang].ok,
+      cancelText = config.cancelText || languages[lang].cancel,
+      onOk = config.onOk,
+      onCancel = config.onCancel
     } = this.props;
     const { visible, animationClassName } = this.state;
 
@@ -157,7 +157,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
 
     // handle node
     const renderNode = (node: RenderNode) =>
-      isFunc(node) ? (node as Function)() : (node as ReactNode);
+      typeof node === 'function' ? node() : node;
     const titleNode = title && renderNode(title);
 
     const footerNode =
