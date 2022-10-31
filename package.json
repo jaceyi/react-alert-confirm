@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "3.3.6",
+  "version": "3.3.7",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "module": "lib/index.js",
   "type": "module",

@@ -60,12 +60,18 @@ alertConfirm({
 
 ## Options
 
+```typescript
+// Types
+type GetNode = (dispatch: Dispatch, instance: AlertConfirm) => ReactNode;
+type RenderNode = ReactNode | GetNode;
+```
+
 | 属性               | 说明                                    | 类型                                             | 默认值         |
 | ------------------ | --------------------------------------- | ------------------------------------------------ | -------------- |
 | type               | 弹窗的类型                              | `'confirm'` &#124; `'alert'`                     | `'confirm'`    |
-| title              | 弹窗标题                                | `string` &#124; `ReactNode`                      | -              |
-| content            | 弹窗内容                                | `string` &#124; `ReactNode`                      | -              |
-| footer             | 弹窗底部，用于自定义底部按钮            | `ReactNode` &#124; `dispatch => React.ReactNode` | 确认、取消按钮 |
+| title              | 弹窗标题                               | `string` &#124; `RenderNode`                     | -              |
+| content            | 弹窗内容                               | `string` &#124; `RenderNode`                     | -              |
+| footer             | 弹窗底部，用于自定义底部按钮               | `string` &#124; `RenderNode`                     | 确认、取消按钮 |
 | lang               | 默认按钮的语言                          | `'zh'` &#124; `'en'`                             | `'zh'`         |
 | zIndex             | 弹层的 z-index                          | `number`                                         | `1000`         |
 | okText             | 确认按钮的文字                          | `string` &#124; `ReactNode`                      | 确认/OK        |
@@ -119,13 +125,14 @@ console.log(isOk, action, instance);
 ### Return Values
 
 ```typescript jsx
-const [isOk, action] = await alert('Alert info');
+const [isOk, action, instance] = await alert('Alert info');
 ```
 
 | 属性   | 说明           | 类型      |
 | ------ | -------------- | --------- |
 | isOk   | 是否点击的确认 | `booleal` |
 | action | 选择的 action  | `string`  |
+| instance | AlertConfirm 实例 | `AlertConfirm` |
 
 ## Custom
 

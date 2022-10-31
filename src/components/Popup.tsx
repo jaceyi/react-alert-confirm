@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import type { ReactNode, FC, CSSProperties } from 'react';
-import { classNames } from '../util';
+import { classNames } from '../utils';
 import { Dispatch } from '../main';
 
 export type Type = 'alert' | 'confirm';

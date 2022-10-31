@@ -4,13 +4,14 @@ import { unmountComponentAtNode, render } from 'react-dom';
 import Popup, { ClosePopup, Type, Status } from './components/Popup';
 import Button from './components/Button';
 import languages from './languages';
+import { isFunc } from './utils';
 
 export type DispatchAction = string | number;
 export type Dispatch = (action: DispatchAction) => void;
 type CloseBefore = (action: DispatchAction, closePopup: ClosePopup) => void;
 type AlertConfirmEvent = (instance?: AlertConfirm) => void;
-type GetFooter = (dispatch: Dispatch) => ReactNode;
-type Footer = ReactNode | GetFooter;
+type GetNode = (dispatch: Dispatch, instance: AlertConfirm) => ReactNode;
+type RenderNode = ReactNode | GetNode;
 type Lang = 'zh' | 'en';
 
 export interface GlobalConfig {
@@ -32,9 +33,9 @@ export const globalConfig: GlobalConfig = {
 
 export interface Options {
   type?: Type;
-  title?: ReactNode;
-  content?: ReactNode;
-  footer?: Footer;
+  title?: RenderNode;
+  content?: RenderNode;
+  footer?: RenderNode;
   lang?: Lang;
   zIndex?: number;
   okText?: string;
@@ -74,6 +75,8 @@ class AlertConfirm {
   closeBefore?: CloseBefore;
 
   constructor({
+    title,
+    content,
     footer,
     lang,
     zIndex,
@@ -107,12 +110,20 @@ class AlertConfirm {
     this.zIndex = zIndex ?? _zIndex ?? 1000;
     this.maskClosable = maskClosable ?? _maskClosable ?? false;
 
+    const renderNode = (node: RenderNode) =>
+      isFunc(node)
+        ? (node as GetNode).call(this, this.dispatch, this)
+        : (node as ReactNode);
+    if (title) {
+      this.title = renderNode(title);
+    }
+
+    if (content) {
+      this.content = renderNode(content);
+    }
+
     if (footer) {
-      const type = Object.prototype.toString.call(footer);
-      this.footer =
-        type === '[object Function]'
-          ? (footer as GetFooter).call(this, this.dispatch)
-          : (footer as ReactNode);
+      this.footer = renderNode(footer);
     } else if (footer === void 0) {
       const langConfig = languages[lang || _lang];
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { FC, ButtonHTMLAttributes } from 'react';
-import { classNames } from '../util';
+import { classNames } from '../utils';
 
 export declare namespace Button {
   type styleType = 'primary' | 'default' | 'danger';
