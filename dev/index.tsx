@@ -5,7 +5,10 @@ import '../lib/style.css';
 import './style.css';
 
 AlertConfirm.config({
-  maskClosable: true
+  maskClosable: true,
+  onCloseAfter: () => {
+    console.log('close');
+  }
 });
 
 const App = () => {
@@ -23,7 +26,7 @@ const App = () => {
   const handleClickCustomFooter = async () => {
     const [action, instance] = await AlertConfirm({
       title: 'Confirm',
-      content: 'This action will delete the product!',
+      desc: 'This action will delete the product!',
       footer(dispatch) {
         return (
           <>
@@ -38,14 +41,18 @@ const App = () => {
       },
       async closeBefore(action, close) {
         if (action === 'delete') {
-          await AlertConfirm.alert(
-            <div>
-              <span className="red">Delete error !</span>
+          await AlertConfirm.alert({
+            title: (
+              <div>
+                <span className="red">Delete error !</span>
+              </div>
+            ),
+            desc: (
               <em className="pointer" onClick={() => AlertConfirm.closeAll()}>
                 Click here to close all popup
               </em>
-            </div>
-          );
+            )
+          });
         } else {
           close();
         }
@@ -67,12 +74,14 @@ const App = () => {
 
   const handleClickCustomPopup = async () => {
     const [action] = await AlertConfirm({
-      className: 'my-alert-confirm',
-      style: { width: '80%' },
-      title: 'Custom Popup',
-      maskClosable: true,
-      content: <div>Some text ...</div>,
-      footer: null
+      custom: dispatch => (
+        <div className="custom-popup">
+          <div>Custom popup</div>
+          <div style={{ marginTop: 10 }}>
+            <button onClick={() => dispatch(false)}>Close</button>
+          </div>
+        </div>
+      )
     });
     console.log(action);
   };
@@ -83,10 +92,15 @@ const App = () => {
     <div>
       <AlertConfirm
         maskClosable
-        title="Hello"
-        content="content"
+        title="Do you Want to delete these items?"
+        desc="Some descriptions"
         visible={visible}
-        onOk={() => setVisible(false)}
+        okText="Yes"
+        onOk={() => {
+          setVisible(false);
+          AlertConfirm.alert('Click Yes');
+        }}
+        cancelText="No"
         onCancel={() => setVisible(false)}
       />
       <Button styleType="primary" onClick={handleClickConfirm}>

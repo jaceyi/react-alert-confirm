@@ -1,21 +1,18 @@
 import React, { createRef, Component } from 'react';
 import type { ReactNode, CSSProperties } from 'react';
-import Button from './Button';
+import Button, { classNames } from './Button';
 import languages from '../languages';
 
-export const classNames = (...names: Array<string | undefined>) =>
-  names?.filter(n => n).join(' ');
 const getClassName = (visible: boolean) => ({
   animationClassName: visible ? AnimationNames.in : AnimationNames.out
 });
 
-type HandleEvent = () => void;
-type RenderNode = ReactNode | (() => ReactNode);
-enum AnimationNames {
-  in = 'alert-confirm-animation-in',
-  out = 'alert-confirm-animation-out',
-  empty = ''
-}
+export type DispatchAction = boolean | string | number;
+export type Dispatch = (action: DispatchAction) => void;
+export type DispatchRender = ReactNode | ((dispatch: Dispatch) => ReactNode);
+export type HandleEvent = () => void;
+type CloseBefore = (action: DispatchAction, close?: HandleEvent) => void;
+
 export declare namespace PopupTypes {
   type Type = 'alert' | 'confirm';
   type Lang = keyof typeof languages;
@@ -29,26 +26,35 @@ export declare namespace PopupTypes {
     maskClassName?: string;
     maskClosable?: boolean;
 
-    title?: RenderNode;
-    footer?: RenderNode;
-    content?: RenderNode;
+    custom?: DispatchRender;
+    title?: DispatchRender;
+    desc?: DispatchRender;
+    footer?: DispatchRender;
 
     lang?: Lang;
     okText?: string;
     cancelText?: string;
     onOk?: HandleEvent;
     onCancel?: HandleEvent;
+    onCloseBefore?: CloseBefore;
+    onCloseAfter?: HandleEvent;
   }
 
   interface Props extends Partial<Config> {
     visible?: boolean;
-    onCloseAfter?: HandleEvent;
+    dispatch?: Dispatch;
   }
 
   interface State {
     visible: boolean;
     animationClassName: AnimationNames;
   }
+}
+
+enum AnimationNames {
+  in = 'alert-confirm-animation-in',
+  out = 'alert-confirm-animation-out',
+  empty = ''
 }
 
 class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
@@ -110,15 +116,21 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   };
 
   animationEnd = () => {
-    const { visible = false, onCloseAfter } = this.props;
+    const { visible = false, onCloseAfter = Popup.config.onCloseAfter } =
+      this.props;
     this.animationCount--;
-    if (this.animationCount <= 0) {
-      this.setState({
-        visible
-      });
-      if (!visible) {
-        onCloseAfter?.();
-      }
+    if (this.animationCount === 0) {
+      this.setState(
+        {
+          animationClassName: AnimationNames.empty,
+          visible
+        },
+        () => {
+          if (!visible) {
+            onCloseAfter?.();
+          }
+        }
+      );
     }
   };
 
@@ -129,23 +141,27 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   render() {
     const { config } = Popup;
     const {
-      type = (config.type = 'confirm'),
+      type = config.type || 'confirm',
       zIndex = config.zIndex,
-      style = config.maskStyle,
+      style = config.style,
       className = config.maskClassName,
       maskStyle = config.maskStyle,
       maskClassName = config.maskClassName,
       maskClosable = config.maskClosable,
 
+      custom = config.custom,
       title = config.title,
-      content = config.content,
+      desc = config.desc,
       footer = config.footer,
 
       lang = config.lang || 'en',
       okText = config.okText || languages[lang].ok,
       cancelText = config.cancelText || languages[lang].cancel,
       onOk = config.onOk,
-      onCancel = config.onCancel
+      onCancel = config.onCancel,
+      onCloseBefore = config.onCloseBefore,
+
+      dispatch
     } = this.props;
     const { visible, animationClassName } = this.state;
 
@@ -155,10 +171,23 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
       Object.assign(zIndexStyle, { zIndex });
     }
 
-    // handle node
-    const renderNode = (node: RenderNode) =>
-      typeof node === 'function' ? node() : node;
+    // render node
+    const _dispatch: Dispatch = action => {
+      if (dispatch) {
+        dispatch(action);
+      } else if (onCloseBefore) {
+        onCloseBefore(action, onCancel);
+      } else if (action === false) {
+        onCancel?.();
+      } else if (action === true) {
+        onOk?.();
+      }
+    };
+    const renderNode = (node: DispatchRender) =>
+      typeof node === 'function' ? node(_dispatch) : node;
+    const customNode = custom && renderNode(custom);
     const titleNode = title && renderNode(title);
+    const descNode = desc && renderNode(desc);
 
     const footerNode =
       footer === void 0 ? (
@@ -179,32 +208,35 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
         <div
           ref={this.maskRef}
           onClick={() => maskClosable && onCancel?.()}
+          style={Object.assign(zIndexStyle, maskStyle)}
           className={classNames(
             'alert-confirm-mask',
             animationClassName,
             maskClassName
           )}
-          style={Object.assign({}, zIndexStyle, maskStyle)}
-        />
-        <div
-          ref={this.mainRef}
-          style={Object.assign({}, zIndexStyle, style)}
-          className={classNames(
-            'alert-confirm-main',
-            `alert-confirm-${type}`,
-            animationClassName,
-            className
-          )}
         >
-          <div className="alert-confirm-body">
-            {!!titleNode && (
-              <div className="alert-confirm-title">{titleNode}</div>
+          <div
+            onClick={e => e.stopPropagation()}
+            ref={this.mainRef}
+            style={style}
+            className={classNames('react-alert-confirm', animationClassName)}
+          >
+            {custom ? (
+              customNode
+            ) : (
+              <div className={classNames('alert-confirm-main', className)}>
+                <div className="alert-confirm-body">
+                  <div className="alert-confirm-title">{titleNode}</div>
+                  {descNode && (
+                    <div className="alert-confirm-desc">{descNode}</div>
+                  )}
+                </div>
+                {!!footerNode && (
+                  <div className="alert-confirm-footer">{footerNode}</div>
+                )}
+              </div>
             )}
-            <div className="alert-confirm-content">{renderNode(content)}</div>
           </div>
-          {!!footerNode && (
-            <div className="alert-confirm-footer">{footerNode}</div>
-          )}
         </div>
       </div>
     );

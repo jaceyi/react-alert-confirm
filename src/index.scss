@@ -8,7 +8,7 @@
       animation: fadeIn 200ms forwards;
     }
 
-    &.alert-confirm-main {
+    &.react-alert-confirm {
       animation: zoomIn 200ms forwards;
     }
   }
@@ -18,7 +18,7 @@
       animation: fadeOut 200ms forwards;
     }
 
-    &.alert-confirm-main {
+    &.react-alert-confirm {
       animation: zoomOut 200ms forwards;
     }
   }
@@ -33,41 +33,42 @@
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.5);
   transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-alert-confirm {
+  margin-top: -20vh;
 }
 
 .alert-confirm-main {
-  width: 380px;
-  position: absolute;
-  z-index: 1000;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  top: 26vh;
+  width: 410px;
   background-color: #fff;
-  border-radius: 2px;
+  border-radius: 6px;
   box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
     0 9px 28px 8px #0000000d;
   max-width: 90vw;
 }
 
 .alert-confirm-body {
-  padding: 26px 22px 20px;
+  padding: 32px 26px 24px;
   min-height: 70px;
 }
 
 .alert-confirm-title {
   display: block;
   overflow: hidden;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgba(0, 0, 0, 0.68);
   font-weight: 500;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.4;
 }
 
-.alert-confirm-content {
-  color: rgba(0, 0, 0, 0.85);
-  font-size: 14px;
-  padding-top: 10px;
+.alert-confirm-desc {
+  color: #777;
+  font-size: 13px;
+  padding-top: 8px;
 
   &:first-child {
     padding-top: 0;

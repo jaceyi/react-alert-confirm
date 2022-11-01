@@ -25,7 +25,9 @@
     "build:es": "babel src --out-dir lib --extensions '.ts,.tsx'",
     "build:type": "tsc --emitDeclarationOnly",
     "build:style": "sass --no-source-map src/index.scss lib/style.css",
-    "watch:ts": "onchange 'src/**/*.ts' 'src/**/*.tsx' -- yarn build:ts"
+    "watch": "onchange 'src/**/*.ts' 'src/**/*.tsx' 'src/index.scss' -- yarn build",
+    "watch:ts": "onchange 'src/**/*.ts' 'src/**/*.tsx' -- yarn build:ts",
+    "watch:style": "onchange 'src/index.scss' -- yarn build:style"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",

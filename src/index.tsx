@@ -1,18 +1,21 @@
 import React, { isValidElement, ReactNode } from 'react';
 import { unmountComponentAtNode, render } from 'react-dom';
-import Popup, { PopupTypes } from './components/Popup';
+import Popup, {
+  PopupTypes,
+  Dispatch,
+  DispatchAction,
+  DispatchRender,
+  HandleEvent
+} from './components/Popup';
 import languages from './languages';
 
 export { default as Button } from './components/Button';
+export type { Dispatch, DispatchAction, DispatchRender };
 
-type DispatchAction = boolean | string | number;
-type Dispatch = (action: DispatchAction) => void;
-type CloseBefore = (action: DispatchAction, close: () => void) => void;
-type DispatchFooter = (dispatch: Dispatch) => ReactNode;
+type CloseBefore = (action: DispatchAction, close: HandleEvent) => void;
 
-interface Options extends Omit<Partial<PopupTypes.Config>, 'footer'> {
-  closeBefore?: CloseBefore;
-  footer?: PopupTypes.Config['footer'] | DispatchFooter;
+interface Options extends Omit<Partial<PopupTypes.Config>, 'onCloseBefore'> {
+  onCloseBefore?: CloseBefore;
 }
 
 let parent: HTMLDivElement | null = null;
@@ -59,7 +62,11 @@ class PopupGenerator {
   };
 
   private dispatch: Dispatch = action => {
-    const { closeBefore, onOk, onCancel } = this.options;
+    const {
+      onCloseBefore = Popup.config.onCloseBefore,
+      onOk,
+      onCancel
+    } = this.options;
 
     if (action === true) {
       onOk?.();
@@ -67,8 +74,8 @@ class PopupGenerator {
       onCancel?.();
     }
 
-    if (closeBefore) {
-      closeBefore.call(this, action, this.close.bind(this));
+    if (onCloseBefore) {
+      onCloseBefore.call(this, action, this.close.bind(this));
     } else {
       this.close();
     }
@@ -76,15 +83,18 @@ class PopupGenerator {
   };
 
   private destroy = () => {
+    const { onCloseAfter = Popup.config.onCloseAfter } = this.options;
     unmountComponentAtNode(this.container!);
     parent?.removeChild(this.container!);
     instanceMap.delete(this.$id);
+    onCloseAfter?.();
     return this;
   };
 
   private render() {
-    const { visible, container, onOk, onCancel, destroy, options } = this;
-    const { closeBefore, footer, ...props } = options;
+    const { visible, container, onOk, onCancel, dispatch, destroy, options } =
+      this;
+    const { onCloseBefore, onCloseAfter, custom, footer, ...props } = options;
 
     if (!parent) {
       parent = document.createElement('div');
@@ -93,6 +103,13 @@ class PopupGenerator {
     }
     if (visible) {
       parent.appendChild(container);
+    }
+
+    let _custom: ReactNode;
+    if (typeof custom === 'function') {
+      _custom = custom(this.dispatch);
+    } else {
+      _custom = custom;
     }
 
     let _footer: ReactNode;
@@ -105,10 +122,12 @@ class PopupGenerator {
     render(
       <Popup
         {...props}
+        custom={_custom}
         footer={_footer}
         visible={visible}
         onOk={onOk}
         onCancel={onCancel}
+        dispatch={dispatch}
         onCloseAfter={destroy}
       />,
       container
@@ -136,24 +155,24 @@ const AlertConfirm: AlertConfirm = function (
     return new Popup(params as PopupTypes.Props);
   }
   if (typeof params === 'string' || isValidElement(params)) {
-    options.content = params;
+    options.title = params;
   } else if (typeof params === 'object') {
     Object.assign(options, params);
   } else {
     console.warn('options required type is object or ReactNode!');
   }
 
-  const { closeBefore, ...rest } = options;
+  const { onCloseBefore, ...rest } = options;
   return new Promise(resolve => {
     const instance = new PopupGenerator({
       ...rest,
-      closeBefore(action, close) {
+      onCloseBefore(action, close) {
         const resolveClose = () => {
           close();
           resolve([action, instance]);
         };
-        if (closeBefore) {
-          closeBefore(action, resolveClose);
+        if (onCloseBefore) {
+          onCloseBefore(action, resolveClose);
         } else {
           resolveClose();
         }
@@ -168,18 +187,9 @@ const alert = (params: Params) => {
     type: 'alert'
   });
 };
-const closeAll = () => {
-  instanceMap.forEach(instance => {
-    instance.close();
-  });
-};
+AlertConfirm.alert = alert;
 
-interface Config extends Partial<PopupTypes.Config> {
-  closeBefore?: CloseBefore;
-}
-const _config: Config = Popup.config;
-
-const config = (config?: Config): Config => {
+const config = (config?: PopupTypes.Config): PopupTypes.Config => {
   if (config) {
     const { lang } = config;
     if (lang) {
@@ -188,20 +198,25 @@ const config = (config?: Config): Config => {
         console.error(
           `config lang must be one of ${Object.keys(languages).join(',')}.`
         );
-        return _config;
+        return Popup.config;
       }
-      Object.assign(_config, {
+      Object.assign(Popup.config, {
         okText: langs.ok,
         cancelText: langs.cancel
       });
     }
-    return Object.assign(_config, config);
+    return Object.assign(Popup.config, config);
   }
-  return _config;
+  return Popup.config;
 };
 
-AlertConfirm.alert = alert;
 AlertConfirm.config = config;
+
+const closeAll = () => {
+  instanceMap.forEach(instance => {
+    instance.close();
+  });
+};
 AlertConfirm.closeAll = closeAll;
 
 export default AlertConfirm;

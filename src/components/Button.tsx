@@ -1,6 +1,8 @@
 import React from 'react';
 import type { FC, ButtonHTMLAttributes } from 'react';
-import { classNames } from './Popup';
+
+export const classNames = (...names: Array<string | undefined>) =>
+  names?.filter(n => n).join(' ');
 
 export declare namespace ButtonTypes {
   type styleType = 'primary' | 'default' | 'danger';
@@ -13,6 +15,7 @@ export declare namespace ButtonTypes {
 
 const Button: FC<ButtonTypes.Props> = ({ styleType, className, ...props }) => (
   <button
+    type="button"
     className={classNames(
       'alert-confirm-button',
       `${styleType || 'default'}-button`,

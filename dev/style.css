@@ -5,23 +5,12 @@
 .pointer {
   cursor: pointer;
   color: #777;
-  padding: 0 7px;
 }
 
-.my-alert-confirm {
-  top: 20vh;
-}
-
-.my-alert-confirm .alert-confirm-body {
+.custom-popup {
+  width: 80vw;
+  height: 50vh;
+  background: #FFF;
   padding: 20px;
-}
-
-.my-alert-confirm .alert-confirm-content {
-  height: 300px;
-}
-
-.my-alert-confirm .alert-confirm-title {
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 10px;
+  text-align: center;
 }
