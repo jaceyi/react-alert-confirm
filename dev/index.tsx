@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import AlertConfirm, { Button } from '../lib/index';
-import '../lib/style.css';
+import AlertConfirm, { Button } from 'react-alert-confirm';
+import 'react-alert-confirm/lib/style.css';
 import './style.css';
 
 AlertConfirm.config({
@@ -39,7 +39,7 @@ const App = () => {
           </>
         );
       },
-      async closeBefore(action, close) {
+      async onCloseBefore(action, close) {
         if (action === 'delete') {
           await AlertConfirm.alert({
             title: (

@@ -1,9 +1,8 @@
-module.exports = {
+export default {
+  preset: 'ts-jest',
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
-  moduleNameMapper: {
-    '^.+\\.(sass|scss)$': 'jest-css-modules'
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json']
+  testEnvironment: 'jsdom'
 };
