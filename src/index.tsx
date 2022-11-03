@@ -1,5 +1,5 @@
 import React, { isValidElement, ReactNode } from 'react';
-import { unmountComponentAtNode, render } from 'react-dom';
+import ReactDOM, { Root } from 'react-dom/client';
 import Popup, {
   PopupTypes,
   Dispatch,
@@ -27,6 +27,7 @@ class PopupGenerator {
   $id: number;
   visible: boolean = false;
   container: HTMLDivElement;
+  root: Root | null = null;
 
   constructor(public options: Options = {}) {
     PopupGenerator.$length++;
@@ -84,8 +85,14 @@ class PopupGenerator {
 
   private destroy = () => {
     const { onCloseAfter = Popup.config.onCloseAfter } = this.options;
-    unmountComponentAtNode(this.container!);
-    parent?.removeChild(this.container!);
+    if (this.root) {
+      setTimeout(() => {
+        this.root?.unmount();
+      });
+    } else {
+      (ReactDOM as any).unmountComponentAtNode(this.container);
+    }
+    this.container.remove();
     instanceMap.delete(this.$id);
     onCloseAfter?.();
     return this;
@@ -118,8 +125,7 @@ class PopupGenerator {
     } else {
       _footer = footer;
     }
-
-    render(
+    const node = (
       <Popup
         {...props}
         custom={_custom}
@@ -129,9 +135,18 @@ class PopupGenerator {
         onCancel={onCancel}
         dispatch={dispatch}
         onCloseAfter={destroy}
-      />,
-      container
+      />
     );
+
+    if (this.root) {
+      this.root.render(node);
+    } else if (ReactDOM.createRoot) {
+      this.root = ReactDOM.createRoot(container);
+      this.root.render(node);
+    } else {
+      (ReactDOM as any).render(node, container);
+    }
+
     return this;
   }
 }
