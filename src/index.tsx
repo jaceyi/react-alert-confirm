@@ -85,13 +85,6 @@ class PopupGenerator {
 
   private destroy = () => {
     const { onCloseAfter = Popup.config.onCloseAfter } = this.options;
-    if (this.root) {
-      setTimeout(() => {
-        this.root?.unmount();
-      });
-    } else {
-      (ReactDOM as any).unmountComponentAtNode(this.container);
-    }
     this.container.remove();
     instanceMap.delete(this.$id);
     onCloseAfter?.();

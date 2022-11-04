@@ -11,7 +11,8 @@
     "locale": "zh-CN",
     "isolatedModules": true,
     "strict": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "forceConsistentCasingInFileNames" :true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

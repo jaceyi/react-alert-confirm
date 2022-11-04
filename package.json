@@ -30,7 +30,10 @@
     "watch:style": "onchange 'src/index.scss' -- yarn build:style",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,scss,css}'",
     "lint": "eslint 'src/**/*.{ts,tsx}' --quiet --fix",
-    "test": "jest"
+    "test": "jest",
+    "_unlink": "yarn unlink",
+    "_link": "yarn build && yarn link",
+    "uplink": "yarn _unlink && yarn _link"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -39,8 +42,8 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@types/jest": "^29.2.1",
-    "@types/react": "^18.0.23",
-    "@types/react-dom": "^18.0.7",
+    "@types/react": "18.0.23",
+    "@types/react-dom": "18.0.7",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
