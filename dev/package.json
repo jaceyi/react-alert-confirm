@@ -3,9 +3,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --port=8080",
-    "_unlink": "yarn unlink \"react-alert-confirm\" && yarn install --force && rm -rf ./node_modules/.vite/deps",
     "_link": "yarn link \"react-alert-confirm\"",
-    "uplink": "yarn _unlink && yarn _link"
+    "_uplink": "yarn _unlink && yarn _link",
+    "_unlink": "yarn unlink \"react-alert-confirm\" && yarn install --force && rm -rf ./node_modules/.vite/deps"
   },
   "dependencies": {
     "@types/react": "^16.9.0",

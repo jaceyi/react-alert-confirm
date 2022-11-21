@@ -1,4 +1,4 @@
-import React, { isValidElement, ReactNode } from 'react';
+import React, { isValidElement, ReactNode, Component } from 'react';
 import ReactDOM, { Root } from 'react-dom/client';
 import Popup, {
   PopupTypes,
@@ -188,7 +188,7 @@ const AlertConfirm: AlertConfirm = function (
     }).open();
   });
 } as AlertConfirm;
-AlertConfirm.prototype = React.Component.prototype;
+AlertConfirm.prototype = Component.prototype;
 
 const alert = (params: Params) => {
   return AlertConfirm(params, {

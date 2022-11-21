@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import AlertConfirm, { Button } from 'react-alert-confirm';
-import 'react-alert-confirm/lib/style.css';
+// import AlertConfirm, { Button } from 'react-alert-confirm';
+// import 'react-alert-confirm/lib/style.css';
+import AlertConfirm, { Button } from '../src';
+import '../lib/style.css';
 import './style.css';
 
 AlertConfirm.config({
@@ -61,14 +63,23 @@ const App = () => {
     console.log(action, instance);
   };
 
-  const handleClickChangeConfig = async () => {
-    const [action] = await AlertConfirm('OK => 😊, Cancel => 😭');
-    if (action) {
-      AlertConfirm.config({
-        okText: '😊',
-        cancelText: '😭'
-      });
-      AlertConfirm.alert('Config changed successfully!');
+  const handleClickChangeLang = async () => {
+    if (AlertConfirm.config().lang === 'zh') {
+      const [action] = await AlertConfirm('Change language to English');
+      if (action) {
+        AlertConfirm.config({
+          lang: 'en'
+        });
+        AlertConfirm.alert('Config changed successfully!');
+      }
+    } else {
+      const [action] = await AlertConfirm('Change language to 中文');
+      if (action) {
+        AlertConfirm.config({
+          lang: 'zh'
+        });
+        AlertConfirm.alert('配置更新成功！');
+      }
     }
   };
 
@@ -114,10 +125,10 @@ const App = () => {
         style={{ marginLeft: 10 }}
         onClick={handleClickCustomFooter}
       >
-        Custom footer
+        Custom Footer
       </Button>
-      <Button style={{ marginLeft: 10 }} onClick={handleClickChangeConfig}>
-        Change config
+      <Button style={{ marginLeft: 10 }} onClick={handleClickChangeLang}>
+        Change Lang
       </Button>
       <Button style={{ marginLeft: 10 }} onClick={handleClickCustomPopup}>
         Custom Popup

@@ -31,9 +31,8 @@
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,scss,css}'",
     "lint": "eslint 'src/**/*.{ts,tsx}' --quiet --fix",
     "test": "jest",
-    "_unlink": "yarn unlink",
     "_link": "yarn build && yarn link",
-    "uplink": "yarn _unlink && yarn _link"
+    "_uplink": "yarn unlink && yarn _link"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
