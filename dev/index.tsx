@@ -114,7 +114,12 @@ const App = () => {
         cancelText="No"
         onCancel={() => setVisible(false)}
       />
-      <Button styleType="primary" onClick={handleClickConfirm}>
+      <Button onClick={() => setVisible(!visible)}>Show</Button>
+      <Button
+        style={{ marginLeft: 10 }}
+        styleType="primary"
+        onClick={handleClickConfirm}
+      >
         Confirm
       </Button>
       <Button style={{ marginLeft: 10 }} onClick={handleClickAlert}>

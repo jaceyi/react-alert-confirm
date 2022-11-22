@@ -83,7 +83,10 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   componentDidUpdate(prevProps: PopupTypes.Props) {
     const { visible = false } = this.props;
     if (prevProps.visible !== visible) {
-      this.setState(getClassName(visible), () => {
+      this.setState({
+        ...getClassName(visible),
+        visible: true
+      }, () => {
         this.bindAnimation();
       });
     }
