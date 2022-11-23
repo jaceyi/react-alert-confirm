@@ -30,7 +30,7 @@ describe('AlertConfirm', () => {
   const testTitle = 'Do you Want to delete these items?';
   const testDesc = 'Some descriptions';
 
-  it('Render JSX', async () => {
+  it('Render JSX', () => {
     let visible: boolean = true;
     let action: string = '';
     const getAlertConfirm = () => {
@@ -74,7 +74,7 @@ describe('AlertConfirm', () => {
   });
 
   it('Imperative confirm popup', async () => {
-    let action = '';
+    const onOk = jest.fn();
     const { getByRole } = render(
       <Button
         onClick={async () => {
@@ -83,7 +83,7 @@ describe('AlertConfirm', () => {
             desc: testDesc
           });
           if (isOk) {
-            action = 'OK';
+            onOk();
           }
         }}
       >
@@ -97,14 +97,14 @@ describe('AlertConfirm', () => {
 
     fireEvent.click(screen.getByText('OK'));
     await awaitRun();
-    expect(action).toBe('OK');
+    expect(onOk).toHaveBeenCalled();
     expect(screen.queryByText(testTitle)).toBeNull();
   });
 
   it('Imperative alert popup', () => {
     const { getByRole } = render(
       <Button
-        onClick={async () => {
+        onClick={() => {
           AlertConfirm.alert(testTitle);
         }}
       >
@@ -119,7 +119,64 @@ describe('AlertConfirm', () => {
     expect(screen.queryByText(testTitle)).toBeNull();
   });
 
-  it('Verify global config', async () => {
+  it('Test imperative onCloseBefore and onCloseAfter callback', () => {
+    const closeBeforeFunc = jest.fn();
+    const closeAfter = jest.fn();
+    const { getByRole } = render(
+      <Button
+        onClick={() => {
+          AlertConfirm({
+            title: testTitle,
+            onCloseBefore(action, close) {
+              closeBeforeFunc(action);
+              close();
+            },
+            onCloseAfter: closeAfter
+          });
+        }}
+      >
+        Delete
+      </Button>
+    );
+    const button = getByRole('button');
+    fireEvent.click(button);
+
+    fireEvent.click(screen.getByText('OK'));
+    expect(closeBeforeFunc).toHaveBeenLastCalledWith(true);
+    expect(closeAfter).toHaveBeenCalled();
+  });
+
+  it('Custom Footer for imperative', async () => {
+    const customText = 'Custom Footer';
+    const dispatchAction = jest.fn();
+    const { getByRole } = render(
+      <Button
+        onClick={async () => {
+          const [action] = await AlertConfirm({
+            title: testTitle,
+            footer(dispatch) {
+              return (
+                <Button onClick={() => dispatch('custom')}>{customText}</Button>
+              );
+            }
+          });
+          if (action) {
+            dispatchAction(action);
+          }
+        }}
+      >
+        Delete
+      </Button>
+    );
+    const button = getByRole('button');
+    fireEvent.click(button);
+
+    fireEvent.click(screen.getByText(customText));
+    await awaitRun();
+    expect(dispatchAction).toHaveBeenLastCalledWith('custom');
+  });
+
+  it('Verify global config', () => {
     AlertConfirm.config({
       lang: 'zh'
     });
@@ -127,7 +184,7 @@ describe('AlertConfirm', () => {
 
     const { getByRole } = render(
       <Button
-        onClick={async () => {
+        onClick={() => {
           AlertConfirm.alert(testTitle);
         }}
       >
