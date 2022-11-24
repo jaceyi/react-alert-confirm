@@ -1,6 +1,8 @@
-> A react component confirm dialog. （一个 react 的弹窗组件，支持 alert、confirm）
+> A react component confirm dialog, support synchronous mode call.
+一个 React 确认弹窗组件，支持同步方式调用。
 
-在线预览 [CodeSandbox](https://codesandbox.io/s/react-alert-confirm-v3-k0gc4)
+
+[CodeSandbox](https://codesandbox.io/s/react-alert-confirm-v4-79lvpw)
 
 ## Installing
 
@@ -13,182 +15,185 @@ npm install react-alert-confirm --save
 ## Import
 
 ```typescript
-import 'react-alert-confirm/dist/index.css';
-import alertConfirm from 'react-alert-confirm';
+import 'react-alert-confirm/lib/style.css';
+import AlertConfirm from 'react-alert-confirm';
 ```
 
 ## Example
 
-### Confirm
+### Imperative
 
 ```typescript jsx
-import alertConfirm, { confirm } from 'react-alert-confirm';
+import AlertConfirm from 'react-alert-confirm';
 
-const [isOk] = await alertConfirm('Content');
-if (isOk) {
+const openConfirm = async () => {
+  const [isOk] = await AlertConfirm('Are you sure?');
+  if (isOk) {
+    console.log('ok');
+  }
+}
+
+const openConfirm2 = () => {
+  AlertConfirm({
+    title: 'Are you sure?',
+    desc: 'description...',
+    onOk: () => {
+      console.log('ok');
+    },
+    onCancel: () => {
+      console.log('cancel');
+    }
+  });
+}
+
+const openAlert = async () => {
+  await AlertConfirm.alert('Are you sure?');
   console.log('ok');
 }
-// or
-confirm('Content');
-// or
-alertConfirm({
-  title: 'Title',
-  content: 'Content',
-  onOk: () => {
-    console.log('ok');
-  },
-  onCancel: () => {
-    console.log('cancel');
-  }
-});
+
+const openAlert2 = async () => {
+  await AlertConfirm.alert({
+    title: 'Are you sure?',
+    desc: 'description...',
+  });
+  console.log('ok');
+}
 ```
 
-### Alert
+### Render JSX
 
 ```typescript jsx
-import alertConfirm, { alert } from 'react-alert-confirm';
+import React, { useState } from 'react';
+import AlertConfirm from 'react-alert-confirm';
 
-alertConfirm.alert('Content');
-// or
-alert('Content');
-// or
-alertConfirm({
-  type: 'Title',
-  content: 'Content'
-});
+const Component = () => {
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <AlertConfirm
+      title="Are you sure?"
+      desc="description..."
+      onOk={() => {
+        console.log('ok');
+        setVisible(false);
+      }}
+    />
+  )
+}
 ```
 
-## Options
+## Imperative API
 
-```typescript
-// Types
-type GetNode = (dispatch: Dispatch, instance: AlertConfirm) => ReactNode;
-type RenderNode = ReactNode | GetNode;
-```
+函数调用传参 API
 
-| 属性          | 说明                                    | 类型                         | 默认值         |
-| ------------- | --------------------------------------- | ---------------------------- | -------------- |
-| type          | 弹窗的类型                              | `'confirm'` &#124; `'alert'` | `'confirm'`    |
-| title         | 弹窗标题                                | `string` &#124; `RenderNode` | -              |
-| content       | 弹窗内容                                | `string` &#124; `RenderNode` | -              |
-| footer        | 弹窗底部，用于自定义底部按钮            | `string` &#124; `RenderNode` | 确认、取消按钮 |
-| lang          | 默认按钮的语言                          | `'zh'` &#124; `'en'`         | `'zh'`         |
-| zIndex        | 弹层的 z-index                          | `number`                     | `1000`         |
-| okText        | 确认按钮的文字                          | `string` &#124; `ReactNode`  | 确认/OK        |
-| cancelText    | 取消按钮的文字                          | `string` &#124; `ReactNode`  | 取消/Cancel    |
-| className     | 对话框的 className                      | `string`                     | -              |
-| maskClassName | 遮罩的 className                        | `string`                     | -              |
-| style         | 对话框的样式                            | `CSSProperties`              | -              |
-| maskStyle     | 遮罩的样式                              | `CSSProperties`              | -              |
-| maskClosable  | 点击遮罩可关闭                          | `boolean`                    | false          |
-| onOk          | 点击确认的回调                          | `function(e)`                | -              |
-| onCancel      | 点击取消或者关闭弹窗的回调              | `function(e)`                | -              |
-| closeBefore   | 关闭弹窗之前的回调，调用 close 关闭弹窗 | `function(action, close)`    | -              |
+| Property      | Description                                                 | Type                                     | Default               |
+| ------------- | ----------------------------------------------------------- | ---------------------------------------- | --------------------- |
+| type          | AlertConfirm type                                           | `'confirm'` &#124; `'alert'`             | `'confirm'`           |
+| zIndex        | The `z-index` of the AlertConfirm                           | `number`                                 | `1000`                |
+| style         | Style of floating layer                                     | `CSSProperties`                          | -                     |
+| className     | The class name of the container of the floating layer       | `string`                                 | -                     |
+| maskStyle     | Style for mask element                                      | `CSSProperties`                          | -                     |
+| maskClassName | The class name of the container of mask                     | `string`                                 | -                     |
+| maskClosable  | Whether to close the modal dialog when the mask is clicked  | `boolean`                                | `false`               |
+| custom        | Customize floating layer content                            | [DispatchRender](#types)                 | -                     |
+| title         | The AlertConfirm dialog's title                             | [DispatchRender](#types)                 | -                     |
+| desc          | The AlertConfirm dialog's description                       | [DispatchRender](#types)                 | -                     |
+| footer        | The AlertConfirm dialog's footer, set `null` to not display | [DispatchRender](#types)                 | OK and Cancel buttons |
+| lang          | Languages                                                   | `'zh'` &#124; `'en'`                     | `'en'`                |
+| okText        | Text of the OK button                                       | `ReactNode`                              | OK                    |
+| cancelText    | Text of the Cancel button                                   | `ReactNode`                              | Cancel                |
+| onOk          | Specify a function that will be called when a user clicks mask or Cancel button | `function(e)`        | -                     |
+| onCancel      | Specify a function that will be called when a user clicks the OK button | `function(e)`                | -                     |
+| onCloseBefore | Specify a function that will be called when dispatch action, You can also just return a promise and when the promise is resolved, the modal dialog will also be closed                                                           | `(action: boolean | string | number, close) => void`| -          |
+| onCloseAfter  | Specify a function that will be called when modal is closed completely | `function(e)`                 | -                     |
+
+## Render JSX Props
+
+Includes [Imperative Options](#imperative-options)（当组件使用时传参大致同 [Imperative API](#imperative-api)，`onCloseBefore` 的第二个参数变为可选，有没有取决于是否传入 `onCancel`）
+| Property      | Description                                        | Type                                                     | Default    |
+| ------------- | -------------------------------------------------- | -------------------------------------------------------- | ---------- |
+| visible       | Whether the AlertConfirm is visible or not         | `boolean`                                                | `'false'`  |
+| dispatch      | Events dispatch                                    | [Dispatch](#types)                                       | -          |
+| onCloseBefore | `onCancel` may be undefined                        | `(action: boolean | string | number, onCancel?) => void` | -          |
 
 ## Advanced
 
-更多自定义用法
-
 ### Custom Footer
 
-自定义 Footer，并提供按钮组件便于样式统一
-
 ```typescript jsx
-import alertConfirm, { Button } from 'react-alert-confirm';
+import AlertConfirm, { Button } from 'react-alert-confirm';
 
-const [isOk, action, instance] = await alertConfirm({
-  title: '警告',
-  content: '此操作将删除该任务，请确认！',
+AlertConfirm({
+  title: 'Confirm',
+  desc: 'This action will delete the product!',
   footer(dispatch) {
     return (
       <>
-        <Button onClick={() => dispatch('ok')}>OK</Button>
-        <Button onClick={() => dispatch('no')} styleType="primary">
-          NO
+        <span className="pointer" onClick={() => dispatch('cancel')}>
+          Cancel
+        </span>
+        <Button onClick={() => dispatch('delete')} styleType="danger">
+          Delete
         </Button>
       </>
     );
   },
   async closeBefore(action, close) {
-    if (action === 'no') {
-      await alert('Click NO');
+    if (action === 'delete') {
+      await deleteProduct(); // some async events ...;
       close();
     } else {
       close();
     }
   }
 });
-console.log(isOk, action, instance);
 ```
 
 ### Return Values
 
 ```typescript jsx
-const [isOk, action, instance] = await alert('Alert info');
+const [action, instance] = await AlertConfirm('Alert info');
 ```
 
-| 属性     | 说明              | 类型           |
-| -------- | ----------------- | -------------- |
-| isOk     | 是否点击的确认    | `booleal`      |
-| action   | 选择的 action     | `string`       |
-| instance | AlertConfirm 实例 | `AlertConfirm` |
+### closeAll
+
+Close all `AlertConfirm` popup （关闭全部弹窗）
+
+```typescript jsx
+import AlertConfirm from 'react-alert-confirm';
+
+AlertConfirm.closeAll();
+```
 
 ## Custom
 
-### Languages
+### Custom config
 
-设置全局语言
-
+[All Config types](#options-and-props)（配置可选参数与调用 AlertConfirm 的传参一致）
+#### Example
 ```typescript jsx
-import alertConfirm from 'react-alert-confirm';
+import AlertConfirm from 'react-alert-confirm';
 
-alertConfirm.config({
-  lang: 'en'
-});
+AlertConfirm.config({
+  lang: 'zh', // language
+  zIndex: 1024
+}); // update config
 
-alertConfirm.config(); // Get current config
-```
-
-### Other config
-
-| 属性        | 说明                                    | 类型                        | 默认值      |
-| ----------- | --------------------------------------- | --------------------------- | ----------- |
-| lang        | 默认按钮的语言                          | `'zh'` &#124; `'en'`        | `'zh'`      |
-| zIndex      | 弹层的 z-index                          | `number`                    | `1000`      |
-| okText      | 确认按钮的文字                          | `string` &#124; `ReactNode` | 确认/OK     |
-| cancelText  | 取消按钮的文字                          | `string` &#124; `ReactNode` | 取消/Cancel |
-| closeBefore | 关闭弹窗之前的回调，调用 close 关闭弹窗 | `function(action, close)`   | -           |
-
-```typescript jsx
-import alertConfirm from 'react-alert-confirm';
-
-alertConfirm.config({
-  lang: 'en',
-  zIndex: 1024,
-  okText: 'YES',
-  cancelText: 'NO',
-  closeBefore: (action, close) => {}
-});
-
-alertConfirm.config(); // 获取当前配置
-```
-
-### destroyAll
-
-```typescript jsx
-import alertConfirm from 'react-alert-confirm';
-
-alertConfirm.destroyAll(); // 销毁全部弹窗
+AlertConfirm.config(); // get config
 ```
 
 ## Button
 
-为了自定义按钮时样式统一，增加了 Button 组件。
+| Property  | Description        | Type                                             | Default     |
+| --------- | ------------------ | ------------------------------------------------ | ----------- |
+| styleType | Button style type  | `'default'` &#124; `'primary'` &#124; `'danger'` | `'default'` |
 
-### Props
+The Button also contains all attributes of the ButtonHTMLAttributes
 
-| 属性      | 说明       | 类型                                             | 默认值      |
-| --------- | ---------- | ------------------------------------------------ | ----------- |
-| styleType | 按钮的样式 | `'default'` &#124; `'primary'` &#124; `'danger'` | `'default'` |
+## Types
 
-> Button 还包含 ButtonHTMLAttributes 所有属性
+```typescript
+type DispatchAction = boolean | string | number;
+type Dispatch = (action: DispatchAction) => void;
+type DispatchRender = ReactNode | ((dispatch: Dispatch) => ReactNode);
+```
