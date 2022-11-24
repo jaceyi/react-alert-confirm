@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
+import './style.css';
 // import AlertConfirm, { Button } from 'react-alert-confirm';
 // import 'react-alert-confirm/lib/style.css';
 import AlertConfirm, { Button } from '../src';
 import '../lib/style.css';
-import './style.css';
 
 AlertConfirm.config({
   maskClosable: true,
@@ -142,5 +142,7 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(<App />);
+// const root = ReactDOM.createRoot(document.getElementById('root')!);
+// root.render(<App />);
+
+ReactDOM.render(<App />, document.getElementById('root')!);

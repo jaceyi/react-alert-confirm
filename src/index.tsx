@@ -1,5 +1,7 @@
-import React, { isValidElement, ReactNode, Component } from 'react';
-import ReactDOM, { Root } from 'react-dom/client';
+import type { ReactNode } from 'react';
+import type { Root } from 'react-dom/client';
+import React, { isValidElement, Component } from 'react';
+import * as ReactDOM from 'react-dom';
 import Popup, {
   PopupTypes,
   Dispatch,
@@ -133,8 +135,8 @@ class PopupGenerator {
 
     if (this.root) {
       this.root.render(node);
-    } else if (ReactDOM.createRoot) {
-      this.root = ReactDOM.createRoot(container);
+    } else if ((ReactDOM as any).createRoot) {
+      this.root = (ReactDOM as any).createRoot(container) as Root;
       this.root.render(node);
     } else {
       (ReactDOM as any).render(node, container);
@@ -190,14 +192,14 @@ const AlertConfirm: AlertConfirm = function (
 } as AlertConfirm;
 AlertConfirm.prototype = Component.prototype;
 
-const alert = (params: Params) => {
+export const alert = (params: Params) => {
   return AlertConfirm(params, {
     type: 'alert'
   });
 };
 AlertConfirm.alert = alert;
 
-const config = (config?: PopupTypes.Config): PopupTypes.Config => {
+export const config = (config?: PopupTypes.Config): PopupTypes.Config => {
   if (config) {
     const { lang } = config;
     if (lang) {
@@ -220,7 +222,7 @@ const config = (config?: PopupTypes.Config): PopupTypes.Config => {
 
 AlertConfirm.config = config;
 
-const closeAll = () => {
+export const closeAll = () => {
   instanceMap.forEach(instance => {
     instance.close();
   });

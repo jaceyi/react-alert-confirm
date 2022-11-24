@@ -1,12 +1,13 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  optimizeDeps: {
-    include: ['react-alert-confirm']
-  },
-  build: {
-    commonjsOptions: {
-      include: [/react-alert-confirm/, /node_modules/]
+  server: {
+    watch: {
+      ignored: ['!**/node_modules/react-alert-confirm/lib/**']
     }
+  },
+  optimizeDeps: {
+    include: ['react-alert-confirm'],
+    needsInterop: ['react-alert-confirm']
   }
 });
