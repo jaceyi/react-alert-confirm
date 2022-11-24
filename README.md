@@ -1,5 +1,4 @@
-> A react component confirm dialog, support synchronous mode call.
-一个 React 确认弹窗组件，支持同步方式调用。
+> A react component confirm dialog, support synchronous mode call.（一个 React 确认对话框组件，支持同步方式调用。）
 
 
 [CodeSandbox](https://codesandbox.io/s/react-alert-confirm-v4-79lvpw)

@@ -1,7 +1,7 @@
 {
   "name": "react-alert-confirm",
-  "version": "4.0.1",
-  "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
+  "version": "4.0.2",
+  "description": "A react component confirm dialog, support synchronous mode call.（一个 React 确认对话框组件，支持同步方式调用。）",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",

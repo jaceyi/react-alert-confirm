@@ -133,10 +133,23 @@ class PopupGenerator {
       />
     );
 
+    const { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, createRoot } = (ReactDOM as typeof ReactDOM & {
+      createRoot?: Function,
+      __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?: {
+        usingClientEntryPoint?: boolean
+      }
+    });
     if (this.root) {
       this.root.render(node);
-    } else if ((ReactDOM as any).createRoot) {
-      this.root = (ReactDOM as any).createRoot(container) as Root;
+    } else if (createRoot) {
+      const has = __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED && typeof __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED === 'object';
+      if (has) {
+        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = true;
+      }
+      this.root = createRoot(container) as Root;
+      if (has) {
+        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint = false;
+      }
       this.root.render(node);
     } else {
       (ReactDOM as any).render(node, container);
