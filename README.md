@@ -108,7 +108,7 @@ const Component = () => {
 
 ## Render JSX Props
 
-Includes [Imperative Options](#imperative-options)（当组件使用时传参大致同 [Imperative API](#imperative-api)，`closeBefore` 的第二个参数变为可选，有没有取决于是否传入 `onCancel`）
+Includes [Imperative Options](#imperative-api)（当组件使用时传参大致同 [Imperative API](#imperative-api)，`closeBefore` 的第二个参数变为可选，有没有取决于是否传入 `onCancel`）
 | Property      | Description                                        | Type                                                     | Default    |
 | ------------- | -------------------------------------------------- | -------------------------------------------------------- | ---------- |
 | visible       | Whether the AlertConfirm is visible or not         | `boolean`                                                | `'false'`  |
