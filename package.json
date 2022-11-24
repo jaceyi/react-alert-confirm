@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "3.3.7",
+  "version": "4.0.0",
   "description": "A react component confirm dialog.（一个react的弹窗组件，支持 alert、confirm）",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -31,6 +31,7 @@
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,scss,css}'",
     "lint": "eslint 'src/**/*.{ts,tsx}' --quiet --fix",
     "test": "jest",
+    "publish": "yarn build && npm publish",
     "_link": "yarn build && yarn link",
     "_uplink": "yarn unlink && yarn _link"
   },

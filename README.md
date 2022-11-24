@@ -104,17 +104,17 @@ const Component = () => {
 | cancelText    | Text of the Cancel button                                   | `ReactNode`                              | Cancel                |
 | onOk          | Specify a function that will be called when a user clicks mask or Cancel button | `function(e)`        | -                     |
 | onCancel      | Specify a function that will be called when a user clicks the OK button | `function(e)`                | -                     |
-| onCloseBefore | Specify a function that will be called when dispatch action, You can also just return a promise and when the promise is resolved, the modal dialog will also be closed                                                           | `(action: boolean | string | number, close) => void`| -          |
-| onCloseAfter  | Specify a function that will be called when modal is closed completely | `function(e)`                 | -                     |
+| closeBefore | Specify a function that will be called when dispatch action, You can also just return a promise and when the promise is resolved, the modal dialog will also be closed                                                           | `(action: boolean | string | number, close) => void`| -          |
+| closeAfter  | Specify a function that will be called when modal is closed completely | `function(e)`                 | -                     |
 
 ## Render JSX Props
 
-Includes [Imperative Options](#imperative-options)（当组件使用时传参大致同 [Imperative API](#imperative-api)，`onCloseBefore` 的第二个参数变为可选，有没有取决于是否传入 `onCancel`）
+Includes [Imperative Options](#imperative-options)（当组件使用时传参大致同 [Imperative API](#imperative-api)，`closeBefore` 的第二个参数变为可选，有没有取决于是否传入 `onCancel`）
 | Property      | Description                                        | Type                                                     | Default    |
 | ------------- | -------------------------------------------------- | -------------------------------------------------------- | ---------- |
 | visible       | Whether the AlertConfirm is visible or not         | `boolean`                                                | `'false'`  |
 | dispatch      | Events dispatch                                    | [Dispatch](#types)                                       | -          |
-| onCloseBefore | `onCancel` may be undefined                        | `(action: boolean | string | number, onCancel?) => void` | -          |
+| closeBefore | `onCancel` may be undefined                        | `(action: boolean | string | number, onCancel?) => void` | -          |
 
 ## Advanced
 

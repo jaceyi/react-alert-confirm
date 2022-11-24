@@ -8,7 +8,7 @@ import './style.css';
 
 AlertConfirm.config({
   maskClosable: true,
-  onCloseAfter: () => {
+  closeAfter: () => {
     console.log('close');
   }
 });
@@ -41,7 +41,7 @@ const App = () => {
           </>
         );
       },
-      async onCloseBefore(action, close) {
+      async closeBefore(action, close) {
         if (action === 'delete') {
           await AlertConfirm.alert({
             title: (

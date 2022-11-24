@@ -36,8 +36,8 @@ export declare namespace PopupTypes {
     cancelText?: string;
     onOk?: HandleEvent;
     onCancel?: HandleEvent;
-    onCloseBefore?: CloseBefore;
-    onCloseAfter?: HandleEvent;
+    closeBefore?: CloseBefore;
+    closeAfter?: HandleEvent;
   }
 
   interface Props extends Partial<Config> {
@@ -119,7 +119,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   };
 
   animationEnd = () => {
-    const { visible = false, onCloseAfter = Popup.config.onCloseAfter } =
+    const { visible = false, closeAfter = Popup.config.closeAfter } =
       this.props;
     this.animationCount--;
     if (this.animationCount === 0) {
@@ -130,7 +130,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
         },
         () => {
           if (!visible) {
-            onCloseAfter?.();
+            closeAfter?.();
           }
         }
       );
@@ -162,7 +162,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
       cancelText = config.cancelText || languages[lang].cancel,
       onOk = config.onOk,
       onCancel = config.onCancel,
-      onCloseBefore = config.onCloseBefore,
+      closeBefore = config.closeBefore,
 
       dispatch
     } = this.props;
@@ -178,8 +178,8 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
     const _dispatch: Dispatch = action => {
       if (dispatch) {
         dispatch(action);
-      } else if (onCloseBefore) {
-        onCloseBefore(action, onCancel);
+      } else if (closeBefore) {
+        closeBefore(action, onCancel);
       } else if (action === false) {
         onCancel?.();
       } else if (action === true) {

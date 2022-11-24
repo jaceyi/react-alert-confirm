@@ -14,8 +14,8 @@ export type { Dispatch, DispatchAction, DispatchRender };
 
 type CloseBefore = (action: DispatchAction, close: HandleEvent) => void;
 
-interface Options extends Omit<Partial<PopupTypes.Config>, 'onCloseBefore'> {
-  onCloseBefore?: CloseBefore;
+interface Options extends Omit<Partial<PopupTypes.Config>, 'closeBefore'> {
+  closeBefore?: CloseBefore;
 }
 
 let parent: HTMLDivElement | null = null;
@@ -64,7 +64,7 @@ class PopupGenerator {
 
   private dispatch: Dispatch = action => {
     const {
-      onCloseBefore = Popup.config.onCloseBefore,
+      closeBefore = Popup.config.closeBefore,
       onOk,
       onCancel
     } = this.options;
@@ -75,8 +75,8 @@ class PopupGenerator {
       onCancel?.();
     }
 
-    if (onCloseBefore) {
-      onCloseBefore.call(this, action, this.close.bind(this));
+    if (closeBefore) {
+      closeBefore.call(this, action, this.close.bind(this));
     } else {
       this.close();
     }
@@ -84,17 +84,17 @@ class PopupGenerator {
   };
 
   private destroy = () => {
-    const { onCloseAfter = Popup.config.onCloseAfter } = this.options;
+    const { closeAfter = Popup.config.closeAfter } = this.options;
     this.container.remove();
     instanceMap.delete(this.$id);
-    onCloseAfter?.();
+    closeAfter?.();
     return this;
   };
 
   private render() {
     const { visible, container, onOk, onCancel, dispatch, destroy, options } =
       this;
-    const { onCloseBefore, onCloseAfter, custom, footer, ...props } = options;
+    const { closeBefore, closeAfter, custom, footer, ...props } = options;
 
     if (!parent) {
       parent = document.createElement('div');
@@ -127,7 +127,7 @@ class PopupGenerator {
         onOk={onOk}
         onCancel={onCancel}
         dispatch={dispatch}
-        onCloseAfter={destroy}
+        closeAfter={destroy}
       />
     );
 
@@ -170,17 +170,17 @@ const AlertConfirm: AlertConfirm = function (
     console.warn('options required type is object or ReactNode!');
   }
 
-  const { onCloseBefore, ...rest } = options;
+  const { closeBefore, ...rest } = options;
   return new Promise(resolve => {
     const instance = new PopupGenerator({
       ...rest,
-      onCloseBefore(action, close) {
+      closeBefore(action, close) {
         const resolveClose = () => {
           close();
           resolve([action, instance]);
         };
-        if (onCloseBefore) {
-          onCloseBefore(action, resolveClose);
+        if (closeBefore) {
+          closeBefore(action, resolveClose);
         } else {
           resolveClose();
         }

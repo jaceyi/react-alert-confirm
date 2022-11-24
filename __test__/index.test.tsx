@@ -119,7 +119,7 @@ describe('AlertConfirm', () => {
     expect(screen.queryByText(testTitle)).toBeNull();
   });
 
-  it('Test imperative onCloseBefore and onCloseAfter callback', () => {
+  it('Test imperative closeBefore and closeAfter callback', () => {
     const closeBeforeFunc = jest.fn();
     const closeAfter = jest.fn();
     const { getByRole } = render(
@@ -127,11 +127,11 @@ describe('AlertConfirm', () => {
         onClick={() => {
           AlertConfirm({
             title: testTitle,
-            onCloseBefore(action, close) {
+            closeBefore(action, close) {
               closeBeforeFunc(action);
               close();
             },
-            onCloseAfter: closeAfter
+            closeAfter: closeAfter
           });
         }}
       >
