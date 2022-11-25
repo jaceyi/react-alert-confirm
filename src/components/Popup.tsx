@@ -83,12 +83,15 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   componentDidUpdate(prevProps: PopupTypes.Props) {
     const { visible = false } = this.props;
     if (prevProps.visible !== visible) {
-      this.setState({
-        ...getClassName(visible),
-        visible: true
-      }, () => {
-        this.bindAnimation();
-      });
+      this.setState(
+        {
+          ...getClassName(visible),
+          visible: true
+        },
+        () => {
+          this.bindAnimation();
+        }
+      );
     }
   }
 
@@ -219,15 +222,17 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
           )}
         >
           <div
-            onClick={e => e.stopPropagation()}
             ref={this.mainRef}
-            style={style}
-            className={classNames('react-alert-confirm', animationClassName)}
+            className={classNames('react-alert-main', animationClassName)}
+            onClick={e => e.stopPropagation()}
           >
             {custom ? (
               customNode
             ) : (
-              <div className={classNames('alert-confirm-main', className)}>
+              <div
+                className={classNames('react-alert-confirm', className)}
+                style={style}
+              >
                 <div className="alert-confirm-body">
                   <div className="alert-confirm-title">{titleNode}</div>
                   {descNode && (

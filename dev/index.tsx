@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import './style.css';
 // import AlertConfirm, { Button } from 'react-alert-confirm';
 // import 'react-alert-confirm/lib/style.css';
 import AlertConfirm, { Button } from '../src';
-import '../lib/style.css';
+import '../src/index.scss';
+import './style.scss';
 
 AlertConfirm.config({
   maskClosable: true,
@@ -114,7 +114,7 @@ const App = () => {
         cancelText="No"
         onCancel={() => setVisible(false)}
       />
-      <Button onClick={() => setVisible(!visible)}>Show</Button>
+      <Button onClick={() => setVisible(!visible)}>Show JSX Render</Button>
       <Button
         style={{ marginLeft: 10 }}
         styleType="primary"

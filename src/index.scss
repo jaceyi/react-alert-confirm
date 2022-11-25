@@ -8,7 +8,7 @@
       animation: fadeIn 200ms forwards;
     }
 
-    &.react-alert-confirm {
+    &.react-alert-main {
       animation: zoomIn 200ms forwards;
     }
   }
@@ -18,7 +18,7 @@
       animation: fadeOut 200ms forwards;
     }
 
-    &.react-alert-confirm {
+    &.react-alert-main {
       animation: zoomOut 200ms forwards;
     }
   }
@@ -40,9 +40,6 @@
 
 .react-alert-confirm {
   margin-top: -20vh;
-}
-
-.alert-confirm-main {
   width: 410px;
   background-color: #fff;
   border-radius: 6px;
@@ -52,7 +49,7 @@
 }
 
 .alert-confirm-body {
-  padding: 32px 26px 24px;
+  padding: 28px 24px 22px;
   min-height: 70px;
 }
 
@@ -83,7 +80,7 @@
   padding: 0 24px 24px;
   font-size: 12px;
 
-  & > * {
+  &>* {
     margin-left: 10px;
   }
 }
@@ -105,6 +102,7 @@ $primaryColor: #148bed;
     0 2px 4px 0 rgba(228, 229, 242, 0.2);
 
   &.default-button {
+
     &:hover,
     &:focus {
       box-shadow: 0 2px 4px 0 rgba(162, 166, 191, 0.2),
