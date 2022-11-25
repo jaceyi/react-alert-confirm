@@ -1,5 +1,17 @@
-> A react component confirm dialog, support synchronous mode call.（一个 React 确认对话框组件，支持同步方式调用。）
+# react-alert-confirm
 
+A react component confirm dialog, support synchronous mode call.（一个 React 确认对话框组件，支持同步方式调用。）
+
+[![NPM version][npm-image]][npm-url]
+[![npm download][download-image]][download-url] 
+[![bundle size][bundlephobia-image]][bundlephobia-url]
+
+[npm-image]: https://img.shields.io/npm/v/react-alert-confirm.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/react-alert-confirm
+[download-image]: https://img.shields.io/npm/dm/react-alert-confirm.svg?style=flat-square
+[download-url]: https://npmjs.org/package/react-alert-confirm
+[bundlephobia-url]: https://bundlephobia.com/result?p=react-alert-confirm
+[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/react-alert-confirm?style=flat-square
 
 [CodeSandbox](https://codesandbox.io/s/react-alert-confirm-v4-79lvpw)
 
@@ -7,7 +19,7 @@
 
 ```bash
 yarn add react-alert-confirm
-// or
+# or
 npm install react-alert-confirm --save
 ```
 
