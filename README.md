@@ -1,6 +1,6 @@
 # react-alert-confirm
 
-A react component confirm dialog, support synchronous mode call | 一个 React 确认对话框组件，支持同步方式调用。
+A react component confirm dialog, support synchronous mode call（一个 React 确认对话框组件，支持同步方式调用）
 
 [![NPM version][npm-image]][npm-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
 
@@ -11,9 +11,9 @@ A react component confirm dialog, support synchronous mode call | 一个 React �
 [bundlephobia-url]: https://bundlephobia.com/result?p=react-alert-confirm
 [bundlephobia-image]: https://badgen.net/bundlephobia/minzip/react-alert-confirm?style=flat-square
 
-<a href="https://codesandbox.io/s/react-alert-confirm-v4-79lvpw" target="_blank" rel="noreferrer">
-  <p><b>CodeSandbox</b></p>
-  <img style="width: 100px" src="https://cdn.icon-icons.com/icons2/2098/PNG/512/codesandbox_icon_128900.png" alt="CodeSandbox"/>
+<a href="https://codesandbox.io/s/react-alert-confirm-v4-79lvpw" rel="nofollow">
+  <img width="100px" src="https://cdn.icon-icons.com/icons2/2098/PNG/512/codesandbox_icon_128900.png" alt="CodeSandbox" />
+  <div><b>CodeSandbox</b></div>
 </a>
 
 ## Installing

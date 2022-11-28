@@ -1,7 +1,7 @@
 {
   "name": "react-alert-confirm",
-  "version": "4.1.0",
-  "description": "A react component confirm dialog, support synchronous mode call. | 一个 React 确认对话框组件，支持同步方式调用。",
+  "version": "4.1.4",
+  "description": "A react component confirm dialog, support synchronous mode call（一个 React 确认对话框组件，支持同步方式调用）",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "repository": "git@github.com:jaceyi/react-alert-confirm.git",
@@ -12,6 +12,7 @@
     "react",
     "dialog",
     "confirm",
+    "alert",
     "react-alert-confirm"
   ],
   "files": [
@@ -48,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "babel-jest": "^29.2.2",
+    "babel-plugin-minify-simplify": "^0.5.1",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
