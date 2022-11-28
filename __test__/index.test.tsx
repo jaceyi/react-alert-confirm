@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AlertConfirm, { Button } from '../lib';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, act } from '@testing-library/react';
 
 const awaitRun = (timeout = 0) =>
   new Promise(resolve => setTimeout(resolve, timeout));
@@ -73,6 +73,12 @@ describe('AlertConfirm', () => {
     expect(queryByText(testTitle)).toBeNull();
   });
 
+  const fireClickByText = (text: string) => {
+    return act(async () => {
+      fireEvent.click(screen.getByText(text));
+    });
+  };
+
   it('Imperative confirm popup', async () => {
     const onOk = jest.fn();
     const { getByRole } = render(
@@ -95,13 +101,12 @@ describe('AlertConfirm', () => {
     screen.getByText(testTitle);
     screen.getByText(testDesc);
 
-    fireEvent.click(screen.getByText('OK'));
-    await awaitRun();
+    await fireClickByText('OK');
     expect(onOk).toHaveBeenCalled();
     expect(screen.queryByText(testTitle)).toBeNull();
   });
 
-  it('Imperative alert popup', () => {
+  it('Imperative alert popup', async () => {
     const { getByRole } = render(
       <Button
         onClick={() => {
@@ -115,11 +120,11 @@ describe('AlertConfirm', () => {
     fireEvent.click(button);
     screen.getByText(testTitle);
 
-    fireEvent.click(screen.getByText('OK'));
+    await fireClickByText('OK');
     expect(screen.queryByText(testTitle)).toBeNull();
   });
 
-  it('Test imperative closeBefore and closeAfter callback', () => {
+  it('Test imperative closeBefore and closeAfter callback', async () => {
     const closeBeforeFunc = jest.fn();
     const closeAfter = jest.fn();
     const { getByRole } = render(
@@ -127,9 +132,13 @@ describe('AlertConfirm', () => {
         onClick={() => {
           AlertConfirm({
             title: testTitle,
-            closeBefore(action, close) {
-              closeBeforeFunc(action);
-              close();
+            closeBefore(action) {
+              if (action) {
+                closeBeforeFunc('YES');
+              } else {
+                closeBeforeFunc('NO');
+                return Promise.reject();
+              }
             },
             closeAfter: closeAfter
           });
@@ -141,8 +150,12 @@ describe('AlertConfirm', () => {
     const button = getByRole('button');
     fireEvent.click(button);
 
-    fireEvent.click(screen.getByText('OK'));
-    expect(closeBeforeFunc).toHaveBeenLastCalledWith(true);
+    await fireClickByText('Cancel');
+    expect(closeBeforeFunc).toHaveBeenLastCalledWith('NO');
+    screen.getByText(testTitle);
+
+    await fireClickByText('OK');
+    expect(closeBeforeFunc).toHaveBeenLastCalledWith('YES');
     expect(closeAfter).toHaveBeenCalled();
   });
 
@@ -171,12 +184,11 @@ describe('AlertConfirm', () => {
     const button = getByRole('button');
     fireEvent.click(button);
 
-    fireEvent.click(screen.getByText(customText));
-    await awaitRun();
+    await fireClickByText(customText);
     expect(dispatchAction).toHaveBeenLastCalledWith('custom');
   });
 
-  it('Verify global config', () => {
+  it('Verify global config', async () => {
     AlertConfirm.config({
       lang: 'zh'
     });
@@ -193,9 +205,7 @@ describe('AlertConfirm', () => {
     );
     const button = getByRole('button');
     fireEvent.click(button);
-    const okButton = screen.getByText(defaultOkText);
-
-    fireEvent.click(okButton);
+    await fireClickByText(defaultOkText);
     expect(screen.queryByText(defaultOkText)).toBeNull();
 
     const okText = 'Custom okText';

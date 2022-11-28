@@ -4,21 +4,16 @@ import React, { isValidElement, Component } from 'react';
 import * as ReactDOM from 'react-dom';
 import Popup, {
   PopupTypes,
+  Action,
   Dispatch,
-  DispatchAction,
-  DispatchRender,
-  HandleEvent
+  Render
 } from './components/Popup';
 import languages from './languages';
 
 export { default as Button } from './components/Button';
-export type { Dispatch, DispatchAction, DispatchRender };
+export type { Dispatch, Action, Render };
 
-type CloseBefore = (action: DispatchAction, close: HandleEvent) => void;
-
-interface Options extends Omit<Partial<PopupTypes.Config>, 'closeBefore'> {
-  closeBefore?: CloseBefore;
-}
+type Options = PopupTypes.Config;
 
 let parent: HTMLDivElement | null = null;
 const instanceMap = new Map<number, PopupGenerator>();
@@ -64,7 +59,7 @@ class PopupGenerator {
     return this;
   };
 
-  private dispatch: Dispatch = action => {
+  private dispatch: Dispatch = async action => {
     const {
       closeBefore = Popup.config.closeBefore,
       onOk,
@@ -78,11 +73,13 @@ class PopupGenerator {
     }
 
     if (closeBefore) {
-      closeBefore.call(this, action, this.close.bind(this));
+      try {
+        await closeBefore(action);
+        this.close();
+      } catch (e) {}
     } else {
       this.close();
     }
-    return this;
   };
 
   private destroy = () => {
@@ -90,7 +87,6 @@ class PopupGenerator {
     this.container.remove();
     instanceMap.delete(this.$id);
     closeAfter?.();
-    return this;
   };
 
   private render() {
@@ -165,20 +161,20 @@ class PopupGenerator {
 }
 
 type Params = Options | ReactNode;
-type ConfirmActionResolve = [DispatchAction, PopupGenerator];
+export type AlertConfirmPromise = Promise<[Action, PopupGenerator]>;
 
 interface AlertConfirm {
   new (props: PopupTypes.Props): Popup;
-  (this: any, params: Params, options?: Options): Promise<ConfirmActionResolve>;
+  (this: any, params: Params, options?: Options): AlertConfirmPromise;
   alert: typeof alert;
   config: typeof config;
   closeAll: typeof closeAll;
 }
 const AlertConfirm: AlertConfirm = function (
   this: any,
-  params: PopupTypes.Props | Params,
+  params: Params,
   options: Options = {}
-): Popup | Promise<ConfirmActionResolve> {
+): Popup | AlertConfirmPromise {
   if (this instanceof AlertConfirm) {
     return new Popup(params as PopupTypes.Props);
   }
@@ -194,13 +190,13 @@ const AlertConfirm: AlertConfirm = function (
   return new Promise(resolve => {
     const instance = new PopupGenerator({
       ...rest,
-      closeBefore(action, close) {
+      async closeBefore(action) {
         const resolveClose = () => {
-          close();
           resolve([action, instance]);
         };
         if (closeBefore) {
-          closeBefore(action, resolveClose);
+          await closeBefore(action);
+          resolveClose();
         } else {
           resolveClose();
         }

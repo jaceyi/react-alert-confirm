@@ -7,11 +7,11 @@ const getClassName = (visible: boolean) => ({
   animationClassName: visible ? AnimationNames.in : AnimationNames.out
 });
 
-export type DispatchAction = boolean | string | number;
-export type Dispatch = (action: DispatchAction) => void;
-export type DispatchRender = ReactNode | ((dispatch: Dispatch) => ReactNode);
-export type HandleEvent = () => void;
-type CloseBefore = (action: DispatchAction, close?: HandleEvent) => void;
+export type Action = boolean | string | number;
+export type Dispatch = (action: Action) => void;
+export type Render = ReactNode | ((dispatch: Dispatch) => ReactNode);
+export type CloseBefore = (action: Action) => Promise<any> | void;
+type HandleEvent = () => void;
 
 export declare namespace PopupTypes {
   type Type = 'alert' | 'confirm';
@@ -26,10 +26,10 @@ export declare namespace PopupTypes {
     maskClassName?: string;
     maskClosable?: boolean;
 
-    custom?: DispatchRender;
-    title?: DispatchRender;
-    desc?: DispatchRender;
-    footer?: DispatchRender;
+    custom?: Render;
+    title?: Render;
+    desc?: Render;
+    footer?: Render;
 
     lang?: Lang;
     okText?: string;
@@ -178,18 +178,21 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
     }
 
     // render node
-    const _dispatch: Dispatch = action => {
+    const _dispatch: Dispatch = async action => {
       if (dispatch) {
         dispatch(action);
       } else if (closeBefore) {
-        closeBefore(action, onCancel);
+        try {
+          await closeBefore(action);
+          onCancel?.();
+        } catch (e) {}
       } else if (action === false) {
         onCancel?.();
       } else if (action === true) {
         onOk?.();
       }
     };
-    const renderNode = (node: DispatchRender) =>
+    const renderNode = (node: Render) =>
       typeof node === 'function' ? node(_dispatch) : node;
     const customNode = custom && renderNode(custom);
     const titleNode = title && renderNode(title);

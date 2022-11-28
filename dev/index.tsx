@@ -41,9 +41,9 @@ const App = () => {
           </>
         );
       },
-      async closeBefore(action, close) {
+      async closeBefore(action) {
         if (action === 'delete') {
-          await AlertConfirm.alert({
+          const [isOK] = await AlertConfirm.alert({
             title: (
               <div>
                 <span className="red">Delete error !</span>
@@ -55,8 +55,7 @@ const App = () => {
               </em>
             )
           });
-        } else {
-          close();
+          if (!isOK) return Promise.reject();
         }
       }
     });
