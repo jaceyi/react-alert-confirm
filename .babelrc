@@ -3,8 +3,8 @@
     [
       "@babel/preset-env",
       {
-        "targets": "> 0.25%, not dead",
-        "modules": "umd"
+        "modules": "umd",
+        "targets": ">0.3%, not dead"
       }
     ],
     "@babel/preset-react",
@@ -16,7 +16,5 @@
       }
     ]
   ],
-  "plugins": [
-    "minify-simplify"
-  ]
+  "plugins": ["@babel/plugin-transform-runtime", "minify-simplify"]
 }
