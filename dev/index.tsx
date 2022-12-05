@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-// import AlertConfirm, { Button } from 'react-alert-confirm';
-// import 'react-alert-confirm/lib/style.css';
 import AlertConfirm, { Button } from '../src';
 import '../src/index.scss';
 import './style.scss';
@@ -29,7 +27,7 @@ const App = () => {
     const [action, instance] = await AlertConfirm({
       title: 'Confirm',
       desc: 'This action will delete the product!',
-      footer(dispatch) {
+      footer: dispatch => {
         return (
           <>
             <span className="pointer" onClick={() => dispatch('cancel')}>
@@ -41,7 +39,7 @@ const App = () => {
           </>
         );
       },
-      async closeBefore(action) {
+      closeBefore: async action => {
         if (action === 'delete') {
           const [isOK] = await AlertConfirm.alert({
             title: (
