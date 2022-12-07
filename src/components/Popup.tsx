@@ -1,7 +1,12 @@
-import React, { createRef, Component } from 'react';
+import React from 'react';
 import type { ReactNode, CSSProperties } from 'react';
-import Button, { classNames } from './Button';
+import Button from './Button';
 import languages from '../languages';
+
+const { createRef, Component } = React;
+
+export const classNames = (...names: Array<string | undefined>) =>
+  names?.filter(n => n).join(' ');
 
 const getClassName = (visible: boolean) => ({
   animationClassName: visible ? AnimationNames.in : AnimationNames.out

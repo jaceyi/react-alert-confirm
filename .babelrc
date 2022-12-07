@@ -1,20 +1,32 @@
 {
+  "assumptions": {
+    "setSpreadProperties": true,
+    "enumerableModuleMeta": true,
+    "constantReexports": true,
+    "pureGetters": true,
+    "superIsCallableConstructor": true
+  },
   "presets": [
     [
       "@babel/preset-env",
       {
-        "modules": "umd",
+        "modules": "commonjs",
         "targets": ">0.3%, not dead"
       }
     ],
     "@babel/preset-react",
-    [
-      "@babel/preset-typescript",
-      {
-        "isTSX": true,
-        "allExtensions": true
-      }
-    ]
+    "@babel/preset-typescript"
   ],
-  "plugins": ["@babel/plugin-transform-runtime", "minify-simplify"]
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "absoluteRuntime": false,
+        "corejs": false,
+        "helpers": true,
+        "regenerator": true
+      }
+    ],
+    "minify-simplify"
+  ]
 }

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Root } from 'react-dom/client';
-import React, { isValidElement, Component } from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import Popup, {
   PopupTypes,
   Action,
@@ -9,6 +9,8 @@ import Popup, {
   Render
 } from './components/Popup';
 import languages from './languages';
+
+const { isValidElement, Component } = React;
 
 export { default as Button } from './components/Button';
 export type { Dispatch, Action, Render };

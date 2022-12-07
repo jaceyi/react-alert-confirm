@@ -1,9 +1,6 @@
 import React from 'react';
 import type { FC, ButtonHTMLAttributes } from 'react';
-
-export const classNames = (...names: Array<string | undefined>) =>
-  names?.filter(n => n).join(' ');
-
+import { classNames } from './Popup';
 export declare namespace ButtonTypes {
   type styleType = 'primary' | 'default' | 'danger';
 
