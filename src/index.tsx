@@ -62,16 +62,13 @@ class PopupGenerator {
   };
 
   private dispatch: Dispatch = async action => {
-    const {
-      closeBefore = Popup.config.closeBefore,
-      onOk,
-      onCancel
-    } = this.options;
+    const closeBefore = this.options.closeBefore || Popup.config.closeBefore;
+    const { onOk, onCancel } = this.options;
 
     if (action === true) {
-      onOk?.();
+      onOk && onOk();
     } else if (action === false) {
-      onCancel?.();
+      onCancel && onCancel();
     }
 
     if (closeBefore) {
@@ -85,16 +82,15 @@ class PopupGenerator {
   };
 
   private destroy = () => {
-    const { closeAfter = Popup.config.closeAfter } = this.options;
+    const closeAfter = this.options.closeAfter || Popup.config.closeAfter;
     this.container.remove();
     instanceMap.delete(this.$id);
-    closeAfter?.();
+    closeAfter && closeAfter();
   };
 
   private render() {
-    const { visible, container, onOk, onCancel, dispatch, destroy, options } =
-      this;
-    const { closeBefore, closeAfter, custom, footer, ...props } = options;
+    const { visible, container } = this;
+    const { closeBefore, closeAfter, custom, footer, ...props } = this.options;
 
     if (!parent) {
       parent = document.createElement('div');
@@ -124,34 +120,32 @@ class PopupGenerator {
         custom={_custom}
         footer={_footer}
         visible={visible}
-        onOk={onOk}
-        onCancel={onCancel}
-        dispatch={dispatch}
-        closeAfter={destroy}
+        onOk={this.onOk}
+        onCancel={this.onCancel}
+        dispatch={this.dispatch}
+        closeAfter={this.destroy}
       />
     );
 
-    const { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED, createRoot } =
-      ReactDOM as typeof ReactDOM & {
-        createRoot?: Function;
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?: {
-          usingClientEntryPoint?: boolean;
-        };
+    const {
+      __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: secret,
+      createRoot
+    } = ReactDOM as typeof ReactDOM & {
+      createRoot?: Function;
+      __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED?: {
+        usingClientEntryPoint?: boolean;
       };
+    };
     if (this.root) {
       this.root.render(node);
     } else if (createRoot) {
-      const has =
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED &&
-        typeof __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED === 'object';
+      const has = secret && typeof secret === 'object';
       if (has) {
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint =
-          true;
+        secret.usingClientEntryPoint = true;
       }
       this.root = createRoot(container) as Root;
       if (has) {
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.usingClientEntryPoint =
-          false;
+        secret.usingClientEntryPoint = false;
       }
       this.root.render(node);
     } else {

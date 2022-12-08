@@ -7,6 +7,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
+    force: true,
     include: ['react-alert-confirm'],
     needsInterop: ['react-alert-confirm']
   }

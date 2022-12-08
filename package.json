@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "4.1.5",
+  "version": "4.1.6",
   "description": "A react component confirm dialog, support synchronous mode call（一个 React 确认对话框组件，支持同步方式调用）",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
+// import AlertConfirm, { Button } from 'react-alert-confirm';
+// import 'react-alert-confirm/lib/style.css';
 import AlertConfirm, { Button } from '../src';
 import '../src/index.scss';
 import './style.scss';

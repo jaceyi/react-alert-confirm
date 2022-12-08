@@ -73,8 +73,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   constructor(props: PopupTypes.Props) {
     super(props);
 
-    const { visible = false } = props;
-
+    const visible = !!props.visible;
     this.state = {
       ...getClassName(visible),
       visible
@@ -86,11 +85,10 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   }
 
   componentDidUpdate(prevProps: PopupTypes.Props) {
-    const { visible = false } = this.props;
-    if (prevProps.visible !== visible) {
+    if (prevProps.visible !== this.props.visible) {
       this.setState(
         {
-          ...getClassName(visible),
+          ...getClassName(!!this.props.visible),
           visible: true
         },
         () => {
@@ -127,8 +125,9 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   };
 
   animationEnd = () => {
-    const { visible = false, closeAfter = Popup.config.closeAfter } =
-      this.props;
+    const closeAfter = this.props.closeAfter || Popup.config.closeAfter;
+    const visible = !!this.props.visible;
+
     this.animationCount--;
     if (this.animationCount === 0) {
       this.setState(
@@ -137,9 +136,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
           visible
         },
         () => {
-          if (!visible) {
-            closeAfter?.();
-          }
+          !visible && closeAfter && closeAfter();
         }
       );
     }
@@ -150,69 +147,45 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
   mainRef = createRef<HTMLDivElement>();
 
   render() {
-    const { config } = Popup;
-    const {
-      type = config.type || 'confirm',
-      zIndex = config.zIndex,
-      style = config.style,
-      className = config.maskClassName,
-      maskStyle = config.maskStyle,
-      maskClassName = config.maskClassName,
-      maskClosable = config.maskClosable,
-
-      custom = config.custom,
-      title = config.title,
-      desc = config.desc,
-      footer = config.footer,
-
-      lang = config.lang || 'en',
-      okText = config.okText || languages[lang].ok,
-      cancelText = config.cancelText || languages[lang].cancel,
-      onOk = config.onOk,
-      onCancel = config.onCancel,
-      closeBefore = config.closeBefore,
-
-      dispatch
-    } = this.props;
+    const merge = { ...Popup.config, ...this.props };
+    const { lang = 'en', onOk, onCancel } = merge;
     const { visible, animationClassName } = this.state;
-
-    // merge props
-    const zIndexStyle: CSSProperties = {};
-    if (zIndex !== void 0) {
-      Object.assign(zIndexStyle, { zIndex });
-    }
 
     // render node
     const _dispatch: Dispatch = async action => {
-      if (dispatch) {
-        dispatch(action);
-      } else if (closeBefore) {
+      if (merge.dispatch) {
+        merge.dispatch(action);
+      } else if (merge.closeBefore) {
         try {
-          await closeBefore(action);
-          onCancel?.();
+          await merge.closeBefore(action);
+          onCancel && onCancel();
         } catch (e) {}
       } else if (action === false) {
-        onCancel?.();
+        onCancel && onCancel();
       } else if (action === true) {
-        onOk?.();
+        onOk && onOk();
       }
     };
     const renderNode = (node: Render) =>
       typeof node === 'function' ? node(_dispatch) : node;
-    const customNode = custom && renderNode(custom);
-    const titleNode = title && renderNode(title);
-    const descNode = desc && renderNode(desc);
+    const customNode = merge.custom && renderNode(merge.custom);
+    const titleNode = merge.title && renderNode(merge.title);
+    const descNode = merge.desc && renderNode(merge.desc);
 
     const footerNode =
-      footer === void 0 ? (
+      merge.footer === void 0 ? (
         <>
-          {type !== 'alert' && <Button onClick={onCancel}>{cancelText}</Button>}
+          {merge.type !== 'alert' && (
+            <Button onClick={onCancel}>
+              {merge.cancelText || languages[lang].cancel}
+            </Button>
+          )}
           <Button styleType="primary" onClick={onOk}>
-            {okText}
+            {merge.okText || languages[lang].ok}
           </Button>
         </>
       ) : (
-        renderNode(footer)
+        renderNode(merge.footer)
       );
 
     if (!visible) return null;
@@ -221,12 +194,15 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
       <div ref={this.containerRef} className="alert-confirm-container">
         <div
           ref={this.maskRef}
-          onClick={() => maskClosable && onCancel?.()}
-          style={Object.assign(zIndexStyle, maskStyle)}
+          onClick={() => merge.maskClosable && onCancel && onCancel()}
+          style={{
+            zIndex: merge.zIndex,
+            ...merge.maskStyle
+          }}
           className={classNames(
             'alert-confirm-mask',
             animationClassName,
-            maskClassName
+            merge.maskClassName
           )}
         >
           <div
@@ -234,12 +210,12 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
             className={classNames('react-alert-main', animationClassName)}
             onClick={e => e.stopPropagation()}
           >
-            {custom ? (
+            {customNode ? (
               customNode
             ) : (
               <div
-                className={classNames('react-alert-confirm', className)}
-                style={style}
+                className={classNames('react-alert-confirm', merge.className)}
+                style={merge.style}
               >
                 <div className="alert-confirm-body">
                   <div className="alert-confirm-title">{titleNode}</div>
