@@ -1,6 +1,8 @@
 .alert-confirm-container {
   * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
 
   .alert-confirm-animation-in {
@@ -42,7 +44,7 @@
   margin-top: -20vh;
   width: 410px;
   background-color: #fff;
-  border-radius: 6px;
+  border-radius: 10px;
   box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
     0 9px 28px 8px #0000000d;
   max-width: 90vw;
@@ -56,16 +58,16 @@
 .alert-confirm-title {
   display: block;
   overflow: hidden;
-  color: rgba(0, 0, 0, 0.68);
-  font-weight: 500;
+  color: #555;
   font-size: 18px;
   line-height: 1.4;
+  padding-bottom: 4px;
 }
 
 .alert-confirm-desc {
   color: #777;
   font-size: 13px;
-  padding-top: 8px;
+  padding-top: 4px;
 
   &:first-child {
     padding-top: 0;
@@ -93,7 +95,7 @@ $primaryColor: #148bed;
   line-height: 36px;
   cursor: pointer;
   color: #5c5c5c;
-  border-radius: 3px;
+  border-radius: 4px;
   outline: none;
   background-color: #fff;
   transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s;

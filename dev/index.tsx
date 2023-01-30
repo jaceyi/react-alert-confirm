@@ -13,6 +13,8 @@ AlertConfirm.config({
   }
 });
 
+(window as any).AlertConfirm = AlertConfirm;
+
 const App = () => {
   const handleClickConfirm = () => {
     AlertConfirm('This is the confirmation popup !');

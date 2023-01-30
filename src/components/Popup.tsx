@@ -98,14 +98,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
     }
   }
 
-  componentWillUnmount() {
-    this.animationElements.forEach(element => {
-      element.removeEventListener('animationend', this.animationEnd);
-    });
-  }
-
   animationCount = 0;
-  animationElements: HTMLDivElement[] = [];
   bindAnimation = () => {
     const { maskRef, mainRef } = this;
     if (!maskRef.current || !mainRef.current) return;
@@ -121,7 +114,6 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
     };
     elements.forEach(bindAnimationEnd);
     this.animationCount = elements.length;
-    this.animationElements = elements;
   };
 
   animationEnd = () => {
@@ -218,7 +210,7 @@ class Popup extends Component<PopupTypes.Props, PopupTypes.State> {
                 style={merge.style}
               >
                 <div className="alert-confirm-body">
-                  <div className="alert-confirm-title">{titleNode}</div>
+                  <h1 className="alert-confirm-title">{titleNode}</h1>
                   {descNode && (
                     <div className="alert-confirm-desc">{descNode}</div>
                   )}
