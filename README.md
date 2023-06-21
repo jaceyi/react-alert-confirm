@@ -78,10 +78,11 @@ import React, { useState } from 'react';
 import AlertConfirm from 'react-alert-confirm';
 
 const Component = () => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   return (
     <AlertConfirm
+      visible={visible}
       title="Are you sure?"
       desc="description..."
       onOk={() => {

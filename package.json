@@ -1,6 +1,6 @@
 {
   "name": "react-alert-confirm",
-  "version": "4.1.7",
+  "version": "4.1.8",
   "description": "A react component confirm dialog, support async/await mode call（一个 React 确认对话框组件，支持 async/await 方式调用）",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

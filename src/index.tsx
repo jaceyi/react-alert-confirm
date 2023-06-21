@@ -1,18 +1,14 @@
 import type { ReactNode } from 'react';
 import type { Root } from 'react-dom/client';
+import type { PopupTypes, Action, Dispatch, Render } from './components/Popup';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Popup, {
-  PopupTypes,
-  Action,
-  Dispatch,
-  Render
-} from './components/Popup';
+import Popup from './components/Popup';
 import languages from './languages';
+import Button from './components/Button';
 
 const { isValidElement, Component } = React;
 
-export { default as Button } from './components/Button';
 export type { Dispatch, Action, Render };
 
 type Options = PopupTypes.Config;
@@ -165,7 +161,9 @@ interface AlertConfirm {
   alert: typeof alert;
   config: typeof config;
   closeAll: typeof closeAll;
+  Button: typeof Button;
 }
+
 const AlertConfirm: AlertConfirm = function (
   this: any,
   params: Params,
@@ -202,14 +200,12 @@ const AlertConfirm: AlertConfirm = function (
 } as AlertConfirm;
 AlertConfirm.prototype = Component.prototype;
 
-export const alert = (params: Params) => {
+const alert = (params: Params) => {
   return AlertConfirm(params, {
     type: 'alert'
   });
 };
-AlertConfirm.alert = alert;
-
-export const config = (config?: PopupTypes.Config): PopupTypes.Config => {
+const config = (config?: PopupTypes.Config): PopupTypes.Config => {
   if (config) {
     const { lang } = config;
     if (lang) {
@@ -229,14 +225,17 @@ export const config = (config?: PopupTypes.Config): PopupTypes.Config => {
   }
   return Popup.config;
 };
-
-AlertConfirm.config = config;
-
-export const closeAll = () => {
+const closeAll = () => {
   instanceMap.forEach(instance => {
     instance.close();
   });
 };
+
+AlertConfirm.alert = alert;
+AlertConfirm.config = config;
 AlertConfirm.closeAll = closeAll;
+AlertConfirm.Button = Button;
+
+export { alert, config, closeAll, Button };
 
 export default AlertConfirm;

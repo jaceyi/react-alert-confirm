@@ -2,9 +2,6 @@ import * as React from 'react';
 import AlertConfirm, { Button } from '../lib';
 import { render, fireEvent, screen, act } from '@testing-library/react';
 
-const awaitRun = (timeout = 0) =>
-  new Promise(resolve => setTimeout(resolve, timeout));
-
 describe('Button', () => {
   it('Render Button', () => {
     const testMessage = 'Test text';

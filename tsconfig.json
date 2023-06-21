@@ -8,11 +8,10 @@
     "declaration": true,
     "outDir": "./lib",
     "jsx": "react",
-    "locale": "zh-CN",
     "isolatedModules": true,
     "strict": true,
     "moduleResolution": "Node",
-    "forceConsistentCasingInFileNames" :true
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
